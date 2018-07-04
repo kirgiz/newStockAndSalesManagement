@@ -1,0 +1,57 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "currencyForDashboard",
+            "otherEntityName": "currency",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "transferForDashboard",
+            "otherEntityName": "transferclassification",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "warehouseOutg",
+            "otherEntityName": "third",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "materialTypeDefDashboard",
+            "otherEntityName": "materialclassification",
+            "otherEntityField": "code"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "transferDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "profitAndLoss",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "numberOfItems",
+            "fieldType": "Long"
+        }
+    ],
+    "changelogDate": "20180704054156",
+    "entityTableName": "dashboard",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "StockAndSalesUtility"
+}

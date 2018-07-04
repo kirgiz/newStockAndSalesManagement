@@ -1,0 +1,56 @@
+
+<div *ngIf="material">
+    <h2><span jhiTranslate="stockAndSalesManagementApp.material.detail.title">Material</span> {{material.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.code">Code</span></dt>
+        <dd>
+            <span>{{material.code}}</span>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.description">Description</span></dt>
+        <dd>
+            <span>{{material.description}}</span>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.creationDate">Creation Date</span></dt>
+        <dd>
+            <span>{{material.creationDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.comments">Comments</span></dt>
+        <dd>
+            <span>{{material.comments}}</span>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.materialTypeDef">Material Type Def</span></dt>
+        <dd>
+            <div *ngIf="material.materialTypeDefId">
+                <a [routerLink]="['/materialclassification-stock-and-sales-utility', material.materialTypeDefId]">{{material.materialTypeDefName}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.lotIdentifier">Lot Identifier</span></dt>
+        <dd>
+            <div *ngIf="material.lotIdentifierId">
+                <a [routerLink]="['/lot-stock-and-sales-utility', material.lotIdentifierId]">{{material.lotIdentifierCode}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.material.materialTypeCat">Material Type Cat</span></dt>
+        <dd>
+            <div *ngIf="material.materialTypeCatId">
+                <a [routerLink]="['/materialclassification-stock-and-sales-utility', material.materialTypeCatId]">{{material.materialTypeCatName}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'material-stock-and-sales-utility/'+ material.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>
