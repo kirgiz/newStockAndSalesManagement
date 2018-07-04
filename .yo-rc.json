@@ -4,7 +4,7 @@
       "packageName": "com.kirgiz.stocksndsalesmanagement",
       "nativeLanguage": "fr"
     },
-    "jhipsterVersion": "4.9.0",
+    "jhipsterVersion": "4.14.0",
     "baseName": "stockAndSalesManagement",
     "packageName": "com.kirgiz.stocksndsalesmanagement",
     "packageFolder": "com/kirgiz/stocksndsalesmanagement",
@@ -58,6 +58,8 @@
     "languages": [
       "fr",
       "en"
-    ]
+    ],
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true
   }
 }

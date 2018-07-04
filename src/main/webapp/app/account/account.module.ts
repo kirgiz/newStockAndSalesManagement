@@ -22,7 +22,7 @@ import {
 @NgModule({
     imports: [
         StockAndSalesManagementSharedModule,
-        RouterModule.forRoot(accountState, { useHash: true })
+        RouterModule.forChild(accountState)
     ],
     declarations: [
         ActivateComponent,
