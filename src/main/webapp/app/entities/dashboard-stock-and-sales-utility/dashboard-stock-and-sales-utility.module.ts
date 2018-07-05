@@ -14,6 +14,11 @@ import {
     dashboardRoute,
     dashboardPopupRoute,
 } from './';
+import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
+import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
+import { ForexratesStockAndSalesUtilityService } from '../forexrates-stock-and-sales-utility';
+import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
+import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-stock-and-sales-utility';
 
 const ENTITY_STATES = [
     ...dashboardRoute,
@@ -43,6 +48,11 @@ const ENTITY_STATES = [
     providers: [
         DashboardStockAndSalesUtilityService,
         DashboardStockAndSalesUtilityPopupService,
+        MaterialhistoryStockAndSalesUtilityService,
+        ThirdStockAndSalesUtilityService,
+        ForexratesStockAndSalesUtilityService,
+        LotStockAndSalesUtilityService,
+        MaterialStockAndSalesUtilityService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

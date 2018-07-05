@@ -7,6 +7,12 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
 import { createRequestOption } from '../../shared';
+import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-stock-and-sales-utility';
+import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
+import { ForexratesStockAndSalesUtilityService } from '../forexrates-stock-and-sales-utility';
+import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
+import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
+import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
 
 export type EntityResponseType = HttpResponse<DashboardStockAndSalesUtility>;
 
@@ -15,7 +21,13 @@ export class DashboardStockAndSalesUtilityService {
 
     private resourceUrl =  SERVER_API_URL + 'api/dashboards';
 
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
+    constructor(private http: HttpClient, private dateUtils: JhiDateUtils,
+        private matHistoryService: MaterialhistoryStockAndSalesUtilityService,
+        private lotService: LotStockAndSalesUtilityService,
+    private fxRatesService: ForexratesStockAndSalesUtilityService,
+    private thirdService: ThirdStockAndSalesUtilityService,
+private materialService: MaterialStockAndSalesUtilityService,
+private companyService: CompanyStockAndSalesUtilityService) { }
 
     create(dashboard: DashboardStockAndSalesUtility): Observable<EntityResponseType> {
         const copy = this.convert(dashboard);

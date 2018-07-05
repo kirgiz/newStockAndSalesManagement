@@ -13,6 +13,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import { MaterialhistoryStockAndSalesUtility, MaterialhistoryStockAndSalesUtilityService } from '../materialhistory';
+import {ThirdStockAndSalesUtilityService, ThirdStockAndSalesUtility} from '../third';
+import {ForexratesStockAndSalesUtilityService, ForexratesStockAndSalesUtility} from '../forexrates';
+import {LotStockAndSalesUtilityService, LotStockAndSalesUtility} from '../lot';
+import {MaterialStockAndSalesUtilityService, MaterialStockAndSalesUtility} from '../material';
+import {CompanyStockAndSalesUtilityService,CompanyStockAndSalesUtility} from '../company';
+
+
 /**
  * Service Implementation for managing Dashboard.
  */
