@@ -4,6 +4,17 @@
     </h2>
     <div class="row">
     </div>
+       <div class="row">     <div class="col-md-11">    
+        <span *ngIf="dashboards && dashboards.length">      
+                   <nvd3 [options]="bpOptions" [data]="bpData"               
+                       class="with-3d-shadow with-transitions"></nvd3>       
+                      </span>         <ngb-alert [dismissible]="false"           
+                        [hidden]="dashboards && dashboards.length">        
+                             <span >             
+                                     No material movements found      
+                                      </span>         </ngb-alert> 
+                                        </div> 
+                                </div>
     <br/>
     <div class="table-responsive" *ngIf="dashboards">
         <table class="table table-striped">

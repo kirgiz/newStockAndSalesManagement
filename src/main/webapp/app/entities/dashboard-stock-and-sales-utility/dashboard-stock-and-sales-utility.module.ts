@@ -1,5 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { NvD3Module } from 'ng2-nvd3';
+import 'd3';
+import 'nvd3';
 
 import { StockAndSalesManagementSharedModule } from '../../shared';
 import {
@@ -28,6 +31,7 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         StockAndSalesManagementSharedModule,
+        NvD3Module,
         RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [

@@ -6,6 +6,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
 import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
 import { Principal } from '../../shared';
+import { D3ChartService } from './D3ChartService';
 
 @Component({
     selector: 'jhi-dashboard-stock-and-sales-utility',
@@ -15,6 +16,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 dashboards: DashboardStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
+    bpReadings: any = {};
+    bpOptions: any= {};
 
     constructor(
         private dashboardService: DashboardStockAndSalesUtilityService,
