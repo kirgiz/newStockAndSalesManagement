@@ -15,7 +15,7 @@ import {
     DashboardStockAndSalesUtilityDeletePopupComponent,
     DashboardStockAndSalesUtilityDeleteDialogComponent,
     dashboardRoute,
-    dashboardPopupRoute,
+    dashboardPopupRoute
 } from './';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
@@ -25,7 +25,7 @@ import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-s
 
 const ENTITY_STATES = [
     ...dashboardRoute,
-    ...dashboardPopupRoute,
+    ...dashboardPopupRoute
 ];
 
 @NgModule({
@@ -56,7 +56,7 @@ const ENTITY_STATES = [
         ThirdStockAndSalesUtilityService,
         ForexratesStockAndSalesUtilityService,
         LotStockAndSalesUtilityService,
-        MaterialStockAndSalesUtilityService
+        MaterialStockAndSalesUtilityService,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

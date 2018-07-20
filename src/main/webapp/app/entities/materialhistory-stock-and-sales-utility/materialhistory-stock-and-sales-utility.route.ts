@@ -9,9 +9,26 @@ import { MaterialhistoryStockAndSalesUtilityPopupComponent } from './materialhis
 import {
     MaterialhistoryStockAndSalesUtilityDeletePopupComponent
 } from './materialhistory-stock-and-sales-utility-delete-dialog.component';
+import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
+
+    constructor(private paginationUtil: JhiPaginationUtil) {}
+
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
+        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+        return {
+            page: this.paginationUtil.parsePage(page),
+            predicate: this.paginationUtil.parsePredicate(sort),
+            ascending: this.paginationUtil.parseAscending(sort)
+      };
+    }
+}
+
+@Injectable()
+export class MaterialSearchStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
 
     constructor(private paginationUtil: JhiPaginationUtil) {}
 
@@ -48,6 +65,21 @@ export const materialhistoryRoute: Routes = [
         canActivate: [UserRouteAccessService]
     }
 ];
+
+export const materialSearchRoute: Routes = [
+    {
+        path: 'material-search-stock-and-sales-utility',
+        component: MaterialSearchStockAndSalesUtilityComponent,
+        resolve: {
+            'pagingParams': MaterialSearchStockAndSalesUtilityResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'stockAndSalesManagementApp.material.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }];
 
 export const materialhistoryPopupRoute: Routes = [
     {

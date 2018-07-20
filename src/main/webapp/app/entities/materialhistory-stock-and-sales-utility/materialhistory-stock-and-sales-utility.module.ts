@@ -14,11 +14,15 @@ import {
     materialhistoryRoute,
     materialhistoryPopupRoute,
     MaterialhistoryStockAndSalesUtilityResolvePagingParams,
+    materialSearchRoute,
+    MaterialSearchStockAndSalesUtilityResolvePagingParams
 } from './';
+import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
 
 const ENTITY_STATES = [
     ...materialhistoryRoute,
     ...materialhistoryPopupRoute,
+    ...materialSearchRoute,
 ];
 
 @NgModule({
@@ -33,6 +37,7 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
         MaterialhistoryStockAndSalesUtilityPopupComponent,
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
+        MaterialSearchStockAndSalesUtilityComponent,
     ],
     entryComponents: [
         MaterialhistoryStockAndSalesUtilityComponent,
@@ -45,6 +50,7 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityService,
         MaterialhistoryStockAndSalesUtilityPopupService,
         MaterialhistoryStockAndSalesUtilityResolvePagingParams,
+        MaterialSearchStockAndSalesUtilityResolvePagingParams,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

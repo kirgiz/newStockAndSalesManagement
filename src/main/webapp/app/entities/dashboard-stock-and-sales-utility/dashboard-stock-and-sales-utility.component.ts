@@ -31,9 +31,11 @@ dashboards: DashboardStockAndSalesUtility[];
         this.dashboardService.query().subscribe(
             (res: HttpResponse<DashboardStockAndSalesUtility[]>) => {
                 this.dashboards = res.body;
+                this.dashboards.push(new DashboardStockAndSalesUtility(1,new Date(),12,1,1001,1401,1251,12));
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
+      
     }
     ngOnInit() {
         this.loadAll();

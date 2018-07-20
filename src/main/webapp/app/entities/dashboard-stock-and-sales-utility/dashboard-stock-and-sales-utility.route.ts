@@ -1,12 +1,14 @@
-import { Routes } from '@angular/router';
-
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
+import { Injectable } from '@angular/core';
 import { UserRouteAccessService } from '../../shared';
 import { DashboardStockAndSalesUtilityComponent } from './dashboard-stock-and-sales-utility.component';
 import { DashboardStockAndSalesUtilityDetailComponent } from './dashboard-stock-and-sales-utility-detail.component';
 import { DashboardStockAndSalesUtilityPopupComponent } from './dashboard-stock-and-sales-utility-dialog.component';
+
 import {
     DashboardStockAndSalesUtilityDeletePopupComponent
 } from './dashboard-stock-and-sales-utility-delete-dialog.component';
+import { JhiPaginationUtil } from 'ng-jhipster';
 
 export const dashboardRoute: Routes = [
     {
