@@ -15,7 +15,11 @@ import {
     materialhistoryPopupRoute,
     MaterialhistoryStockAndSalesUtilityResolvePagingParams,
     materialSearchRoute,
-    MaterialSearchStockAndSalesUtilityResolvePagingParams
+    MaterialSearchStockAndSalesUtilityResolvePagingParams,
+    materialSearchPopupRoute,
+    MaterialSearchStockAndSalesUtilityPopupService,
+    MaterialSearchStockAndSalesUtilityDialogComponent,
+    MaterialSearchStockAndSalesUtilityPopupComponent
 } from './';
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
 
@@ -23,6 +27,7 @@ const ENTITY_STATES = [
     ...materialhistoryRoute,
     ...materialhistoryPopupRoute,
     ...materialSearchRoute,
+    ...materialSearchPopupRoute,
 ];
 
 @NgModule({
@@ -38,6 +43,8 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityPopupComponent,
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
         MaterialSearchStockAndSalesUtilityComponent,
+        MaterialSearchStockAndSalesUtilityDialogComponent,
+        MaterialSearchStockAndSalesUtilityPopupComponent,
     ],
     entryComponents: [
         MaterialhistoryStockAndSalesUtilityComponent,
@@ -45,12 +52,16 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityPopupComponent,
         MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
+        MaterialSearchStockAndSalesUtilityComponent,
+        MaterialSearchStockAndSalesUtilityDialogComponent,
+        MaterialSearchStockAndSalesUtilityPopupComponent,
     ],
     providers: [
         MaterialhistoryStockAndSalesUtilityService,
         MaterialhistoryStockAndSalesUtilityPopupService,
         MaterialhistoryStockAndSalesUtilityResolvePagingParams,
         MaterialSearchStockAndSalesUtilityResolvePagingParams,
+        MaterialSearchStockAndSalesUtilityPopupService,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -10,6 +10,7 @@ import {
     MaterialhistoryStockAndSalesUtilityDeletePopupComponent
 } from './materialhistory-stock-and-sales-utility-delete-dialog.component';
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
+import { MaterialSearchStockAndSalesUtilityPopupComponent } from './material-search-stock-and-sales-utility-dialog.component';
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
@@ -68,7 +69,7 @@ export const materialhistoryRoute: Routes = [
 
 export const materialSearchRoute: Routes = [
     {
-        path: 'material-search-stock-and-sales-utility',
+        path: 'material-search-stock-and-sales-utility-nopopup',
         component: MaterialSearchStockAndSalesUtilityComponent,
         resolve: {
             'pagingParams': MaterialSearchStockAndSalesUtilityResolvePagingParams
@@ -78,8 +79,22 @@ export const materialSearchRoute: Routes = [
             pageTitle: 'stockAndSalesManagementApp.material.home.title'
         },
         canActivate: [UserRouteAccessService],
-        outlet: 'popup'
     }];
+
+    export const materialSearchPopupRoute: Routes = [
+        {
+            path: 'material-search-stock-and-sales-utility-popup',
+            component: MaterialSearchStockAndSalesUtilityPopupComponent,
+            resolve: {
+                'pagingParams': MaterialSearchStockAndSalesUtilityResolvePagingParams
+            },
+            data: {
+                authorities: ['ROLE_USER'],
+                pageTitle: 'stockAndSalesManagementApp.material.home.title'
+            },
+            canActivate: [UserRouteAccessService],
+            outlet: 'popup'
+        }];
 
 export const materialhistoryPopupRoute: Routes = [
     {

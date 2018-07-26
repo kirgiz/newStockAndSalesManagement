@@ -41,6 +41,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     }
 
     ngOnInit() {
+        console.log('zboubbbbbbb');
         this.isSaving = false;
         this.materialService.query()
             .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => { this.materials = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));

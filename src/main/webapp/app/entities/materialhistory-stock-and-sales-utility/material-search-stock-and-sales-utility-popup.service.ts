@@ -5,7 +5,6 @@ import { HttpResponse } from '@angular/common/http';
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
 
-
 @Injectable()
 export class MaterialSearchStockAndSalesUtilityPopupService {
     private ngbModalRef: NgbModalRef;
@@ -17,6 +16,7 @@ export class MaterialSearchStockAndSalesUtilityPopupService {
 
     ) {
         this.ngbModalRef = null;
+        console.log('zboub');
     }
 
     open(component: Component, id?: number | any): Promise<NgbModalRef> {
@@ -51,6 +51,7 @@ export class MaterialSearchStockAndSalesUtilityPopupService {
     }
 
     materialSearchModalRef(component: Component, materialhistory: MaterialhistoryStockAndSalesUtility): NgbModalRef {
+        console.log('zboub');
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.materialhistory = materialhistory;
         modalRef.result.then((result) => {
