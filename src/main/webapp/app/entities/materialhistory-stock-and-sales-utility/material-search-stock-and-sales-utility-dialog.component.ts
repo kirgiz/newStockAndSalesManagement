@@ -25,6 +25,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     isSaving: boolean;
 
     materials: MaterialStockAndSalesUtility[];
+    selectedMaterial: number[];
 
     transferclassifications: TransferclassificationStockAndSalesUtility[];
 
@@ -40,6 +41,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     predicate: any;
     previousPage: any;
     reverse: any;
+    searchfield: string;
 
     constructor(
         public activeModal: NgbActiveModal,

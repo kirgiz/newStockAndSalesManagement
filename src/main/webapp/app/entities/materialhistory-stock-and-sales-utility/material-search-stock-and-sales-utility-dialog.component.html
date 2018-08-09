@@ -3,7 +3,21 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
-  
+
+    <hr>
+
+    <div class="container">
+    <div class="form-group row">
+            <div class="col-xs-3">
+                 <!--   <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                  </div>-->
+                  <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+            </div>
+        </div>
+     </div>
+        
       <div class="table-responsive" *ngIf="materials">
             <table class="table table-striped">
                 <thead>
@@ -77,6 +91,8 @@
                 </tbody>
             </table>
         </div> 
+    </div>
+       
        <div *ngIf="materials && materials.length">
             <div class="row justify-content-center">
                 <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
@@ -86,3 +102,11 @@
             </div>
         </div>
     </div>
+    <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+                <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" [disabled]=" isSaving" class="btn btn-primary">
+                <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+            </button>
+        </div>

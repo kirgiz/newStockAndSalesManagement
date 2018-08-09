@@ -3,8 +3,8 @@
       <span class="hipster img-fluid rounded"></span>
     </div>
     <div class="col-md-9">
-      <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
-      <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
+    <!-- <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
+      <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>-->
   
       <div [ngSwitch]="isAuthenticated()">
         <div class="alert alert-success" *ngSwitchCase="true">
@@ -200,7 +200,24 @@
     </div>
   
   </div>
-  
+  <div class="row">
+      <div class="col">
+    
+      </div>
+      <div class="col">
+        <a routerLink="materialclassification-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          class="list-group-item clearfix">
+          <div class="pull-left">
+            <h5 class="list-group-item-heading">Types d'articles</h5>
+            <p class="list-group-item-text">Gérer/Visualiser les Types d'articles</p>
+          </div>
+          <span class="pull-right">
+            <img src="../../content/images/setup.jpeg" alt="noImage" class="img-responsive" style="max-height: 25px;">
+          </span>
+        </a>
+      </div>
+    
+    </div>
   </div>
   </div>
   </div>
