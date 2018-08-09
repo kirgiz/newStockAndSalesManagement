@@ -50,6 +50,16 @@ export class MaterialStockAndSalesUtilityDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        const theDate = new Date(Date.now());
+        const year1  =  new Date(Date.now()).getFullYear() ;
+        const month1 = new Date(Date.now()).getMonth() + 1 ;
+        const day1 = new Date(Date.now()).getDate() ;
+        const dd:  {year: any; month: any; day: any} = {
+            year: year1,
+            month: month1,
+            day: day1};
+        this.material.creationDate = dd;
+        this.isSaving = true;
         if (this.material.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.materialService.update(this.material));

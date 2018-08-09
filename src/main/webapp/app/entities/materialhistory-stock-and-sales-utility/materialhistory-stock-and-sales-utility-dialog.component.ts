@@ -12,6 +12,7 @@ import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-st
 import { MaterialStockAndSalesUtility, MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 import { TransferclassificationStockAndSalesUtility, TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility';
 import { ThirdStockAndSalesUtility, ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
+// import { JhiDateUtils } from 'ng-jhipster';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -36,7 +37,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         private materialService: MaterialStockAndSalesUtilityService,
         private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
         private thirdService: ThirdStockAndSalesUtilityService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+      //  private dateUtils: JhiDateUtils
     ) {
     }
 
@@ -56,6 +58,17 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
 
     save() {
         this.isSaving = true;
+        const theDate = new Date(Date.now());
+        const year1  =  new Date(Date.now()).getFullYear() ;
+        const month1 = new Date(Date.now()).getMonth() + 1 ;
+        const day1 = new Date(Date.now()).getDate() ;
+        const dd:  {year: any; month: any; day: any} = {
+            year: year1,
+            month: month1,
+            day: day1};
+        this.materialhistory.creationDate = dd;
+
+
         if (this.materialhistory.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.materialhistoryService.update(this.materialhistory));
@@ -73,7 +86,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
         this.eventManager.broadcast({ name: 'materialhistoryListModification', content: 'OK'});
         this.isSaving = false;
-        this.activeModal.dismiss(result);
+       // this.activeModal.dismiss(result);
     }
 
     private onSaveError() {

@@ -14,7 +14,7 @@
     <br/>
     <div class="table-responsive" *ngIf="materials">
         <table class="table table-striped">
-            <thead>
+          <!--  <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.material.code">Code</span> <span class="fa fa-sort"></span></th>
@@ -27,7 +27,7 @@
             <th></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody>-->
             <tr *ngFor="let material of materials ;trackBy: trackId">
                 <td><a [routerLink]="['../material-stock-and-sales-utility', material.id ]">{{material.id}}</a></td>
                 <td>{{material.code}}</td>
@@ -76,15 +76,15 @@
                     </div>
                 </td>
             </tr>
-            </tbody>
+           <!-- </tbody> -->
         </table>
     </div>
-    <div *ngIf="materials && materials.length">
+     <!--  <div *ngIf="materials && materials.length">
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
         </div>
         <div class="row justify-content-center">
             <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
         </div>
-    </div>
+    </div> -->
 </div>

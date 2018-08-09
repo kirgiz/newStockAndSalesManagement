@@ -23,7 +23,7 @@
                 </small>
             </div>
         </div>
-        <div class="form-group">
+        <!--<div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.creationDate" for="field_creationDate">Creation Date</label>
             <div class="input-group">
                 <input id="field_creationDate" type="text" class="form-control" name="creationDate" ngbDatepicker  #creationDateDp="ngbDatepicker" [(ngModel)]="materialhistory.creationDate"
@@ -38,7 +38,7 @@
                    This field is required.
                 </small>
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.price" for="field_price">Price</label>
             <input type="number" class="form-control" name="price" id="field_price"
@@ -56,31 +56,32 @@
             </div>
         </div>
 
+        <br>
+        <div class="btn-group flex-btn-group-container">
+            <button type="submit"
+                    [routerLink]="['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }]"
+                    replaceUrl="true"
+                    queryParamsHandling="merge"
+                    class="btn btn-info btn-sm">
+                <span class="fa fa-eye"></span>
+                <span class="d-none d-md-inline" >Sélection des Articles</span>
+            </button>
+        </div>
+
         <div class="form-group">
             <label jhiTranslate="stockAndSalesManagementApp.materialhistory.itemTransfered" for="field_itemTransfered">Item Transfered</label>
             <select class="form-control" id="field_itemTransfered" multiple name="itemTransfered" [(ngModel)]="materialhistory.itemTransfereds">
                 <option [ngValue]="getSelected(materialhistory.itemTransfereds, materialOption)" *ngFor="let materialOption of materials; trackBy: trackMaterialById">{{materialOption.id}}</option>
             </select>
         </div>
-            <div class="btn-group flex-btn-group-container">
+         <!--   <div class="btn-group flex-btn-group-container">
                 <button type="submit"
                         [routerLink]="['../material-search-stock-and-sales-utility-nopopup']"
                         class="btn btn-info btn-sm">
                     <span class="fa fa-eye"></span>
                     <span class="d-none d-md-inline" >No popup</span>
                 </button>
-            </div>
-            <br>
-            <div class="btn-group flex-btn-group-container">
-                <button type="submit"
-                        [routerLink]="['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }]"
-                        class="btn btn-info btn-sm">
-                    <span class="fa fa-eye"></span>
-                    <span class="d-none d-md-inline" >Popup</span>
-                </button>
-            </div>
-
-
+            </div>-->
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>

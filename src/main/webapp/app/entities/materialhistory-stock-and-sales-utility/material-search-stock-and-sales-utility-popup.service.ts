@@ -2,8 +2,9 @@ import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
-import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
-import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
+import { MaterialStockAndSalesUtility } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.service';
+import { MaterialSearchStockAndSalesUtilityResolvePagingParams} from './';
 
 @Injectable()
 export class MaterialSearchStockAndSalesUtilityPopupService {
@@ -12,50 +13,51 @@ export class MaterialSearchStockAndSalesUtilityPopupService {
     constructor(
         private modalService: NgbModal,
         private router: Router,
-        private materialhistoryService: MaterialhistoryStockAndSalesUtilityService
+        private materialService: MaterialStockAndSalesUtilityService
 
     ) {
         this.ngbModalRef = null;
         console.log('zboub');
     }
 
-    open(component: Component, id?: number | any): Promise<NgbModalRef> {
+    open(component: Component //, id?: number | any
+    ): Promise<NgbModalRef> {
         return new Promise<NgbModalRef>((resolve, reject) => {
             const isOpen = this.ngbModalRef !== null;
             if (isOpen) {
                 resolve(this.ngbModalRef);
             }
 
-            if (id) {
-                this.materialhistoryService.find(id)
-                    .subscribe((materialhistoryResponse: HttpResponse<MaterialhistoryStockAndSalesUtility>) => {
-                        const materialhistory: MaterialhistoryStockAndSalesUtility = materialhistoryResponse.body;
-                        if (materialhistory.creationDate) {
-                            materialhistory.creationDate = {
-                                year: materialhistory.creationDate.getFullYear(),
-                                month: materialhistory.creationDate.getMonth() + 1,
-                                day: materialhistory.creationDate.getDate()
+            /*if (id) {
+                this.materialService.find(id)
+                    .subscribe((materialResponse: HttpResponse<MaterialStockAndSalesUtility>) => {
+                        const material: MaterialStockAndSalesUtility = materialResponse.body;
+                        if (material.creationDate) {
+                            material.creationDate = {
+                                year: material.creationDate.getFullYear(),
+                                month: material.creationDate.getMonth() + 1,
+                                day: material.creationDate.getDate()
                             };
                         }
-                        this.ngbModalRef = this.materialSearchModalRef(component, materialhistory);
+                        this.ngbModalRef = this.materialSearchModalRef(component, material);
                         resolve(this.ngbModalRef);
                     });
-            } else {
+            } else {*/
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
-                    this.ngbModalRef = this.materialSearchModalRef(component, new MaterialhistoryStockAndSalesUtility());
+                    this.ngbModalRef = this.materialSearchModalRef(component, new MaterialStockAndSalesUtility());
                     resolve(this.ngbModalRef);
                 }, 0);
-            }
+         //   }
         });
     }
 
-    materialSearchModalRef(component: Component, materialhistory: MaterialhistoryStockAndSalesUtility): NgbModalRef {
+    materialSearchModalRef(component: Component, material: MaterialStockAndSalesUtility): NgbModalRef {
         console.log('zboub');
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
-        modalRef.componentInstance.materialhistory = materialhistory;
+        modalRef.componentInstance.material = material;
         modalRef.result.then((result) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
+            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true,  queryParamsHandling: 'merge' });
             this.ngbModalRef = null;
         }, (reason) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });

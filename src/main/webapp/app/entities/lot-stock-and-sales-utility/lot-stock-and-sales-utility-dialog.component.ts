@@ -44,6 +44,16 @@ export class LotStockAndSalesUtilityDialogComponent implements OnInit {
 
     save() {
         this.isSaving = true;
+        this.isSaving = true;
+        const theDate = new Date(Date.now());
+        const year1  =  new Date(Date.now()).getFullYear() ;
+        const month1 = new Date(Date.now()).getMonth() + 1 ;
+        const day1 = new Date(Date.now()).getDate() ;
+        const dd:  {year: any; month: any; day: any} = {
+            year: year1,
+            month: month1,
+            day: day1};
+        this.lot.creationDate = dd;
         if (this.lot.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.lotService.update(this.lot));

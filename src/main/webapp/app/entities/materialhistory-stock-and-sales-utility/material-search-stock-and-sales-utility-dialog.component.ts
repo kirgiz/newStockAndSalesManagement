@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { MaterialSearchStockAndSalesUtilityPopupService } from './material-search-stock-and-sales-utility-popup.service';
@@ -12,6 +12,8 @@ import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-st
 import { MaterialStockAndSalesUtility, MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 import { TransferclassificationStockAndSalesUtility, TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility';
 import { ThirdStockAndSalesUtility, ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
+import { Router } from '@angular/router';
+import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-material-search-stock-and-sales-utility-dialog',
@@ -29,26 +31,79 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     thirds: ThirdStockAndSalesUtility[];
     creationDateDp: any;
 
+    routeData: any;
+    links: any;
+    totalItems: any;
+    queryCount: any;
+    itemsPerPage: any;
+    page: any;
+    predicate: any;
+    previousPage: any;
+    reverse: any;
+
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
+        private parseLinks: JhiParseLinks,
         private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
         private materialService: MaterialStockAndSalesUtilityService,
         private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
         private thirdService: ThirdStockAndSalesUtilityService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private router: Router,
+        private activatedRoute: ActivatedRoute
     ) {
-    }
+        console.log('this.activatedRoute.data');
+      // console.log(JSON.stringify(this.activatedRoute.data));
+        this.itemsPerPage = ITEMS_PER_PAGE;
+        this.routeData = this.activatedRoute.data.subscribe((data) => {
+           //  console.log(data);
+            this.page =  1;  //data.pagingParams.page;
+            this.previousPage =  1 ; // data.pagingParams.page; 
+            this.reverse =  'asc'; // data.pagingParams.ascending;
+            this.predicate = 'id'; // data.pagingParams.predicate; 
+
+    });
+}
 
     ngOnInit() {
+        this.loadAll();
+           }
+
+    loadAll() {
+        this.materialService.query({
+            page: this.page - 1,
+            size: this.itemsPerPage,
+            sort: this.sort()}).subscribe(
+                (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => this.onSuccess(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message));
         console.log('zboubbbbbbb');
         this.isSaving = false;
-        this.materialService.query()
-            .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => { this.materials = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.transferclassificationService.query()
-            .subscribe((res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => { this.transferclassifications = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+     /*   this.materialService.query()
+            .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => { this.materials = res.body;
+                 console.log('dialog materials' + JSON.stringify(res.body)); }, (res: HttpErrorResponse) => this.onError(res.message));
+     */   this.transferclassificationService.query()
+            .subscribe((res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
+                this.transferclassifications = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.thirdService.query()
             .subscribe((res: HttpResponse<ThirdStockAndSalesUtility[]>) => { this.thirds = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+
+    }
+
+    private onSuccess(data, headers) {
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        this.queryCount = this.totalItems;
+        // this.page = pagingParams.page;
+        this.materials = data;
+    }
+
+    sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
     }
 
     clear() {
@@ -83,6 +138,17 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     private onError(error: any) {
         this.jhiAlertService.error(error.message, null, null);
+    }
+
+    transition() {
+        this.router.navigate(['/material-search-stock-and-sales-utility'], {queryParams:
+            {
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
+            }
+        });
+        this.loadAll();
     }
 
     trackMaterialById(index: number, item: MaterialStockAndSalesUtility) {
@@ -123,15 +189,21 @@ export class MaterialSearchStockAndSalesUtilityPopupComponent implements OnInit,
     ) {}
 
     ngOnInit() {
+        console.log('routeParams');
+      //  console.log(JSON.stringify(this.route));
         this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
+          /*  if ( params['id'] ) {
                 this.materialSearchPopupService
                     .open(MaterialSearchStockAndSalesUtilityDialogComponent as Component, params['id']);
-            } else {
+            } else {*/
+                console.log('routeParams');
+                console.log(JSON.stringify(params));
                 this.materialSearchPopupService
                     .open(MaterialSearchStockAndSalesUtilityDialogComponent as Component);
-            }
+            // }
         });
+        console.log('route subscription');
+        console.log(this.routeSub);
     }
 
     ngOnDestroy() {

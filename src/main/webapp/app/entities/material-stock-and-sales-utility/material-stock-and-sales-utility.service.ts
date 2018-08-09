@@ -18,6 +18,7 @@ export class MaterialStockAndSalesUtilityService {
     constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
 
     create(material: MaterialStockAndSalesUtility): Observable<EntityResponseType> {
+        console.log(material.creationDate);
         const copy = this.convert(material);
         return this.http.post<MaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
             .map((res: EntityResponseType) => this.convertResponse(res));

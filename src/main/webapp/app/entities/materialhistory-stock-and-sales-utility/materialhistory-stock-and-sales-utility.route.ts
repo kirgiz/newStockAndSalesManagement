@@ -20,6 +20,7 @@ export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements R
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+        console.log('000000000000000000000000000000000');
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
@@ -36,6 +37,7 @@ export class MaterialSearchStockAndSalesUtilityResolvePagingParams implements Re
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+        console.log('dgdfsgdsgdfgdfgdffgdfgdfgdfgdfgf');
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
