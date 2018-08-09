@@ -35,7 +35,7 @@ dashboards: DashboardStockAndSalesUtility[];
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
-      
+
     }
     ngOnInit() {
         this.loadAll();
