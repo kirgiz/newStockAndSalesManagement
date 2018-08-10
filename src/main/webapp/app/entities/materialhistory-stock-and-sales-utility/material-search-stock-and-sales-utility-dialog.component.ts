@@ -25,6 +25,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     isSaving: boolean;
 
     materials: MaterialStockAndSalesUtility[];
+    materialsToDisplay: [{id: any, code: any, description: any, materialTypeDefName: any, lotIdentifierCode: any}];
     selectedMaterial: number[];
 
     transferclassifications: TransferclassificationStockAndSalesUtility[];
@@ -90,7 +91,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         this.thirdService.query()
             .subscribe((res: HttpResponse<ThirdStockAndSalesUtility[]>) => { this.thirds = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
 
-    }
+        }
 
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
@@ -98,6 +99,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.materials = data;
+        this.materialsToDisplay = data;
     }
 
     sort() {
@@ -175,6 +177,17 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         }
         return option;
     }
+
+    onKey(event: any) {
+        // tslint:disable-next-line:curly
+        if (!event.target.value) return this.materialsToDisplay;
+       const searchText = event.target.value.toLowerCase();
+       let t = this.materialsToDisplay.filter( (it) => {
+          return it.code.toLowerCase().includes(searchText) ||
+          it.description.toLowerCase().includes(searchText);
+    });
+  // this.materialsToDisplay = t;
+      }
 }
 
 @Component({

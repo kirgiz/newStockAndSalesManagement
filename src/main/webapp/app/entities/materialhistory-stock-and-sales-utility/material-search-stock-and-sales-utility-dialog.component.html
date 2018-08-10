@@ -13,7 +13,7 @@
                         <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">@</span>
                   </div>-->
-                  <input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+                  <input [(ngModel)]="searchfield"  (keyup)="onKey($event)" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
             </div>
         </div>
      </div>
@@ -34,8 +34,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let material of materials ;trackBy: trackId">
-                    <!--  <td><a [routerLink]="['../material-stock-and-sales-utility', material.id ]">{{material.id}}</a></td>-->
+                <tr *ngFor="let material of materialsToDisplay  ;trackBy: trackId">
+                    <!-- | fullTextSearch:searchfield:'code' <td><a [routerLink]="['../material-stock-and-sales-utility', material.id ]">{{material.id}}</a></td>-->
                     <td><div class="form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                        <!-- <label class="form-check-label" for="exampleCheck1">Check me out</label>-->
