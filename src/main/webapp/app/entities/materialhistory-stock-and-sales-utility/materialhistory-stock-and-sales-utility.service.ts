@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
@@ -7,11 +7,14 @@ import { JhiDateUtils } from 'ng-jhipster';
 
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { createRequestOption } from '../../shared';
+import { MaterialStockAndSalesUtility } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.model';
 
 export type EntityResponseType = HttpResponse<MaterialhistoryStockAndSalesUtility>;
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityService {
+
+    @Output() selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
 
     private resourceUrl =  SERVER_API_URL + 'api/materialhistories';
 
@@ -78,5 +81,9 @@ export class MaterialhistoryStockAndSalesUtilityService {
         copy.creationDate = this.dateUtils
             .convertLocalDateToServer(materialhistory.creationDate);
         return copy;
+    }
+
+    selectMaterial(materials: MaterialStockAndSalesUtility[]) {
+        this.selectedMaterial.emit(materials );
     }
 }

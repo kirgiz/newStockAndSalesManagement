@@ -13,6 +13,7 @@ import { MaterialStockAndSalesUtility, MaterialStockAndSalesUtilityService } fro
 import { TransferclassificationStockAndSalesUtility, TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility';
 import { ThirdStockAndSalesUtility, ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
 // import { JhiDateUtils } from 'ng-jhipster';
+import { BaseEntity } from '../../shared/model/base-entity';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -44,13 +45,22 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
 
     ngOnInit() {
         this.isSaving = false;
-        this.materialService.query()
-            .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => { this.materials = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.transferclassificationService.query()
+          this.transferclassificationService.query()
             .subscribe((res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => { this.transferclassifications = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
         this.thirdService.query()
             .subscribe((res: HttpResponse<ThirdStockAndSalesUtility[]>) => { this.thirds = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-    }
+if (!this.materialhistory.id) {
+            this.materialhistory.itemTransfereds = [];
+            this.materialhistoryService.selectedMaterial.subscribe(
+                (data: MaterialStockAndSalesUtility[]) => {
+                    this.materials = data;
+                this.materialhistory.itemTransfereds = this.materials;
+                  } );
+ } else
+ {
+   this.materials =  this.materialhistory.itemTransfereds;
+ }
+        }
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -67,14 +77,15 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
             month: month1,
             day: day1};
         this.materialhistory.creationDate = dd;
-
+        console.log('adfdsffsfsdfsdfsdfsdfdsfsdfsdfsdfdsgsffgjfhj');
+        console.log(JSON.stringify(this.materialhistory));
 
         if (this.materialhistory.id !== undefined) {
             this.subscribeToSaveResponse(
                 this.materialhistoryService.update(this.materialhistory));
         } else {
-            this.subscribeToSaveResponse(
-                this.materialhistoryService.create(this.materialhistory));
+            this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
+            this.subscribeToSaveResponse(this.materialhistoryService.create(this.materialhistory));
         }
     }
 
@@ -86,7 +97,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
         this.eventManager.broadcast({ name: 'materialhistoryListModification', content: 'OK'});
         this.isSaving = false;
-       // this.activeModal.dismiss(result);
+        this.activeModal.dismiss(result);
     }
 
     private onSaveError() {

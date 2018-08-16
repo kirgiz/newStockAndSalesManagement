@@ -3,27 +3,27 @@
     "stockAndSalesManagementApp": {
         "materialhistory" : {
             "home": {
-                "title": "Materialhistories",
-                "createLabel": "Créer un nouveau Materialhistory",
-                "createOrEditLabel": "Créer ou éditer un Materialhistory"
+                "title": "Transfers/Ventes/Achats",
+                "createLabel": "Nouveau Transfert",
+                "createOrEditLabel": "Transfer"
             },
-            "created": "Un nouveau Materialhistory a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Materialhistory avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Materialhistory avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau transfert a été créé avec l'identifiant {{ param }}",
+            "updated": "Le transfert avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le transfert avec l'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Materialhistory {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le transfert {{ id }} ?"
             },
             "detail": {
-                "title": "Materialhistory"
+                "title": "Transfers"
             },
             "code": "Code",
-            "creationDate": "Creation Date",
-            "price": "Price",
-            "comments": "Comments",
-            "itemTransfered": "Item Transfered",
-            "transferClassif": "Transfer Classif",
-            "warehousefrom": "Warehousefrom",
-            "warehouseto": "Warehouseto"
+            "creationDate": "Date de Création",
+            "price": "Prix",
+            "comments": "Commentaires",
+            "itemTransfered": "Articles transférés",
+            "transferClassif": "Type de Transfert",
+            "warehousefrom": "Source",
+            "warehouseto": "Destination"
         }
     }
 }

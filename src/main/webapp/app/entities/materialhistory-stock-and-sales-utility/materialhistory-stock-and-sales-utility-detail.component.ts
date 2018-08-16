@@ -35,6 +35,7 @@ export class MaterialhistoryStockAndSalesUtilityDetailComponent implements OnIni
         this.materialhistoryService.find(id)
             .subscribe((materialhistoryResponse: HttpResponse<MaterialhistoryStockAndSalesUtility>) => {
                 this.materialhistory = materialhistoryResponse.body;
+                console.log(JSON.stringify(this.materialhistory.itemTransfereds));
             });
     }
     previousState() {

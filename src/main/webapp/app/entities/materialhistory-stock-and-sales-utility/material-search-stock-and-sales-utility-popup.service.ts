@@ -17,10 +17,9 @@ export class MaterialSearchStockAndSalesUtilityPopupService {
 
     ) {
         this.ngbModalRef = null;
-        console.log('zboub');
     }
 
-    open(component: Component //, id?: number | any
+    open(component: Component
     ): Promise<NgbModalRef> {
         return new Promise<NgbModalRef>((resolve, reject) => {
             const isOpen = this.ngbModalRef !== null;
@@ -28,32 +27,14 @@ export class MaterialSearchStockAndSalesUtilityPopupService {
                 resolve(this.ngbModalRef);
             }
 
-            /*if (id) {
-                this.materialService.find(id)
-                    .subscribe((materialResponse: HttpResponse<MaterialStockAndSalesUtility>) => {
-                        const material: MaterialStockAndSalesUtility = materialResponse.body;
-                        if (material.creationDate) {
-                            material.creationDate = {
-                                year: material.creationDate.getFullYear(),
-                                month: material.creationDate.getMonth() + 1,
-                                day: material.creationDate.getDate()
-                            };
-                        }
-                        this.ngbModalRef = this.materialSearchModalRef(component, material);
-                        resolve(this.ngbModalRef);
-                    });
-            } else {*/
-                // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
                     this.ngbModalRef = this.materialSearchModalRef(component, new MaterialStockAndSalesUtility());
                     resolve(this.ngbModalRef);
                 }, 0);
-         //   }
         });
     }
 
     materialSearchModalRef(component: Component, material: MaterialStockAndSalesUtility): NgbModalRef {
-        console.log('zboub');
         const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.material = material;
         modalRef.result.then((result) => {

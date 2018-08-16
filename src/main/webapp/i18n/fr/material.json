@@ -3,26 +3,26 @@
     "stockAndSalesManagementApp": {
         "material" : {
             "home": {
-                "title": "Materials",
-                "createLabel": "Créer un nouveau Material",
-                "createOrEditLabel": "Créer ou éditer un Material"
+                "title": "Articles",
+                "createLabel": "Créer un nouvel article",
+                "createOrEditLabel": "Créer ou éditer un article"
             },
-            "created": "Un nouveau Material a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Material avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Material avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouvel article a été créé avec l'identifiant {{ param }}",
+            "updated": "Le article avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le article avec l'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Material {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer l'article' {{ id }} ?"
             },
             "detail": {
-                "title": "Material"
+                "title": "Article"
             },
             "code": "Code",
             "description": "Description",
             "creationDate": "Creation Date",
             "comments": "Comments",
-            "materialTypeDef": "Material Type Def",
-            "lotIdentifier": "Lot Identifier",
-            "materialTypeCat": "Material Type Cat"
+            "materialTypeDef": "Type",
+            "lotIdentifier": "Lot",
+            "materialTypeCat": "Type"
         }
     }
 }
