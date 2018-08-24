@@ -1,5 +1,6 @@
+import {MaterialclassificationStockAndSalesUtility} from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
@@ -14,122 +15,176 @@ import { TransferclassificationStockAndSalesUtility, TransferclassificationStock
 import { ThirdStockAndSalesUtility, ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
 // import { JhiDateUtils } from 'ng-jhipster';
 import { BaseEntity } from '../../shared/model/base-entity';
+import { Subscription } from 'rxjs/Subscription';
+import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility';
 
 @Component({
-    selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
-    templateUrl: './materialhistory-stock-and-sales-utility-dialog.component.html'
+  selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
+  templateUrl: './materialhistory-stock-and-sales-utility-dialog.component.html'
 })
-export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnInit {
+export class MaterialhistoryStockAndSalesUtilityDialogComponent
+  implements OnInit, OnDestroy {
+  materialClassificationSubscription: Subscription;
+  materialClassifications: MaterialclassificationStockAndSalesUtility[];
 
-    materialhistory: MaterialhistoryStockAndSalesUtility;
-    isSaving: boolean;
+  selectedMaterialSubscription: Subscription;
 
-    materials: MaterialStockAndSalesUtility[];
+  materialhistory: MaterialhistoryStockAndSalesUtility;
+  isSaving: boolean;
 
-    transferclassifications: TransferclassificationStockAndSalesUtility[];
+  materials: MaterialStockAndSalesUtility[];
 
-    thirds: ThirdStockAndSalesUtility[];
-    creationDateDp: any;
+  transferclassifications: TransferclassificationStockAndSalesUtility[];
 
-    constructor(
-        public activeModal: NgbActiveModal,
-        private jhiAlertService: JhiAlertService,
-        private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
-        private materialService: MaterialStockAndSalesUtilityService,
-        private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
-        private thirdService: ThirdStockAndSalesUtilityService,
-        private eventManager: JhiEventManager,
-      //  private dateUtils: JhiDateUtils
-    ) {
-    }
+  thirds: ThirdStockAndSalesUtility[];
+  creationDateDp: any;
+  materialTypeId: number;
 
-    ngOnInit() {
-        this.isSaving = false;
-          this.transferclassificationService.query()
-            .subscribe((res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => { this.transferclassifications = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.thirdService.query()
-            .subscribe((res: HttpResponse<ThirdStockAndSalesUtility[]>) => { this.thirds = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-if (!this.materialhistory.id) {
-            this.materialhistory.itemTransfereds = [];
-            this.materialhistoryService.selectedMaterial.subscribe(
-                (data: MaterialStockAndSalesUtility[]) => {
-                    this.materials = data;
-                this.materialhistory.itemTransfereds = this.materials;
-                  } );
- } else
- {
-   this.materials =  this.materialhistory.itemTransfereds;
- }
+  constructor(
+    public activeModal: NgbActiveModal,
+    private jhiAlertService: JhiAlertService,
+    private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
+    private materialService: MaterialStockAndSalesUtilityService,
+    private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
+    private thirdService: ThirdStockAndSalesUtilityService,
+    private eventManager: JhiEventManager,
+    private materialclassificationStockAndSalesUtilityService: MaterialclassificationStockAndSalesUtilityService,
+    private router: Router //  private dateUtils: JhiDateUtils
+  ) {}
+
+  ngOnInit() {
+    this.isSaving = false;
+    this.transferclassificationService.query().subscribe(
+      (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
+        this.transferclassifications = res.body;
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    this.thirdService.query().subscribe(
+      (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
+        this.thirds = res.body;
+      },
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+    if (!this.materialhistory.id) {
+      this.materialhistory.itemTransfereds = [];
+      this.selectedMaterialSubscription = this.materialhistoryService.selectedMaterial.subscribe(
+        (data: MaterialStockAndSalesUtility[]) => {
+          this.materials = data;
+          this.materialhistory.itemTransfereds = this.materials;
         }
-
-    clear() {
-        this.activeModal.dismiss('cancel');
+      );
+    } else {
+      this.materials = this.materialhistory.itemTransfereds;
     }
 
-    save() {
-        this.isSaving = true;
-        const theDate = new Date(Date.now());
-        const year1  =  new Date(Date.now()).getFullYear() ;
-        const month1 = new Date(Date.now()).getMonth() + 1 ;
-        const day1 = new Date(Date.now()).getDate() ;
-        const dd:  {year: any; month: any; day: any} = {
-            year: year1,
-            month: month1,
-            day: day1};
-        this.materialhistory.creationDate = dd;
-        console.log('adfdsffsfsdfsdfsdfsdfdsfsdfsdfsdfdsgsffgjfhj');
-        console.log(JSON.stringify(this.materialhistory));
+    this.materialClassificationSubscription = this.materialclassificationStockAndSalesUtilityService.query().subscribe(
+      ( res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+        this.materialClassifications = res.body;
+      }
+    );
+  }
 
-        if (this.materialhistory.id !== undefined) {
-            this.subscribeToSaveResponse(
-                this.materialhistoryService.update(this.materialhistory));
-        } else {
-            this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
-            this.subscribeToSaveResponse(this.materialhistoryService.create(this.materialhistory));
-        }
-    }
+  clear() {
+    this.activeModal.dismiss('cancel');
+  }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<MaterialhistoryStockAndSalesUtility>>) {
-        result.subscribe((res: HttpResponse<MaterialhistoryStockAndSalesUtility>) =>
-            this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+  save() {
+    this.isSaving = true;
+    const theDate = new Date(Date.now());
+    const year1 = new Date(Date.now()).getFullYear();
+    const month1 = new Date(Date.now()).getMonth() + 1;
+    const day1 = new Date(Date.now()).getDate();
+    const dd: { year: any; month: any; day: any } = {
+      year: year1,
+      month: month1,
+      day: day1
+    };
+    this.materialhistory.creationDate = dd;
+    if (this.materialhistory.id !== undefined) {
+      this.subscribeToSaveResponse(
+        this.materialhistoryService.update(this.materialhistory)
+      );
+    } else {
+      this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
+      this.subscribeToSaveResponse(
+        this.materialhistoryService.create(this.materialhistory)
+      );
     }
+  }
 
-    private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
-        this.eventManager.broadcast({ name: 'materialhistoryListModification', content: 'OK'});
-        this.isSaving = false;
-        this.activeModal.dismiss(result);
-    }
+  private subscribeToSaveResponse(
+    result: Observable<HttpResponse<MaterialhistoryStockAndSalesUtility>>
+  ) {
+    result.subscribe(
+      (res: HttpResponse<MaterialhistoryStockAndSalesUtility>) =>
+        this.onSaveSuccess(res.body),
+      (res: HttpErrorResponse) => this.onSaveError()
+    );
+  }
 
-    private onSaveError() {
-        this.isSaving = false;
-    }
+  private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
+    this.eventManager.broadcast({
+      name: 'materialhistoryListModification',
+      content: 'OK'
+    });
+    this.isSaving = false;
+    this.activeModal.dismiss(result);
+  }
 
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
-    }
+  private onSaveError() {
+    this.isSaving = false;
+  }
 
-    trackMaterialById(index: number, item: MaterialStockAndSalesUtility) {
-        return item.id;
-    }
+  private onError(error: any) {
+    this.jhiAlertService.error(error.message, null, null);
+  }
 
-    trackTransferclassificationById(index: number, item: TransferclassificationStockAndSalesUtility) {
-        return item.id;
-    }
+  trackMaterialById(index: number, item: MaterialStockAndSalesUtility) {
+    return item.id;
+  }
 
-    trackThirdById(index: number, item: ThirdStockAndSalesUtility) {
-        return item.id;
-    }
+  trackTransferclassificationById(
+    index: number,
+    item: TransferclassificationStockAndSalesUtility
+  ) {
+    return item.id;
+  }
 
-    getSelected(selectedVals: Array<any>, option: any) {
-        if (selectedVals) {
-            for (let i = 0; i < selectedVals.length; i++) {
-                if (option.id === selectedVals[i].id) {
-                    return selectedVals[i];
-                }
-            }
-        }
-        return option;
+  trackmaterialclassificationById(
+    index: number,
+    item: TransferclassificationStockAndSalesUtility
+  ) {
+    return item.id;
+  }
+
+  trackMaterialclassificationById(
+    index: number,
+    item: MaterialclassificationStockAndSalesUtility
+  ) {
+    return item.id;
+  }
+
+  trackThirdById(index: number, item: ThirdStockAndSalesUtility) {
+    return item.id;
+  }
+
+  ngOnDestroy() {
+    if (this.selectedMaterialSubscription) {
+      this.selectedMaterialSubscription.unsubscribe();
     }
+  }
+  onSelectArticle() {
+
+    console.log('material type ' + this.materialTypeId);
+
+      this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId}});
+      // this.materialhistoryService.SelectmaterialType(this.materialTypeId);
+
+    //  this.materialhistoryService.stopSelectmaterialType();
+  }
+
+
 }
 
 @Component({

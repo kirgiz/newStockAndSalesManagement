@@ -22,7 +22,6 @@ import {
     MaterialSearchStockAndSalesUtilityPopupComponent
 } from './';
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
-import { FullTextSearchPipe } from './materialfilter.pipe';
 
 const ENTITY_STATES = [
     ...materialhistoryRoute,
@@ -45,8 +44,7 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
         MaterialSearchStockAndSalesUtilityComponent,
         MaterialSearchStockAndSalesUtilityDialogComponent,
-        MaterialSearchStockAndSalesUtilityPopupComponent,
-        FullTextSearchPipe
+        MaterialSearchStockAndSalesUtilityPopupComponent
     ],
     entryComponents: [
         MaterialhistoryStockAndSalesUtilityComponent,

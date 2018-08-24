@@ -54,6 +54,9 @@ import {
     Principal
 } from '../../shared';
 
+import 'rxjs/add/observable/forkJoin';
+import { logsRoute } from '../../admin/logs/logs.route';
+
 @Component({
     selector: 'jhi-material-search-stock-and-sales-utility-dialog',
     templateUrl: './material-search-stock-and-sales-utility-dialog.component.html'
@@ -71,7 +74,8 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         materialTypeDefName?: any,
         lotIdentifierCode?: any,
         selectedItem?: boolean,
-        displayItem?: boolean
+        displayItem?: boolean,
+        materialTypeDefId?: number
     }[];
     selectedMaterial: number[];
 
@@ -90,6 +94,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     previousPage: any;
     reverse: any;
     searchfield: string;
+    private selectedMaterialType: number;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -118,17 +123,51 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     }
 
     loadAll() {
-        this.materialService.query({
-            page: this.page - 1,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
-            this.onSuccess(res.body, res.headers);
-        },
-            (res: HttpErrorResponse) => {
-                this.onError(res.message);
-        } );
+        this.selectedMaterialType = +this.activatedRoute.snapshot.queryParams['matType'];
+        console.log(this.selectedMaterialType);
+        /*.queryParams
+        .filter((params) => params.order)
+        .subscribe((params) => {
+          console.log(params);
+          this.selectedMaterialType = params.matType;
+          console.log(this.selectedMaterialType);
+        });*/
+
+   /*     this.materialhistoryService.selectedMaterialTypeId.subscribe(
+            (materialTypeId) => {
+                this.selectedMaterialType = materialTypeId;
+                console.log('found mat type' +  this.selectedMaterialType );
+});*/
+
+this.materialService.query({
+    page: this.page - 1,
+    size: this.itemsPerPage,
+    sort: this.sort()
+}).subscribe(
+    (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
+    this.onSuccess(res.body, res.headers);
+    console.log('found mat type' +  this.selectedMaterialType );
+},
+    (res: HttpErrorResponse) => {
+        this.onError(res.message);
+}
+);
+
+
+
+   /* this.materialService.query({
+        page: this.page - 1,
+        size: this.itemsPerPage,
+        sort: this.sort()
+    }).subscribe(
+        (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
+        this.onSuccess(res.body, res.headers);
+    },
+        (res: HttpErrorResponse) => {
+            this.onError(res.message);
+    }
+);*/
+
         this.isSaving = false;
         this.transferclassificationService.query()
             .subscribe((res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
@@ -147,11 +186,37 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         // this.page = pagingParams.page;
         this.materials = data;
         this.materialsToDisplay = this.materials.slice();
+        console.log(this.materialsToDisplay);
         this.materialsToDisplay.forEach((element) => {
-        element.displayItem = true;
-        element.selectedItem = false;
-    });
-    }
+            element.displayItem = true;
+            element.selectedItem = false;
+            console.log('aaaaaaaaaaaa'  );
+            console.log( element );
+        }
+                );
+
+                let mat = this.materialsToDisplay;
+                if  (this.selectedMaterialType !== null) {
+                    console.log('big material' + mat );
+                    mat = this.materialsToDisplay.filter((item) => {
+                      //  console.log('selected type' + materialTypeId );
+                        console.log('mat type' + item.materialTypeDefId);
+                        return item.materialTypeDefId === this.selectedMaterialType; }
+                    ); }
+
+                //    console.log(mat);
+                    this.materialsToDisplay.forEach((element) => {
+                        element.displayItem = false;
+                        const index: number = mat.findIndex((originalElement) => element.id === originalElement.id);
+                        if (index > -1) { element.displayItem = true; }
+                    });
+                    console.log('big material filtered' +  this.materialsToDisplay );
+                    console.log(  this.materialsToDisplay );
+
+                    this.totalItems = mat.length;
+                    this.queryCount = mat.length;
+
+}
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -167,41 +232,14 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     save() {
         this.isSaving = true;
-    /*    if (this.materialhistory.id !== undefined) {
-            this.subscribeToSaveResponse(
-                this.materialhistoryService.update(this.materialhistory));
-        } else {
-            this.subscribeToSaveResponse(
-                this.materialhistoryService.create(this.materialhistory));
-        }*/
-    //    this.materialsToDisplay.forEach((material) => {})
-
         console.log('selected materials');
         // tslint:disable-next-line:arrow-return-shorthand
         console.log(JSON.stringify(this.materialsToDisplay.filter((material) => {return material.selectedItem === true; })));
         // tslint:disable-next-line:arrow-return-shorthand
         this.materialhistoryService.selectMaterial(this.materialsToDisplay.filter((material) => {return material.selectedItem === true; }));
         this.activeModal.close(this.materials);
-      //  this.selectMaterial.emit(this.materials );
-    }
 
-  /*  private subscribeToSaveResponse(result: Observable < HttpResponse < MaterialhistoryStockAndSalesUtility >> ) {
-        result.subscribe((res: HttpResponse < MaterialhistoryStockAndSalesUtility > ) =>
-        this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
     }
-
-    private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
-        this.eventManager.broadcast({
-            name: 'materialhistoryListModification',
-            content: 'OK'
-        });
-        this.isSaving = false;
-        this.activeModal.dismiss(result);
-    }
-
-    private onSaveError() {
-        this.isSaving = false;
-    }*/
 
     private onError(error: any) {
         this.jhiAlertService.error(error.message, null, null);
@@ -245,18 +283,23 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
             lotIdentifierCode?: any
         }[] = [];
         // tslint:disable-next-line:curly
-        // tslint:disable-next-line:curly
         if (!event.target.value) {
-         t = this.materialsToDisplay;
+         t = this.materialsToDisplay.filter((it) => {
+             return it.materialTypeDefId === this.selectedMaterialType;
+            });
         } else {
         const searchText = event.target.value.toLowerCase();
 
         t = this.materialsToDisplay.filter((it) => {
-            return it.code.toLowerCase().includes(searchText) ||
+            return (it.code.toLowerCase().includes(searchText) ||
                 it.description.toLowerCase().includes(searchText) ||
-                it.lotIdentifierCode.toLowerCase().includes(searchText);
+                it.lotIdentifierCode.toLowerCase().includes(searchText)) && it.materialTypeDefId === this.selectedMaterialType;
+
         });
     }
+    this.totalItems = t.length;
+    this.queryCount = t.length;
+
 
     this.materialsToDisplay.forEach((element) => {
         element.displayItem = false;

@@ -19,9 +19,9 @@
             "code": "Code",
             "name": "Name",
             "comments": "Comments",
-            "materialCategory": "Material Category",
-            "materialCat": "Material Cat",
-            "materialCategoryDashboard": "Material Category Dashboard"
+            "materialCategory": "Type d'Article",
+            "materialCat": "Type d'Article",
+            "materialCategoryDashboard": "Type d'Article"
         }
     }
 }
