@@ -16,7 +16,6 @@ export type EntityResponseType = HttpResponse<MaterialhistoryStockAndSalesUtilit
 export class MaterialhistoryStockAndSalesUtilityService {
 
     @Output() selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
-     selectedMaterialTypeId: Subject<number> = new Subject<number>();
 
     private resourceUrl =  SERVER_API_URL + 'api/materialhistories';
 
@@ -87,17 +86,5 @@ export class MaterialhistoryStockAndSalesUtilityService {
 
     selectMaterial(materials: MaterialStockAndSalesUtility[]) {
         this.selectedMaterial.emit(materials );
-    }
-
-    SelectmaterialType(materialType: number) {
-        this.selectedMaterialTypeId.next(materialType);
-    }
-
-    getSelectedMaterialType(): Subject<number> {
-        return this.selectedMaterialTypeId;
-    }
-
-    stopSelectmaterialType() {
-        this.selectedMaterialTypeId.complete();
     }
 }

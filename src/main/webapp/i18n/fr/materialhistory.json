@@ -23,7 +23,8 @@
             "itemTransfered": "Articles transférés",
             "transferClassif": "Type de Transfert",
             "warehousefrom": "Source",
-            "warehouseto": "Destination"
+            "warehouseto": "Destination",
+            "transferDate": "Date du Transfert"
         }
     }
 }

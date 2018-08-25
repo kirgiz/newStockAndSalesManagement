@@ -56,12 +56,13 @@ import {
 
 import 'rxjs/add/observable/forkJoin';
 import { logsRoute } from '../../admin/logs/logs.route';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'jhi-material-search-stock-and-sales-utility-dialog',
     templateUrl: './material-search-stock-and-sales-utility-dialog.component.html'
 })
-export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit {
+export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit, OnDestroy {
 
     materialhistory: MaterialhistoryStockAndSalesUtility;
     isSaving: boolean;
@@ -95,6 +96,9 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     reverse: any;
     searchfield: string;
     private selectedMaterialType: number;
+    private matSubscription: Subscription;
+    private transferClassificationSubscription: Subscription;
+    private thirdsubscription: Subscription;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -122,24 +126,15 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         this.loadAll();
     }
 
+    ngOnDestroy(): void {
+        this.matSubscription.unsubscribe();
+        this.transferClassificationSubscription.unsubscribe();
+        this.thirdsubscription.unsubscribe();
+    }
+
     loadAll() {
         this.selectedMaterialType = +this.activatedRoute.snapshot.queryParams['matType'];
-        console.log(this.selectedMaterialType);
-        /*.queryParams
-        .filter((params) => params.order)
-        .subscribe((params) => {
-          console.log(params);
-          this.selectedMaterialType = params.matType;
-          console.log(this.selectedMaterialType);
-        });*/
-
-   /*     this.materialhistoryService.selectedMaterialTypeId.subscribe(
-            (materialTypeId) => {
-                this.selectedMaterialType = materialTypeId;
-                console.log('found mat type' +  this.selectedMaterialType );
-});*/
-
-this.materialService.query({
+this.matSubscription = this.materialService.query({
     page: this.page - 1,
     size: this.itemsPerPage,
     sort: this.sort()
@@ -153,27 +148,12 @@ this.materialService.query({
 }
 );
 
-
-
-   /* this.materialService.query({
-        page: this.page - 1,
-        size: this.itemsPerPage,
-        sort: this.sort()
-    }).subscribe(
-        (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
-        this.onSuccess(res.body, res.headers);
-    },
-        (res: HttpErrorResponse) => {
-            this.onError(res.message);
-    }
-);*/
-
         this.isSaving = false;
-        this.transferclassificationService.query()
+ this.transferClassificationSubscription = this.transferclassificationService.query()
             .subscribe((res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
                 this.transferclassifications = res.body;
             }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.thirdService.query()
+       this.thirdsubscription =  this.thirdService.query()
             .subscribe((res: HttpResponse < ThirdStockAndSalesUtility[] > ) => {
                 this.thirds = res.body;
             }, (res: HttpErrorResponse) => this.onError(res.message));
@@ -190,28 +170,20 @@ this.materialService.query({
         this.materialsToDisplay.forEach((element) => {
             element.displayItem = true;
             element.selectedItem = false;
-            console.log('aaaaaaaaaaaa'  );
-            console.log( element );
         }
                 );
 
                 let mat = this.materialsToDisplay;
                 if  (this.selectedMaterialType !== null) {
-                    console.log('big material' + mat );
                     mat = this.materialsToDisplay.filter((item) => {
-                      //  console.log('selected type' + materialTypeId );
                         console.log('mat type' + item.materialTypeDefId);
                         return item.materialTypeDefId === this.selectedMaterialType; }
                     ); }
-
-                //    console.log(mat);
                     this.materialsToDisplay.forEach((element) => {
                         element.displayItem = false;
                         const index: number = mat.findIndex((originalElement) => element.id === originalElement.id);
                         if (index > -1) { element.displayItem = true; }
                     });
-                    console.log('big material filtered' +  this.materialsToDisplay );
-                    console.log(  this.materialsToDisplay );
 
                     this.totalItems = mat.length;
                     this.queryCount = mat.length;
@@ -307,6 +279,8 @@ this.materialService.query({
         if (index > -1) { element.displayItem = true; }
     });
     }
+
+
 }
 
 @Component({

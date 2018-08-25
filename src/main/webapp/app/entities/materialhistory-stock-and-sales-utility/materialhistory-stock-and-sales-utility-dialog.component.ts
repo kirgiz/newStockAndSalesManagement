@@ -25,7 +25,9 @@ import { MaterialclassificationStockAndSalesUtilityService } from '../materialcl
 export class MaterialhistoryStockAndSalesUtilityDialogComponent
   implements OnInit, OnDestroy {
   materialClassificationSubscription: Subscription;
+  thirdSubscription: Subscription;
   materialClassifications: MaterialclassificationStockAndSalesUtility[];
+  transferClassificationSubscription: Subscription;
 
   selectedMaterialSubscription: Subscription;
 
@@ -54,13 +56,13 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
 
   ngOnInit() {
     this.isSaving = false;
-    this.transferclassificationService.query().subscribe(
+    this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
       (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
         this.transferclassifications = res.body;
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
-    this.thirdService.query().subscribe(
+    this.thirdSubscription = this.thirdService.query().subscribe(
       (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
         this.thirds = res.body;
       },
@@ -172,6 +174,9 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
   ngOnDestroy() {
     if (this.selectedMaterialSubscription) {
       this.selectedMaterialSubscription.unsubscribe();
+      this.materialClassificationSubscription.unsubscribe();
+      this.thirdSubscription.unsubscribe();
+      this.transferClassificationSubscription.unsubscribe();
     }
   }
   onSelectArticle() {
@@ -179,11 +184,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     console.log('material type ' + this.materialTypeId);
 
       this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId}});
-      // this.materialhistoryService.SelectmaterialType(this.materialTypeId);
-
-    //  this.materialhistoryService.stopSelectmaterialType();
   }
-
 
 }
 
