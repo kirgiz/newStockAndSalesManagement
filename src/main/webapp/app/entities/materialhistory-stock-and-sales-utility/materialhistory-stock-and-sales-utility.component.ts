@@ -7,10 +7,11 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDateUtils } from 'n
 
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, User, BaseEntity } from "../../shared";
 import { TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.service';
 import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.model';
 import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.service';
+import { UserService } from '../../shared/user/user.service';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility',
@@ -18,6 +19,8 @@ import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utili
 })
 export class MaterialhistoryStockAndSalesUtilityComponent
   implements OnInit, OnDestroy {
+  userList: User[];
+  userServiceSubscription: Subscription;
   thirdList: ThirdStockAndSalesUtility[];
   transferclassifications: TransferclassificationStockAndSalesUtility[];
   transferClassificationSubscription: Subscription;
@@ -43,7 +46,18 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   date: { year: number; month: number; day: number };
   transferSource: number;
   transferDest: number;
-  materialhistoriesToDisplay: MaterialhistoryStockAndSalesUtility[];
+
+  materialhistoriesToDisplay: {id?: number,
+    code?: string,
+    creationDate?: any,
+     price?: number,
+     comments?: string,
+   userMod?: number,
+    itemTransfereds?: BaseEntity[],
+    transferClassifId?: number,
+     warehousefromId?: number,
+   warehousetoId?: number ,
+   userModName?: string} []; //MaterialhistoryStockAndSalesUtility[];
 
   constructor(
     private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
@@ -54,10 +68,11 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private eventManager: JhiEventManager,
-    private thirdService: ThirdStockAndSalesUtilityService
+    private thirdService: ThirdStockAndSalesUtilityService,
+    private userService: UserService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
-    this.routeData = this.activatedRoute.data.subscribe( (data) => {
+    this.routeData = this.activatedRoute.data.subscribe((data) => {
       this.page = data.pagingParams.page;
       this.previousPage = data.pagingParams.page;
       this.reverse = data.pagingParams.ascending;
@@ -73,8 +88,20 @@ export class MaterialhistoryStockAndSalesUtilityComponent
         sort: this.sort()
       })
       .subscribe(
-        (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) =>
-          this.onSuccess(res.body, res.headers),
+        (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => {
+            this.onSuccess(res.body, res.headers);
+            this.userServiceSubscription = this.userService.query().subscribe(
+                (res1: HttpResponse<User[]>) => {
+                  this.userList = res1.body;
+                  this.materialhistoriesToDisplay.forEach((item) =>
+                  this.userList.forEach((element) => { if  (element.id === item.userMod) {
+                      item.userModName = element.login; }
+                    }
+                )
+              );
+            },
+                (res1: HttpErrorResponse) => this.onError(res1.message));
+          },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
 
@@ -93,7 +120,9 @@ export class MaterialhistoryStockAndSalesUtilityComponent
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
-  }
+
+    }
+
   loadPage(page: number) {
     if (page !== this.previousPage) {
       this.previousPage = page;
@@ -123,12 +152,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
         );
         let ddthis: Date;
         if (this.date) {
-          ddthis = new Date(
-          this.date.year,
-          this.date.month - 1,
-          this.date.day
-        );
-    }
+          ddthis = new Date(this.date.year, this.date.month - 1, this.date.day);
+        }
         return (
           (item.transferClassifId === this.transferClassifId ||
             this.transferClassifId === null ||
@@ -176,6 +201,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     this.transferClassificationSubscription.unsubscribe();
     this.historySubscription.unsubscribe();
     this.thirdSubscription.unsubscribe();
+    this.userServiceSubscription.unsubscribe();
   }
 
   trackId(index: number, item: MaterialhistoryStockAndSalesUtility) {

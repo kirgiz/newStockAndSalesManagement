@@ -57,11 +57,13 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.code">Code</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="creationDate"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.creationDate">Creation Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="price"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.price">Price</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.comments">Comments</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="transferClassifName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif">Transfer Classif</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="price"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.price">Price</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="userModName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.userMod">userMod</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="warehousefromName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom">Warehousefrom</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="warehousetoName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto">Warehouseto</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.comments">Comments</span> <span class="fa fa-sort"></span></th>
+
             <th></th>
             </tr>
             </thead>
@@ -70,13 +72,13 @@
                 <td><a [routerLink]="['../materialhistory-stock-and-sales-utility', materialhistory.id ]">{{materialhistory.id}}</a></td>
                 <td>{{materialhistory.code}}</td>
                 <td>{{materialhistory.creationDate | date:'mediumDate'}}</td>
-                <td>{{materialhistory.price}}</td>
-                <td>{{materialhistory.comments}}</td>
                 <td>
                     <div *ngIf="materialhistory.transferClassifId">
                         <a [routerLink]="['../transferclassification-stock-and-sales-utility', materialhistory.transferClassifId  ]" >{{materialhistory.transferClassifName}}</a>
                     </div>
                 </td>
+                <td >{{materialhistory.price}}</td>
+                <td>{{materialhistory.userModName}}</td>
                 <td>
                     <div *ngIf="materialhistory.warehousefromId">
                         <a [routerLink]="['../third-stock-and-sales-utility', materialhistory.warehousefromId  ]" >{{materialhistory.warehousefromName}}</a>
@@ -87,6 +89,7 @@
                         <a [routerLink]="['../third-stock-and-sales-utility', materialhistory.warehousetoId  ]" >{{materialhistory.warehousetoName}}</a>
                     </div>
                 </td>
+                <td>{{materialhistory.comments}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
