@@ -24,7 +24,8 @@
             "transferClassif": "Type de Transfert",
             "warehousefrom": "Source",
             "warehouseto": "Destination",
-            "transferDate": "Date du Transfert"
+            "transferDate": "Date du Transfert",
+            "userMod":"Utilisateur"
         }
     }
 }

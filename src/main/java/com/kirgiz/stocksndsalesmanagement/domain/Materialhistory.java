@@ -42,6 +42,9 @@ public class Materialhistory implements Serializable {
     @Column(name = "comments", length = 500)
     private String comments;
 
+    @Column(name = "user_mod")
+    private Integer userMod;
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "materialhistory_item_transfered",
@@ -120,6 +123,19 @@ public class Materialhistory implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Integer getUserMod() {
+        return userMod;
+    }
+
+    public Materialhistory userMod(Integer userMod) {
+        this.userMod = userMod;
+        return this;
+    }
+
+    public void setUserMod(Integer userMod) {
+        this.userMod = userMod;
     }
 
     public Set<Material> getItemTransfereds() {
@@ -213,6 +229,7 @@ public class Materialhistory implements Serializable {
             ", creationDate='" + getCreationDate() + "'" +
             ", price=" + getPrice() +
             ", comments='" + getComments() + "'" +
+            ", userMod=" + getUserMod() +
             "}";
     }
 }

@@ -7,6 +7,7 @@ export class MaterialhistoryStockAndSalesUtility implements BaseEntity {
         public creationDate?: any,
         public price?: number,
         public comments?: string,
+        public userMod?: number,
         public itemTransfereds?: BaseEntity[],
         public transferClassifId?: number,
         public warehousefromId?: number,

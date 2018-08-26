@@ -58,6 +58,9 @@ public class MaterialhistoryResourceIntTest {
     private static final String DEFAULT_COMMENTS = "AAAAAAAAAA";
     private static final String UPDATED_COMMENTS = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_USER_MOD = 1;
+    private static final Integer UPDATED_USER_MOD = 2;
+
     @Autowired
     private MaterialhistoryRepository materialhistoryRepository;
 
@@ -105,7 +108,8 @@ public class MaterialhistoryResourceIntTest {
             .code(DEFAULT_CODE)
             .creationDate(DEFAULT_CREATION_DATE)
             .price(DEFAULT_PRICE)
-            .comments(DEFAULT_COMMENTS);
+            .comments(DEFAULT_COMMENTS)
+            .userMod(DEFAULT_USER_MOD);
         // Add required entity
         Transferclassification transferClassif = TransferclassificationResourceIntTest.createEntity(em);
         em.persist(transferClassif);
@@ -149,6 +153,7 @@ public class MaterialhistoryResourceIntTest {
         assertThat(testMaterialhistory.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testMaterialhistory.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testMaterialhistory.getComments()).isEqualTo(DEFAULT_COMMENTS);
+        assertThat(testMaterialhistory.getUserMod()).isEqualTo(DEFAULT_USER_MOD);
     }
 
     @Test
@@ -204,7 +209,8 @@ public class MaterialhistoryResourceIntTest {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.doubleValue())))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].userMod").value(hasItem(DEFAULT_USER_MOD)));
     }
 
     @Test
@@ -221,7 +227,8 @@ public class MaterialhistoryResourceIntTest {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
             .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.doubleValue()))
-            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()));
+            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
+            .andExpect(jsonPath("$.userMod").value(DEFAULT_USER_MOD));
     }
 
     @Test
@@ -247,7 +254,8 @@ public class MaterialhistoryResourceIntTest {
             .code(UPDATED_CODE)
             .creationDate(UPDATED_CREATION_DATE)
             .price(UPDATED_PRICE)
-            .comments(UPDATED_COMMENTS);
+            .comments(UPDATED_COMMENTS)
+            .userMod(UPDATED_USER_MOD);
         MaterialhistoryDTO materialhistoryDTO = materialhistoryMapper.toDto(updatedMaterialhistory);
 
         restMaterialhistoryMockMvc.perform(put("/api/materialhistories")
@@ -263,6 +271,7 @@ public class MaterialhistoryResourceIntTest {
         assertThat(testMaterialhistory.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testMaterialhistory.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testMaterialhistory.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testMaterialhistory.getUserMod()).isEqualTo(UPDATED_USER_MOD);
     }
 
     @Test

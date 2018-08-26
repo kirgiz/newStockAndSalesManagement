@@ -1,7 +1,10 @@
 package com.kirgiz.stocksndsalesmanagement.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.kirgiz.stocksndsalesmanagement.domain.User;
+import com.kirgiz.stocksndsalesmanagement.repository.UserRepository;
 import com.kirgiz.stocksndsalesmanagement.service.MaterialhistoryService;
+import com.kirgiz.stocksndsalesmanagement.service.UserService;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertException;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.PaginationUtil;
@@ -14,6 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,9 +43,28 @@ public class MaterialhistoryResource {
 
     private final MaterialhistoryService materialhistoryService;
 
-    public MaterialhistoryResource(MaterialhistoryService materialhistoryService) {
+    private final UserService userService;
+
+    public MaterialhistoryResource(MaterialhistoryService materialhistoryService, UserService userService) {
         this.materialhistoryService = materialhistoryService;
+        this.userService = userService;
     }
+
+  /*  public static Long getCurrentUserId(UserDetails user) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        String id = null;
+        if (authentication != null)
+            if (authentication.getPrincipal() instanceof UserDetails)
+                id = ((UserDetails) authentication.getPrincipal()).getUsername();
+            else if (authentication.getPrincipal() instanceof String)
+                id = (String) authentication.getPrincipal();
+        try {
+            return Long.valueOf(id != null ? id : "1"); //anonymoususer
+        } catch (NumberFormatException e) {
+            return 1L;
+        }
+}*/
 
     /**
      * POST  /materialhistories : Create a new materialhistory.
@@ -49,8 +75,10 @@ public class MaterialhistoryResource {
      */
     @PostMapping("/materialhistories")
     @Timed
-    public ResponseEntity<MaterialhistoryDTO> createMaterialhistory(@Valid @RequestBody MaterialhistoryDTO materialhistoryDTO) throws URISyntaxException {
+    public ResponseEntity<MaterialhistoryDTO> createMaterialhistory(@Valid @RequestBody MaterialhistoryDTO materialhistoryDTO,
+    @AuthenticationPrincipal UserDetails user) throws URISyntaxException {
         log.debug("REST request to save Materialhistory : {}", materialhistoryDTO);
+        materialhistoryDTO.setUserMod(this.userService.getUserIdFromPrincipal(user));
         if (materialhistoryDTO.getId() != null) {
             throw new BadRequestAlertException("A new materialhistory cannot already have an ID", ENTITY_NAME, "idexists");
         }
@@ -71,11 +99,12 @@ public class MaterialhistoryResource {
      */
     @PutMapping("/materialhistories")
     @Timed
-    public ResponseEntity<MaterialhistoryDTO> updateMaterialhistory(@Valid @RequestBody MaterialhistoryDTO materialhistoryDTO) throws URISyntaxException {
+    public ResponseEntity<MaterialhistoryDTO> updateMaterialhistory(@Valid @RequestBody MaterialhistoryDTO materialhistoryDTO,  @AuthenticationPrincipal UserDetails user) throws URISyntaxException {
         log.debug("REST request to update Materialhistory : {}", materialhistoryDTO);
         if (materialhistoryDTO.getId() == null) {
-            return createMaterialhistory(materialhistoryDTO);
+            return createMaterialhistory(materialhistoryDTO, user);
         }
+        materialhistoryDTO.setUserMod(this.userService.getUserIdFromPrincipal(user));
         MaterialhistoryDTO result = materialhistoryService.save(materialhistoryDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, materialhistoryDTO.getId().toString()))

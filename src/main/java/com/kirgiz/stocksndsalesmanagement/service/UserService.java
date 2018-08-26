@@ -17,6 +17,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -264,6 +265,15 @@ public class UserService {
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
+
+      /**
+     * @return a list of all the authorities
+     */
+    public int getUserIdFromPrincipal(UserDetails user) {
+        String login= user.getUsername();
+        int id = this.getUserWithAuthoritiesByLogin(login).get().getId().intValue();
+        return id;
     }
 
 }
