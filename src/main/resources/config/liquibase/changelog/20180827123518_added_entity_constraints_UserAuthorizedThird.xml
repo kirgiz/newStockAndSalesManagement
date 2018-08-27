@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity UserAuthorizedThird.
+    -->
+    <changeSet id="20180827123518-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="user_auth_id"
+                                 baseTableName="user_authorized_third"
+                                 constraintName="fk_user_authorized_third_user_auth_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="third_name_id"
+                                 baseTableName="user_authorized_third"
+                                 constraintName="fk_user_authorized_third_third_name_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="third"/>
+
+    </changeSet>
+</databaseChangeLog>

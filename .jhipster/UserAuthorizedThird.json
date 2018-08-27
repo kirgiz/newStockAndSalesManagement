@@ -1,0 +1,26 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "userAuth",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "userAuthorizedThird"
+        },
+        {
+            "relationshipName": "thirdName",
+            "otherEntityName": "third",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20180827123518",
+    "dto": "mapstruct",
+    "service": "serviceClass",
+    "entityTableName": "user_authorized_third",
+    "jpaMetamodelFiltering": false,
+    "pagination": "infinite-scroll"
+}
