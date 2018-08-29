@@ -77,6 +77,7 @@ public class CacheConfiguration {
             cm.createCache(com.kirgiz.stocksndsalesmanagement.domain.Materialhistory.class.getName(), jcacheConfiguration);
             cm.createCache(com.kirgiz.stocksndsalesmanagement.domain.Materialhistory.class.getName() + ".itemTransfereds", jcacheConfiguration);
             cm.createCache(com.kirgiz.stocksndsalesmanagement.domain.Dashboard.class.getName(), jcacheConfiguration);
+            cm.createCache(com.kirgiz.stocksndsalesmanagement.domain.UserAuthorizedThird.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

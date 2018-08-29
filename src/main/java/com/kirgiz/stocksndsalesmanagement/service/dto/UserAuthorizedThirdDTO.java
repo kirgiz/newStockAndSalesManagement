@@ -17,9 +17,9 @@ public class UserAuthorizedThirdDTO implements Serializable {
 
     private String userAuthLogin;
 
-    private Long thirdNameId;
+    private Long thirdAuthId;
 
-    private String thirdNameName;
+    private String thirdAuthName;
 
     public Long getId() {
         return id;
@@ -45,20 +45,20 @@ public class UserAuthorizedThirdDTO implements Serializable {
         this.userAuthLogin = userLogin;
     }
 
-    public Long getThirdNameId() {
-        return thirdNameId;
+    public Long getThirdAuthId() {
+        return thirdAuthId;
     }
 
-    public void setThirdNameId(Long thirdId) {
-        this.thirdNameId = thirdId;
+    public void setThirdAuthId(Long thirdId) {
+        this.thirdAuthId = thirdId;
     }
 
-    public String getThirdNameName() {
-        return thirdNameName;
+    public String getThirdAuthName() {
+        return thirdAuthName;
     }
 
-    public void setThirdNameName(String thirdName) {
-        this.thirdNameName = thirdName;
+    public void setThirdAuthName(String thirdName) {
+        this.thirdAuthName = thirdName;
     }
 
     @Override

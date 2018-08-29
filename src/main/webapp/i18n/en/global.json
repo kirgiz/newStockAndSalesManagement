@@ -22,6 +22,7 @@
                 "materialStockAndSalesUtility": "Material",
                 "materialhistoryStockAndSalesUtility": "Materialhistory",
                 "dashboardStockAndSalesUtility": "Dashboard",
+                "userAuthorizedThird": "User Authorized Third",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

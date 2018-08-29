@@ -11,7 +11,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface UserAuthorizedThirdRepository extends JpaRepository<UserAuthorizedThird, Long> {
+public interface UserAuthorizedThirdRepository extends JpaRepository<UserAuthorizedThird, Long>, JpaSpecificationExecutor<UserAuthorizedThird> {
 
     @Query("select user_authorized_third from UserAuthorizedThird user_authorized_third where user_authorized_third.userAuth.login = ?#{principal.username}")
     List<UserAuthorizedThird> findByUserAuthIsCurrentUser();

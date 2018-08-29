@@ -3,11 +3,15 @@ package com.kirgiz.stocksndsalesmanagement.web.rest;
 import com.kirgiz.stocksndsalesmanagement.StockAndSalesManagementApp;
 
 import com.kirgiz.stocksndsalesmanagement.domain.UserAuthorizedThird;
+import com.kirgiz.stocksndsalesmanagement.domain.User;
+import com.kirgiz.stocksndsalesmanagement.domain.Third;
 import com.kirgiz.stocksndsalesmanagement.repository.UserAuthorizedThirdRepository;
 import com.kirgiz.stocksndsalesmanagement.service.UserAuthorizedThirdService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.UserAuthorizedThirdDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.UserAuthorizedThirdMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.UserAuthorizedThirdCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.UserAuthorizedThirdQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +55,9 @@ public class UserAuthorizedThirdResourceIntTest {
     private UserAuthorizedThirdService userAuthorizedThirdService;
 
     @Autowired
+    private UserAuthorizedThirdQueryService userAuthorizedThirdQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -69,7 +76,7 @@ public class UserAuthorizedThirdResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final UserAuthorizedThirdResource userAuthorizedThirdResource = new UserAuthorizedThirdResource(userAuthorizedThirdService);
+        final UserAuthorizedThirdResource userAuthorizedThirdResource = new UserAuthorizedThirdResource(userAuthorizedThirdService, userAuthorizedThirdQueryService);
         this.restUserAuthorizedThirdMockMvc = MockMvcBuilders.standaloneSetup(userAuthorizedThirdResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -156,6 +163,65 @@ public class UserAuthorizedThirdResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(userAuthorizedThird.getId().intValue()));
     }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByUserAuthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        User userAuth = UserResourceIntTest.createEntity(em);
+        em.persist(userAuth);
+        em.flush();
+        userAuthorizedThird.setUserAuth(userAuth);
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+        Long userAuthId = userAuth.getId();
+
+        // Get all the userAuthorizedThirdList where userAuth equals to userAuthId
+        defaultUserAuthorizedThirdShouldBeFound("userAuthId.equals=" + userAuthId);
+
+        // Get all the userAuthorizedThirdList where userAuth equals to userAuthId + 1
+        defaultUserAuthorizedThirdShouldNotBeFound("userAuthId.equals=" + (userAuthId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByThirdAuthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Third thirdAuth = ThirdResourceIntTest.createEntity(em);
+        em.persist(thirdAuth);
+        em.flush();
+        userAuthorizedThird.setThirdAuth(thirdAuth);
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+        Long thirdAuthId = thirdAuth.getId();
+
+        // Get all the userAuthorizedThirdList where thirdAuth equals to thirdAuthId
+        defaultUserAuthorizedThirdShouldBeFound("thirdAuthId.equals=" + thirdAuthId);
+
+        // Get all the userAuthorizedThirdList where thirdAuth equals to thirdAuthId + 1
+        defaultUserAuthorizedThirdShouldNotBeFound("thirdAuthId.equals=" + (thirdAuthId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultUserAuthorizedThirdShouldBeFound(String filter) throws Exception {
+        restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultUserAuthorizedThirdShouldNotBeFound(String filter) throws Exception {
+        restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
 
     @Test
     @Transactional

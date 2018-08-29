@@ -7,11 +7,13 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService, JhiDateUtils } from 'n
 
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal, User, BaseEntity } from "../../shared";
+import { ITEMS_PER_PAGE, Principal, User, BaseEntity } from '../../shared';
 import { TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.service';
 import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.model';
 import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.service';
 import { UserService } from '../../shared/user/user.service';
+import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
+import { UserAuthorizedThird } from 'src/main/webapp/app/entities/user-authorized-third';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility',
@@ -19,7 +21,11 @@ import { UserService } from '../../shared/user/user.service';
 })
 export class MaterialhistoryStockAndSalesUtilityComponent
   implements OnInit, OnDestroy {
+    thirdAuthSubscription: Subscription;
+    usrSubscription: Subscription;
   userList: User[];
+  user: User;
+  authThirdsList: UserAuthorizedThird[];
   userServiceSubscription: Subscription;
   thirdList: ThirdStockAndSalesUtility[];
   transferclassifications: TransferclassificationStockAndSalesUtility[];
@@ -43,7 +49,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   reverse: any;
 
   transferClassifId: number;
-  date: { year: number; month: number; day: number };
+  date: { year: number; month: number; dusrSubscription: Subscription; day: number };
   transferSource: number;
   transferDest: number;
 
@@ -57,7 +63,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     transferClassifId?: number,
      warehousefromId?: number,
    warehousetoId?: number ,
-   userModName?: string} []; //MaterialhistoryStockAndSalesUtility[];
+   userModName?: string} [];
 
   constructor(
     private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
@@ -69,7 +75,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     private router: Router,
     private eventManager: JhiEventManager,
     private thirdService: ThirdStockAndSalesUtilityService,
-    private userService: UserService
+    private userService: UserService,
+    private autThirds: UserAuthorizedThirdService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -101,7 +108,35 @@ export class MaterialhistoryStockAndSalesUtilityComponent
               );
             },
                 (res1: HttpErrorResponse) => this.onError(res1.message));
-          },
+               this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe( (user: HttpResponse<User>) => {
+                    const resuser: User = user.body;
+                 this.thirdAuthSubscription  = this.autThirds.query({
+                        'userAuthId.equals': resuser.id
+                    }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
+                        this.authThirdsList = reslist.body;
+                        const mat:  MaterialhistoryStockAndSalesUtility[] =  this.materialhistoriesToDisplay.slice();
+                        this.materialhistoriesToDisplay = mat.filter((element) => {
+                            for (const authList of this.authThirdsList) {
+                           if ( authList.thirdAuthId === element.warehousefromId
+                            || authList.thirdAuthId === element.warehousetoId) {
+                             return true;
+                           }
+                            }
+                        });
+
+                  const thirds =  this.thirdList.slice();
+                  this.thirdList = thirds.filter((element) => {
+                    for (const authList of this.authThirdsList) {
+                   if ( authList.thirdAuthId === element.id) {
+                     return true;
+                   }
+                    }
+                });
+
+                    });
+                });
+            }
+          ,
         (res: HttpErrorResponse) => this.onError(res.message)
       );
 
@@ -202,6 +237,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     this.historySubscription.unsubscribe();
     this.thirdSubscription.unsubscribe();
     this.userServiceSubscription.unsubscribe();
+    this.usrSubscription.unsubscribe();
+    this.thirdAuthSubscription.unsubscribe();
   }
 
   trackId(index: number, item: MaterialhistoryStockAndSalesUtility) {

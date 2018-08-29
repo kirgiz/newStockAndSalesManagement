@@ -27,7 +27,7 @@ public class UserAuthorizedThird implements Serializable {
     private User userAuth;
 
     @ManyToOne
-    private Third thirdName;
+    private Third thirdAuth;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -51,17 +51,17 @@ public class UserAuthorizedThird implements Serializable {
         this.userAuth = user;
     }
 
-    public Third getThirdName() {
-        return thirdName;
+    public Third getThirdAuth() {
+        return thirdAuth;
     }
 
-    public UserAuthorizedThird thirdName(Third third) {
-        this.thirdName = third;
+    public UserAuthorizedThird thirdAuth(Third third) {
+        this.thirdAuth = third;
         return this;
     }
 
-    public void setThirdName(Third third) {
-        this.thirdName = third;
+    public void setThirdAuth(Third third) {
+        this.thirdAuth = third;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

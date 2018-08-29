@@ -1,3 +1,4 @@
+import {User} from '../../shared/user/user.model';
 import {MaterialclassificationStockAndSalesUtility} from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +18,10 @@ import { ThirdStockAndSalesUtility, ThirdStockAndSalesUtilityService } from '../
 import { BaseEntity } from '../../shared/model/base-entity';
 import { Subscription } from 'rxjs/Subscription';
 import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility';
+import { UserService } from '../../shared/user/user.service';
+import { UserAuthorizedThird } from '../user-authorized-third/user-authorized-third.model';
+import { UserAuthorizedThirdService } from '../user-authorized-third';
+import { Principal } from '../../shared/auth/principal.service';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -24,6 +29,11 @@ import { MaterialclassificationStockAndSalesUtilityService } from '../materialcl
 })
 export class MaterialhistoryStockAndSalesUtilityDialogComponent
   implements OnInit, OnDestroy {
+    user: User;
+    authThirdsList: UserAuthorizedThird[];
+    currentAccount: any;
+    thirdAuthSubscription: any;
+    usrSubscription: Subscription;
   materialClassificationSubscription: Subscription;
   thirdSubscription: Subscription;
   materialClassifications: MaterialclassificationStockAndSalesUtility[];
@@ -51,11 +61,17 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     private thirdService: ThirdStockAndSalesUtilityService,
     private eventManager: JhiEventManager,
     private materialclassificationStockAndSalesUtilityService: MaterialclassificationStockAndSalesUtilityService,
-    private router: Router //  private dateUtils: JhiDateUtils
-  ) {}
+    private router: Router ,
+    private userService: UserService,
+    private autThirds: UserAuthorizedThirdService,
+    private principal: Principal ) {}
 
   ngOnInit() {
     this.isSaving = false;
+    this.principal.identity().then((account) => {
+        this.currentAccount = account;
+        console.log(this.currentAccount);
+      });
     this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
       (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
         this.transferclassifications = res.body;
@@ -65,6 +81,24 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     this.thirdSubscription = this.thirdService.query().subscribe(
       (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
         this.thirds = res.body;
+
+        this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe( (user: HttpResponse<User>) => {
+            const resuser: User = user.body;
+         this.thirdAuthSubscription  = this.autThirds.query({
+                'userAuthId.equals': resuser.id
+            }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
+                this.authThirdsList = reslist.body;
+                const thirds:  ThirdStockAndSalesUtility[] =  this.thirds.slice();
+                this.thirds = thirds.filter((element) => {
+                    for (const authList of this.authThirdsList) {
+                   if ( authList.thirdAuthId === element.id) {
+                     return true;
+                   }
+                    }
+                });
+            });
+        });
+
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );

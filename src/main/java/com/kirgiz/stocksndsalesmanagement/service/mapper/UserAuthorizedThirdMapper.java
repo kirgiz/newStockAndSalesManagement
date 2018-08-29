@@ -13,12 +13,12 @@ public interface UserAuthorizedThirdMapper extends EntityMapper<UserAuthorizedTh
 
     @Mapping(source = "userAuth.id", target = "userAuthId")
     @Mapping(source = "userAuth.login", target = "userAuthLogin")
-    @Mapping(source = "thirdName.id", target = "thirdNameId")
-    @Mapping(source = "thirdName.name", target = "thirdNameName")
+    @Mapping(source = "thirdAuth.id", target = "thirdAuthId")
+    @Mapping(source = "thirdAuth.name", target = "thirdAuthName")
     UserAuthorizedThirdDTO toDto(UserAuthorizedThird userAuthorizedThird);
 
     @Mapping(source = "userAuthId", target = "userAuth")
-    @Mapping(source = "thirdNameId", target = "thirdName")
+    @Mapping(source = "thirdAuthId", target = "thirdAuth")
     UserAuthorizedThird toEntity(UserAuthorizedThirdDTO userAuthorizedThirdDTO);
 
     default UserAuthorizedThird fromId(Long id) {
