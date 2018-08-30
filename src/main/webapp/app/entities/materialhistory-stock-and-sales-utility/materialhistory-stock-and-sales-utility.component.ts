@@ -13,7 +13,7 @@ import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility/thir
 import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.service';
 import { UserService } from '../../shared/user/user.service';
 import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
-import { UserAuthorizedThird } from 'src/main/webapp/app/entities/user-authorized-third';
+import { UserAuthorizedThird } from '../user-authorized-third';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility',
