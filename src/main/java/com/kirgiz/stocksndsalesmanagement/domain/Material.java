@@ -43,6 +43,9 @@ public class Material implements Serializable {
     @Column(name = "comments", length = 500)
     private String comments;
 
+    @Column(name = "current_location")
+    private Integer currentLocation;
+
     @ManyToOne(optional = false)
     @NotNull
     private Materialclassification materialTypeDef;
@@ -116,6 +119,19 @@ public class Material implements Serializable {
         this.comments = comments;
     }
 
+    public Integer getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public Material currentLocation(Integer currentLocation) {
+        this.currentLocation = currentLocation;
+        return this;
+    }
+
+    public void setCurrentLocation(Integer currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
     public Materialclassification getMaterialTypeDef() {
         return materialTypeDef;
     }
@@ -184,6 +200,7 @@ public class Material implements Serializable {
             ", description='" + getDescription() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             ", comments='" + getComments() + "'" +
+            ", currentLocation=" + getCurrentLocation() +
             "}";
     }
 }

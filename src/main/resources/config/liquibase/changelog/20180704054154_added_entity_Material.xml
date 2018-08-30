@@ -37,6 +37,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="current_location" type="integer">
+                <constraints nullable="true" />
+            </column>
+
             <column name="material_type_def_id" type="bigint">
                 <constraints nullable="false" />
             </column>

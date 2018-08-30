@@ -29,6 +29,8 @@ public class MaterialDTO implements Serializable {
     @Size(max = 500)
     private String comments;
 
+    private Integer currentLocation;
+
     private Long materialTypeDefId;
 
     private String materialTypeDefName;
@@ -79,6 +81,14 @@ public class MaterialDTO implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Integer getCurrentLocation() {
+        return currentLocation;
+    }
+
+    public void setCurrentLocation(Integer currentLocation) {
+        this.currentLocation = currentLocation;
     }
 
     public Long getMaterialTypeDefId() {
@@ -158,6 +168,7 @@ public class MaterialDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", creationDate='" + getCreationDate() + "'" +
             ", comments='" + getComments() + "'" +
+            ", currentLocation=" + getCurrentLocation() +
             "}";
     }
 }

@@ -217,7 +217,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
 
     console.log('material type ' + this.materialTypeId);
 
-      this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId}});
+      this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId,
+         destination: this.materialhistory.warehousetoId}});
   }
 
 }

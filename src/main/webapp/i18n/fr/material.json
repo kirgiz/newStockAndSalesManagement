@@ -22,7 +22,8 @@
             "comments": "Comments",
             "materialTypeDef": "Type",
             "lotIdentifier": "Lot",
-            "materialTypeCat": "Type"
+            "materialTypeCat": "Type",
+            "currentLocation": "Emplacement"
         }
     }
 }

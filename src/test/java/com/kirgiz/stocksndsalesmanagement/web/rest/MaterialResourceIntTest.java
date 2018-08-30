@@ -58,6 +58,9 @@ public class MaterialResourceIntTest {
     private static final String DEFAULT_COMMENTS = "AAAAAAAAAA";
     private static final String UPDATED_COMMENTS = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_CURRENT_LOCATION = 1;
+    private static final Integer UPDATED_CURRENT_LOCATION = 2;
+
     @Autowired
     private MaterialRepository materialRepository;
 
@@ -105,7 +108,8 @@ public class MaterialResourceIntTest {
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
             .creationDate(DEFAULT_CREATION_DATE)
-            .comments(DEFAULT_COMMENTS);
+            .comments(DEFAULT_COMMENTS)
+            .currentLocation(DEFAULT_CURRENT_LOCATION);
         // Add required entity
         Materialclassification materialTypeDef = MaterialclassificationResourceIntTest.createEntity(em);
         em.persist(materialTypeDef);
@@ -149,6 +153,7 @@ public class MaterialResourceIntTest {
         assertThat(testMaterial.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMaterial.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testMaterial.getComments()).isEqualTo(DEFAULT_COMMENTS);
+        assertThat(testMaterial.getCurrentLocation()).isEqualTo(DEFAULT_CURRENT_LOCATION);
     }
 
     @Test
@@ -242,7 +247,8 @@ public class MaterialResourceIntTest {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].currentLocation").value(hasItem(DEFAULT_CURRENT_LOCATION)));
     }
 
     @Test
@@ -259,7 +265,8 @@ public class MaterialResourceIntTest {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()))
-            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()));
+            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
+            .andExpect(jsonPath("$.currentLocation").value(DEFAULT_CURRENT_LOCATION));
     }
 
     @Test
@@ -285,7 +292,8 @@ public class MaterialResourceIntTest {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .creationDate(UPDATED_CREATION_DATE)
-            .comments(UPDATED_COMMENTS);
+            .comments(UPDATED_COMMENTS)
+            .currentLocation(UPDATED_CURRENT_LOCATION);
         MaterialDTO materialDTO = materialMapper.toDto(updatedMaterial);
 
         restMaterialMockMvc.perform(put("/api/materials")
@@ -301,6 +309,7 @@ public class MaterialResourceIntTest {
         assertThat(testMaterial.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMaterial.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testMaterial.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testMaterial.getCurrentLocation()).isEqualTo(UPDATED_CURRENT_LOCATION);
     }
 
     @Test

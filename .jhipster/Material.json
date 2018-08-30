@@ -56,13 +56,17 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "currentLocation",
+            "fieldType": "Integer"
         }
     ],
     "changelogDate": "20180704054154",
-    "entityTableName": "material",
     "dto": "mapstruct",
-    "pagination": "pagination",
     "service": "serviceClass",
+    "entityTableName": "material",
     "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
     "angularJSSuffix": "StockAndSalesUtility"
 }

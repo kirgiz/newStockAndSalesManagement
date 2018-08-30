@@ -20,6 +20,7 @@
             "description": "Description",
             "creationDate": "Creation Date",
             "comments": "Comments",
+            "currentLocation": "Current Location",
             "materialTypeDef": "Material Type Def",
             "lotIdentifier": "Lot Identifier",
             "materialTypeCat": "Material Type Cat"

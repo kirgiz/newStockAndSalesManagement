@@ -58,11 +58,21 @@ import 'rxjs/add/observable/forkJoin';
 import { logsRoute } from '../../admin/logs/logs.route';
 import { Subscription } from 'rxjs/Subscription';
 
+import { UserService } from '../../shared/user/user.service';
+import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
+import { User } from '../../shared/user/user.model';
+import { UserAuthorizedThird } from '../user-authorized-third/user-authorized-third.model';
+
 @Component({
     selector: 'jhi-material-search-stock-and-sales-utility-dialog',
     templateUrl: './material-search-stock-and-sales-utility-dialog.component.html'
 })
 export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit, OnDestroy {
+    destination: number;
+    hasAdminAuth: boolean;
+    thirdAuthSubscription: any;
+    usrSubscription: any;
+    thirdSubscription: Subscription;
 
     materialhistory: MaterialhistoryStockAndSalesUtility;
     isSaving: boolean;
@@ -99,6 +109,8 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     private matSubscription: Subscription;
     private transferClassificationSubscription: Subscription;
     private thirdsubscription: Subscription;
+    private currentAccount: any;
+    private authThirdsList: UserAuthorizedThird[];
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -110,7 +122,10 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         private thirdService: ThirdStockAndSalesUtilityService,
         private eventManager: JhiEventManager,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private principal: Principal,
+        private userService: UserService,
+        private autThirds: UserAuthorizedThirdService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -124,6 +139,12 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     ngOnInit() {
         this.loadAll();
+        this.principal.identity().then((account) => {
+            this.currentAccount = account;
+          });
+          this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
+            this.hasAdminAuth = hasAuth;
+          });
     }
 
     ngOnDestroy(): void {
@@ -134,6 +155,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     loadAll() {
         this.selectedMaterialType = +this.activatedRoute.snapshot.queryParams['matType'];
+        this.destination = +this.activatedRoute.snapshot.queryParams['destination'];
 this.matSubscription = this.materialService.query({
     page: this.page - 1,
     size: this.itemsPerPage,
@@ -142,6 +164,7 @@ this.matSubscription = this.materialService.query({
     (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
     this.onSuccess(res.body, res.headers);
     console.log('found mat type' +  this.selectedMaterialType );
+   // console.log('found mat type' +  this.selectedMaterialType );
 },
     (res: HttpErrorResponse) => {
         this.onError(res.message);
@@ -165,29 +188,66 @@ this.matSubscription = this.materialService.query({
         this.queryCount = this.totalItems;
         // this.page = pagingParams.page;
         this.materials = data;
-        this.materialsToDisplay = this.materials.slice();
-        console.log(this.materialsToDisplay);
-        this.materialsToDisplay.forEach((element) => {
-            element.displayItem = true;
-            element.selectedItem = false;
-        }
-                );
+        console.log(this.materials);
 
-                let mat = this.materialsToDisplay;
-                if  (this.selectedMaterialType !== null) {
-                    mat = this.materialsToDisplay.filter((item) => {
-                        console.log('mat type' + item.materialTypeDefId);
-                        return item.materialTypeDefId === this.selectedMaterialType; }
-                    ); }
-                    this.materialsToDisplay.forEach((element) => {
-                        element.displayItem = false;
-                        const index: number = mat.findIndex((originalElement) => element.id === originalElement.id);
-                        if (index > -1) { element.displayItem = true; }
+        this.thirdSubscription = this.thirdService.query().subscribe(
+            (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
+              this.thirds = res.body;
+              this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe( (user: HttpResponse<User>) => {
+                  const resuser: User = user.body;
+               this.thirdAuthSubscription  = this.autThirds.query({
+                      'userAuthId.equals': resuser.id
+                  }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
+                      this.authThirdsList = reslist.body;
+                      const thirds:  ThirdStockAndSalesUtility[] =  this.thirds.slice();
+                      this.thirds = thirds.filter((element) => {
+                          for (const authList of this.authThirdsList) {
+                         if ( authList.thirdAuthId === element.id) {
+                           return true;
+                         }
+                          }
+                      });
+                      const matt:  MaterialStockAndSalesUtility[] =  this.materials.slice();
+                      this.materials = matt.filter((element) => {
+                        for (const authList of this.authThirdsList) {
+                            console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJ');
+                            console.log(element);
+                            console.log(authList.thirdAuthId);
+                       if ( (authList.thirdAuthId === element.currentLocation &&  this.destination !== element.currentLocation) ||
+                    ((!element.currentLocation || element.currentLocation === null)
+                    && this.hasAdminAuth)) {
+                         return true;
+                       }
+                        }
                     });
+                    this.materialsToDisplay = this.materials.slice();
+                    console.log(this.materialsToDisplay);
+                    this.materialsToDisplay.forEach((element) => {
+                        element.displayItem = true;
+                        element.selectedItem = false;
+                    }
+                            );
 
-                    this.totalItems = mat.length;
-                    this.queryCount = mat.length;
+                            let mat = this.materialsToDisplay;
+                            if  (this.selectedMaterialType !== null) {
+                                mat = this.materialsToDisplay.filter((item) => {
+                                    console.log('mat type' + item.materialTypeDefId);
+                                    return item.materialTypeDefId === this.selectedMaterialType; }
+                                ); }
+                                this.materialsToDisplay.forEach((element) => {
+                                    element.displayItem = false;
+                                    const index: number = mat.findIndex((originalElement) => element.id === originalElement.id);
+                                    if (index > -1) { element.displayItem = true; }
+                                });
+                                this.totalItems = mat.length;
+                                this.queryCount = mat.length;
+                  }
+                );
+              });
 
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+          );
 }
 
     sort() {
@@ -272,15 +332,12 @@ this.matSubscription = this.materialService.query({
     this.totalItems = t.length;
     this.queryCount = t.length;
 
-
     this.materialsToDisplay.forEach((element) => {
         element.displayItem = false;
         const index: number = t.findIndex((originalElement) => element.id === originalElement.id);
         if (index > -1) { element.displayItem = true; }
     });
     }
-
-
 }
 
 @Component({

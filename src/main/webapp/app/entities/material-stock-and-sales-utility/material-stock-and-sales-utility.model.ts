@@ -7,6 +7,7 @@ export class MaterialStockAndSalesUtility implements BaseEntity {
         public description?: string,
         public creationDate?: any,
         public comments?: string,
+        public currentLocation?: number,
         public materialTypeDefId?: number,
         public lotIdentifierId?: number,
         public materialTypeCatId?: number,
