@@ -25,7 +25,8 @@
             "warehousefrom": "Source",
             "warehouseto": "Destination",
             "transferDate": "Date du Transfert",
-            "userMod":"Utilisateur"
+            "userMod":"Utilisateur",
+            "materialclassification": "Type d Article"
         }
     }
 }

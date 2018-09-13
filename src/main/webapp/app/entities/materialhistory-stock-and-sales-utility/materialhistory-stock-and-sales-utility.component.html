@@ -1,15 +1,59 @@
 <div>
-    <h2>
+        <!-- <h2>
         <span jhiTranslate="stockAndSalesManagementApp.materialhistory.home.title">Materialhistories</span>
         <button class="btn btn-primary float-right jh-create-entity create-materialhistory-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]">
             <span class="fa fa-plus"></span>
-            <span  jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createLabel">
+       <span  jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createLabel">
             Create new Materialhistory
             </span>
         </button>
         <br>
-    </h2>
+    </h2> -->
     <jhi-alert></jhi-alert>
+    <br>
+
+    <div class="row">
+            <div class="col">
+        <div class="col-xs-12 form-group">
+          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+            <div class="pull-left">
+              <h5 class="list-group-item-heading">Vendre</h5>
+            </div>
+            <span class="pull-right">
+              <img src="../../../content/images/action.jpg" alt="noImage" class="img-responsive" style="max-height: 25px;">
+            </span>
+          </a>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-xs-12 form-group" >
+          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+            <div class="pull-left">
+              <h5 class="list-group-item-heading">Acheter</h5>
+            </div>
+            <span class="pull-right">
+              <img src="../../../content/images/action.jpg" alt="noImage" class="img-responsive" style="max-height: 25px;">
+            </span>
+          </a>
+        </div>
+    </div>
+    <div class="col">
+        <div class="col-xs-12 form-group" *ngIf="hasAdminAuth">
+            <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+              <div class="pull-left">
+                <h5 class="list-group-item-heading">Transferer</h5>
+              </div>
+              <span class="pull-right">
+                <img src="../../../content/images/action.jpg" alt="noImage" class="img-responsive" style="max-height: 25px;">
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+<br>
+<h4 class="list-group-item-heading" >Liste des Mouvements</h4>
+<hr>
     <div class="form-row">
             <div class="form-group col-md-2">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
@@ -62,7 +106,10 @@
             <th jhiSortBy="userModName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.userMod">userMod</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="warehousefromName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom">Warehousefrom</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="warehousetoName"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto">Warehouseto</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.comments">Comments</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="materialclassificationDescription"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.materialclassification">Type d article</span> <span class="fa fa-sort"></span></th>
+
+            <!-- <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialhistory.comments">Comments</span> <span class="fa fa-sort"></span></th>-->
+
 
             <th></th>
             </tr>
@@ -89,7 +136,10 @@
                         <a [routerLink]="['../third-stock-and-sales-utility', materialhistory.warehousetoId  ]" >{{materialhistory.warehousetoName}}</a>
                     </div>
                 </td>
-                <td>{{materialhistory.comments}}</td>
+                <td>
+                   {{materialhistory.materialclassificationDescription}}
+                </td>
+            <!--    <td>{{materialhistory.comments}}</td> -->
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

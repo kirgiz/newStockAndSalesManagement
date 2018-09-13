@@ -36,8 +36,7 @@
             <column name="comments" type="varchar(500)">
                 <constraints nullable="true" />
             </column>
-
-            <column name="user_mod" type="integer">
+ <column name="user_mod" type="integer">
                 <constraints nullable="true" />
             </column>
 
@@ -53,9 +52,13 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="materialclassification_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
         <createTable tableName="materialhistory_item_transfered">
             <column name="item_transfereds_id" type="bigint">
                 <constraints nullable="false"/>
@@ -66,7 +69,7 @@
         </createTable>
 
         <addPrimaryKey columnNames="materialhistories_id, item_transfereds_id" tableName="materialhistory_item_transfered"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

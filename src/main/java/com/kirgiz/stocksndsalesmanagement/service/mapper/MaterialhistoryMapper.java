@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity Materialhistory and its DTO MaterialhistoryDTO.
  */
-@Mapper(componentModel = "spring", uses = {MaterialMapper.class, TransferclassificationMapper.class, ThirdMapper.class})
+@Mapper(componentModel = "spring", uses = {MaterialMapper.class, TransferclassificationMapper.class, ThirdMapper.class, MaterialclassificationMapper.class})
 public interface MaterialhistoryMapper extends EntityMapper<MaterialhistoryDTO, Materialhistory> {
 
     @Mapping(source = "transferClassif.id", target = "transferClassifId")
@@ -17,11 +17,14 @@ public interface MaterialhistoryMapper extends EntityMapper<MaterialhistoryDTO, 
     @Mapping(source = "warehousefrom.name", target = "warehousefromName")
     @Mapping(source = "warehouseto.id", target = "warehousetoId")
     @Mapping(source = "warehouseto.name", target = "warehousetoName")
+    @Mapping(source = "materialclassification.id", target = "materialclassificationId")
+    @Mapping(source = "materialclassification.name", target = "materialclassificationDescription")
     MaterialhistoryDTO toDto(Materialhistory materialhistory);
 
     @Mapping(source = "transferClassifId", target = "transferClassif")
     @Mapping(source = "warehousefromId", target = "warehousefrom")
     @Mapping(source = "warehousetoId", target = "warehouseto")
+    @Mapping(source = "materialclassificationId", target = "materialclassification")
     Materialhistory toEntity(MaterialhistoryDTO materialhistoryDTO);
 
     default Materialhistory fromId(Long id) {

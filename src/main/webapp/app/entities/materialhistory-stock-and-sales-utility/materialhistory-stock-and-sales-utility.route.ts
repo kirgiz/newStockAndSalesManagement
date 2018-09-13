@@ -12,6 +12,7 @@ import {
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
 import { MaterialSearchStockAndSalesUtilityPopupComponent } from './material-search-stock-and-sales-utility-dialog.component';
 
+
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
 
@@ -20,7 +21,6 @@ export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements R
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
         const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-        console.log('000000000000000000000000000000000');
         return {
             page: this.paginationUtil.parsePage(page),
             predicate: this.paginationUtil.parsePredicate(sort),
@@ -28,7 +28,6 @@ export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements R
       };
     }
 }
-
 @Injectable()
 export class MaterialSearchStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
 
@@ -68,7 +67,6 @@ export const materialhistoryRoute: Routes = [
         canActivate: [UserRouteAccessService]
     }
 ];
-
 export const materialSearchRoute: Routes = [
     {
         path: 'material-search-stock-and-sales-utility-nopopup',

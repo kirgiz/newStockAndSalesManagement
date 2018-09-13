@@ -25,9 +25,7 @@ public class MaterialhistoryDTO implements Serializable {
 
     @Size(max = 500)
     private String comments;
-
     private Integer userMod;
-
     private Set<MaterialDTO> itemTransfereds = new HashSet<>();
 
     private Long transferClassifId;
@@ -41,6 +39,10 @@ public class MaterialhistoryDTO implements Serializable {
     private Long warehousetoId;
 
     private String warehousetoName;
+
+    private Long materialclassificationId;
+
+    private String materialclassificationDescription;
 
     public Long getId() {
         return id;
@@ -89,7 +91,6 @@ public class MaterialhistoryDTO implements Serializable {
     public void setUserMod(Integer userMod) {
         this.userMod = userMod;
     }
-
     public Set<MaterialDTO> getItemTransfereds() {
         return itemTransfereds;
     }
@@ -144,6 +145,22 @@ public class MaterialhistoryDTO implements Serializable {
 
     public void setWarehousetoName(String thirdName) {
         this.warehousetoName = thirdName;
+    }
+
+    public Long getMaterialclassificationId() {
+        return materialclassificationId;
+    }
+
+    public void setMaterialclassificationId(Long materialclassificationId) {
+        this.materialclassificationId = materialclassificationId;
+    }
+
+    public String getMaterialclassificationDescription() {
+        return materialclassificationDescription;
+    }
+
+    public void setMaterialclassificationDescription(String materialclassificationDescription) {
+        this.materialclassificationDescription = materialclassificationDescription;
     }
 
     @Override

@@ -21,6 +21,7 @@ import { UserAuthorizedThird } from '../user-authorized-third';
 })
 export class MaterialhistoryStockAndSalesUtilityComponent
   implements OnInit, OnDestroy {
+    hasAdminAuth: boolean;
     thirdAuthSubscription: Subscription;
     usrSubscription: Subscription;
   userList: User[];
@@ -63,7 +64,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     transferClassifId?: number,
      warehousefromId?: number,
    warehousetoId?: number ,
-   userModName?: string} [];
+   userModName?: string,
+   materialclassificationDescription?: string} [];
 
   constructor(
     private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
@@ -155,6 +157,10 @@ export class MaterialhistoryStockAndSalesUtilityComponent
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
+
+    this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
+        this.hasAdminAuth = hasAuth;
+      });
 
     }
 
@@ -265,6 +271,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     this.queryCount = this.totalItems;
     // this.page = pagingParams.page;
     this.materialhistories = data;
+    console.log(this.materialhistories);
+
     this.materialhistoriesToDisplay = this.materialhistories.slice();
   }
   private onError(error) {

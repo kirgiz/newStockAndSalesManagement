@@ -23,7 +23,8 @@
             "itemTransfered": "Item Transfered",
             "transferClassif": "Transfer Classif",
             "warehousefrom": "Warehousefrom",
-            "warehouseto": "Warehouseto"
+            "warehouseto": "Warehouseto",
+            "materialclassification": "Materialclassification"
         }
     }
 }

@@ -13,6 +13,7 @@ import { Account, LoginModalService, Principal } from '../shared';
 
 })
 export class HomeComponent implements OnInit {
+    hasAdminAuth: boolean;
     account: Account;
     modalRef: NgbModalRef;
 
@@ -28,6 +29,9 @@ export class HomeComponent implements OnInit {
             this.account = account;
         });
         this.registerAuthenticationSuccess();
+        this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
+            this.hasAdminAuth = hasAuth;
+          });
     }
 
     registerAuthenticationSuccess() {
@@ -35,6 +39,9 @@ export class HomeComponent implements OnInit {
             this.principal.identity().then((account) => {
                 this.account = account;
             });
+            this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
+                this.hasAdminAuth = hasAuth;
+              });
         });
     }
 

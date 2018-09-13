@@ -29,6 +29,15 @@
             "relationshipName": "warehouseto",
             "otherEntityName": "third",
             "otherEntityField": "name"
+        },
+        {
+            "relationshipName": "materialclassification",
+            "otherEntityName": "materialclassification",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "description"
         }
     ],
     "fields": [
@@ -61,10 +70,10 @@
         }
     ],
     "changelogDate": "20180704054155",
-    "entityTableName": "materialhistory",
     "dto": "mapstruct",
-    "pagination": "pagination",
     "service": "serviceClass",
+    "entityTableName": "materialhistory",
     "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
     "angularJSSuffix": "StockAndSalesUtility"
 }

@@ -12,6 +12,7 @@ export class MaterialhistoryStockAndSalesUtility implements BaseEntity {
         public transferClassifId?: number,
         public warehousefromId?: number,
         public warehousetoId?: number,
+        public materialclassificationId?: number,
     ) {
     }
 }

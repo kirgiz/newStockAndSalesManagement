@@ -12,6 +12,7 @@ import { MaterialhistoryStockAndSalesUtility } from '../../../../../../main/weba
 import { MaterialStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/material-stock-and-sales-utility';
 import { TransferclassificationStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/transferclassification-stock-and-sales-utility';
 import { ThirdStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/third-stock-and-sales-utility';
+import { MaterialclassificationStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/materialclassification-stock-and-sales-utility';
 
 describe('Component Tests', () => {
 
@@ -30,6 +31,7 @@ describe('Component Tests', () => {
                     MaterialStockAndSalesUtilityService,
                     TransferclassificationStockAndSalesUtilityService,
                     ThirdStockAndSalesUtilityService,
+                    MaterialclassificationStockAndSalesUtilityService,
                     MaterialhistoryStockAndSalesUtilityService
                 ]
             })

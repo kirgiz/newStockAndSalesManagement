@@ -42,7 +42,6 @@ public class MaterialhistoryResource {
     private static final String ENTITY_NAME = "materialhistory";
 
     private final MaterialhistoryService materialhistoryService;
-
     private final UserService userService;
 
     public MaterialhistoryResource(MaterialhistoryService materialhistoryService, UserService userService) {
@@ -50,7 +49,7 @@ public class MaterialhistoryResource {
         this.userService = userService;
     }
 
-  /*  public static Long getCurrentUserId(UserDetails user) {
+    /*  public static Long getCurrentUserId(UserDetails user) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String id = null;
@@ -65,7 +64,6 @@ public class MaterialhistoryResource {
             return 1L;
         }
 }*/
-
     /**
      * POST  /materialhistories : Create a new materialhistory.
      *

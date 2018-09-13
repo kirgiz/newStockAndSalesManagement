@@ -139,6 +139,9 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
       day: day1
     };
     this.materialhistory.creationDate = dd;
+   // this.materialhistory.materialclassificationId = this.materialTypeId;
+console.log(this.materialhistory);
+
     if (this.materialhistory.id !== undefined) {
       this.subscribeToSaveResponse(
         this.materialhistoryService.update(this.materialhistory)
@@ -216,10 +219,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     }
   }
   onSelectArticle() {
-
-    console.log('material type ' + this.materialTypeId);
-
-      this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId,
+      this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams:
+        { matType: this.materialhistory.materialclassificationId,
          destination: this.materialhistory.warehousetoId,  source: this.materialhistory.warehousefromId }});
   }
 

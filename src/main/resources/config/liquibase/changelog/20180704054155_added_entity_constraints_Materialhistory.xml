@@ -37,5 +37,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="third"/>
 
+        <addForeignKeyConstraint baseColumnNames="materialclassification_id"
+                                 baseTableName="materialhistory"
+                                 constraintName="fk_materialhistory_materialclassification_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="materialclassification"/>
+
     </changeSet>
 </databaseChangeLog>

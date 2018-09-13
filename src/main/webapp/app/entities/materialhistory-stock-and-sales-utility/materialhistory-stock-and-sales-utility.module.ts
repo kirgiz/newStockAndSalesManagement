@@ -23,6 +23,7 @@ import {
 } from './';
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
 
+
 const ENTITY_STATES = [
     ...materialhistoryRoute,
     ...materialhistoryPopupRoute,

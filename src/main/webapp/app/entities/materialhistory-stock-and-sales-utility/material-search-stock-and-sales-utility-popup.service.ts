@@ -4,7 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
 import { MaterialStockAndSalesUtility } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.model';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.service';
-import { MaterialSearchStockAndSalesUtilityResolvePagingParams} from './';
+ import { MaterialSearchStockAndSalesUtilityResolvePagingParams} from './';
 
 @Injectable()
 export class MaterialSearchStockAndSalesUtilityPopupService {

@@ -28,6 +28,8 @@ export class MaterialhistoryStockAndSalesUtilityService {
     create(materialhistory: MaterialhistoryStockAndSalesUtility):
         Observable<EntityResponseType> {
         const copy = this.convert(materialhistory);
+        console.log('haaaaaaaaaaa');
+        console.log(copy);
         materialhistory.itemTransfereds.forEach( (element) => {
             this.materialService.find(element.id).subscribe(
                    (resmaterial: HttpResponse<MaterialStockAndSalesUtility>) => {

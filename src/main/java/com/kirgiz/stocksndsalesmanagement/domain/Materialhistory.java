@@ -41,7 +41,6 @@ public class Materialhistory implements Serializable {
     @Size(max = 500)
     @Column(name = "comments", length = 500)
     private String comments;
-
     @Column(name = "user_mod")
     private Integer userMod;
 
@@ -63,6 +62,10 @@ public class Materialhistory implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     private Third warehouseto;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private Materialclassification materialclassification;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -137,7 +140,6 @@ public class Materialhistory implements Serializable {
     public void setUserMod(Integer userMod) {
         this.userMod = userMod;
     }
-
     public Set<Material> getItemTransfereds() {
         return itemTransfereds;
     }
@@ -198,6 +200,19 @@ public class Materialhistory implements Serializable {
 
     public void setWarehouseto(Third third) {
         this.warehouseto = third;
+    }
+
+    public Materialclassification getMaterialclassification() {
+        return materialclassification;
+    }
+
+    public Materialhistory materialclassification(Materialclassification materialclassification) {
+        this.materialclassification = materialclassification;
+        return this;
+    }
+
+    public void setMaterialclassification(Materialclassification materialclassification) {
+        this.materialclassification = materialclassification;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
