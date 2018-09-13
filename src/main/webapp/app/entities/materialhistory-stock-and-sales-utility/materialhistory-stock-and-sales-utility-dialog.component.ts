@@ -29,6 +29,7 @@ import { Principal } from '../../shared/auth/principal.service';
 })
 export class MaterialhistoryStockAndSalesUtilityDialogComponent
   implements OnInit, OnDestroy {
+    thirdsfrom: ThirdStockAndSalesUtility[];
     user: User;
     authThirdsList: UserAuthorizedThird[];
     currentAccount: any;
@@ -96,6 +97,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
                    }
                     }
                 });
+                this.thirdsfrom = this.thirds.slice();
             });
         });
 
@@ -142,7 +144,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
         this.materialhistoryService.update(this.materialhistory)
       );
     } else {
-      this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
+     // this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
       this.subscribeToSaveResponse(
         this.materialhistoryService.create(this.materialhistory)
       );
@@ -218,7 +220,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     console.log('material type ' + this.materialTypeId);
 
       this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams: { matType: this.materialTypeId,
-         destination: this.materialhistory.warehousetoId}});
+         destination: this.materialhistory.warehousetoId,  source: this.materialhistory.warehousefromId }});
   }
 
 }

@@ -68,6 +68,7 @@ import { UserAuthorizedThird } from '../user-authorized-third/user-authorized-th
     templateUrl: './material-search-stock-and-sales-utility-dialog.component.html'
 })
 export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit, OnDestroy {
+    source: number;
     destination: number;
     hasAdminAuth: boolean;
     thirdAuthSubscription: any;
@@ -156,6 +157,7 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
     loadAll() {
         this.selectedMaterialType = +this.activatedRoute.snapshot.queryParams['matType'];
         this.destination = +this.activatedRoute.snapshot.queryParams['destination'];
+        this.source = +this.activatedRoute.snapshot.queryParams['source'];
 this.matSubscription = this.materialService.query({
     page: this.page - 1,
     size: this.itemsPerPage,
@@ -213,7 +215,7 @@ this.matSubscription = this.materialService.query({
                             console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJ');
                             console.log(element);
                             console.log(authList.thirdAuthId);
-                       if ( (authList.thirdAuthId === element.currentLocation &&  this.destination !== element.currentLocation) ||
+                       if ( (authList.thirdAuthId === element.currentLocation &&  this.destination !== element.currentLocation &&  this.source === element.currentLocation) ||
                     ((!element.currentLocation || element.currentLocation === null)
                     && this.hasAdminAuth)) {
                          return true;

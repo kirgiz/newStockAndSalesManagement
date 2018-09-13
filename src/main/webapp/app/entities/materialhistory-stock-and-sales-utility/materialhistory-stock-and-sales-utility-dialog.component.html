@@ -28,19 +28,22 @@
             </small>
             </div>
 
-
-            <div class="form-group  col-md-6">
-                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto" for="field_warehouseto">Warehouseto</label>
-                <select class="form-control" id="field_warehouseto" name="warehouseto" [(ngModel)]="materialhistory.warehousetoId" required>
-                <option *ngIf="!editForm.value.warehouseto" [ngValue]="null" selected></option>
-                <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirds; trackBy: trackThirdById">{{thirdOption.name}}</option>
+            <div class="form-group col-md-6">
+                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d'article</label>
+                <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialTypeId"
+                    required>
+                <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
+                <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
             </select>
-            </div>
-            <div [hidden]="!(editForm.controls.warehouseto?.dirty && editForm.controls.warehouseto?.invalid)">
-                <small class="form-text text-danger" [hidden]="!editForm.controls.warehouseto?.errors?.required" jhiTranslate="entity.validation.required">
+
+            <div [hidden]="!(editForm.controls.materialClassif?.dirty && editForm.controls.materialClassif?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.materialClassif?.errors?.required" jhiTranslate="entity.validation.required">
                 This field is required.
             </small>
             </div>
+        </div>
+
+
         </div>
 
         <div class="form-row">
@@ -62,39 +65,49 @@
         </div>
 
         <div class="form-row">
-                <div class="form-group col-md-6">
-                        <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d'article</label>
-                        <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialTypeId"
-                            required>
-                        <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
-                        <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
-                    </select>
+            <div class="form-group  col-md-6">
+                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto" for="field_warehouseto">Warehouseto</label>
+                <select class="form-control" id="field_warehouseto" name="warehouseto" [(ngModel)]="materialhistory.warehousetoId" required>
+                <option *ngIf="!editForm.value.warehouseto" [ngValue]="null" selected></option>
+                <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirds; trackBy: trackThirdById">{{thirdOption.name}}</option>
+            </select>
+            </div>
+            <div [hidden]="!(editForm.controls.warehouseto?.dirty && editForm.controls.warehouseto?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.warehouseto?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+            </div>
 
-                    <div [hidden]="!(editForm.controls.materialClassif?.dirty && editForm.controls.materialClassif?.invalid)">
-                        <small class="form-text text-danger" [hidden]="!editForm.controls.materialClassif?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
-                    </small>
-                    </div>
-                </div>
+            <div class="form-group  col-md-6">
+                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_warehousefrom">Warehousefrom</label>
+                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId" required>
+                <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
+                <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
+            </select>
+            </div>
+            <div [hidden]="!(editForm.controls.warehouseto?.dirty && editForm.controls.warehouseto?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.warehouseto?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+            </div>
+    </div>
+    <div class="form-row">
+          <!-- <div class="form-group col-md-6">-->
+                    <br>
+    <div class="btn-group flex-btn-group-container">
+        <button type="button"
+        (click) = "onSelectArticle()"
 
-                    <div class="form-group col-md-6">
-                        <br>
-                      <!--  [routerLink]="['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }]"-->
-        <div class="btn-group flex-btn-group-container">
-            <button type="button"
-            (click) = "onSelectArticle()"
-
-            replaceUrl="true"
-                queryParamsHandling="merge"
-                class="btn btn btn-info"
-                [disabled]="editForm.form.invalid || isSaving" >
-                <span class="fa fa-eye"></span>&nbsp;
-                <span class="d-none d-md-inline">Sélection des Articles</span>
-            </button>
+        replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn btn-info"
+            [disabled]="editForm.form.invalid || isSaving" >
+            <span class="fa fa-eye"></span>&nbsp;
+            <span class="d-none d-md-inline">Sélection des Articles</span>
+        </button>
+   <!-- </div>-->
+</div>
         </div>
-    </div>
-    </div>
-
     <div class="form-group" *ngIf="materials">
     <div class="form-row">
 
@@ -135,15 +148,6 @@
     </div>
     <br>
 
-
-    <!--   <div class="btn-group flex-btn-group-container">
-                <button type="submit"
-                        [routerLink]="['../material-search-stock-and-sales-utility-nopopup']"
-                        class="btn btn-info btn-sm">
-                    <span class="fa fa-eye"></span>
-                    <span class="d-none d-md-inline" >No popup</span>
-                </button>
-            </div>-->
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
