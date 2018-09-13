@@ -245,7 +245,7 @@ public class MaterialhistoryResourceIntTest {
     // @Transactional
     // public void updateMaterialhistory() throws Exception {
         // Initialize the database
-        materialhistoryRepository.saveAndFlush(materialhistory);
+      //  materialhistoryRepository.saveAndFlush(materialhistory);
        // int databaseSizeBeforeUpdate = materialhistoryRepository.findAll().size();
 
         // Update the materialhistory
