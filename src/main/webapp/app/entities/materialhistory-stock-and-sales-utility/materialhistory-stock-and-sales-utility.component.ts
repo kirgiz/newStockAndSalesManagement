@@ -285,4 +285,38 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   ) {
     return item.id;
   }
+
+  OnSale() {
+      console.log('transEvent');
+      const saleTransfType = this.transferclassifications.find(
+          (transferclassification) => {
+              return transferclassification.isOutgoingTransfer === true;
+          }
+      );
+      console.log('transEvent');
+      console.log(saleTransfType);
+      this.materialhistoryService.emitTransTypeEvent(saleTransfType);
+      this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
+  }
+
+  OnBuy() {
+    console.log('transEvent');
+    const buyTransfType = this.transferclassifications.find(
+        (transferclassification) => {
+            return transferclassification.isIncomingTransfer === true;
+        }
+    );
+    this.materialhistoryService.emitTransTypeEvent(buyTransfType);
+}
+
+OnTransf() {
+    console.log('transEvent');
+    const intTransfType = this.transferclassifications.find(
+        (transferclassification) => {
+            return transferclassification.isInternalTransfer === true;
+        }
+    );
+    this.materialhistoryService.emitTransTypeEvent(intTransfType);
+}
+
 }

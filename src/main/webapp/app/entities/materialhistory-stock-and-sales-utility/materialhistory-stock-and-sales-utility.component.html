@@ -15,7 +15,7 @@
     <div class="row">
             <div class="col">
         <div class="col-xs-12 form-group">
-          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+          <a class="list-group-item clearfix" (click)="OnSale()">
             <div class="pull-left">
               <h5 class="list-group-item-heading">Vendre</h5>
             </div>
@@ -27,7 +27,7 @@
     </div>
     <div class="col">
         <div class="col-xs-12 form-group" >
-          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix" (click)="OnBuy()">
             <div class="pull-left">
               <h5 class="list-group-item-heading">Acheter</h5>
             </div>
@@ -39,7 +39,7 @@
     </div>
     <div class="col">
         <div class="col-xs-12 form-group" *ngIf="hasAdminAuth">
-            <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix">
+            <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]"  class="list-group-item clearfix" (click)="OnTransf()">
               <div class="pull-left">
                 <h5 class="list-group-item-heading">Transferer</h5>
               </div>

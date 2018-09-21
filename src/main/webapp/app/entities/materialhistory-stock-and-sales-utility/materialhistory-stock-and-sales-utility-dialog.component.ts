@@ -1,6 +1,6 @@
 import {User} from '../../shared/user/user.model';
-import {MaterialclassificationStockAndSalesUtility} from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MaterialclassificationStockAndSalesUtility } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
@@ -22,6 +22,7 @@ import { UserService } from '../../shared/user/user.service';
 import { UserAuthorizedThird } from '../user-authorized-third/user-authorized-third.model';
 import { UserAuthorizedThirdService } from '../user-authorized-third';
 import { Principal } from '../../shared/auth/principal.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -29,6 +30,7 @@ import { Principal } from '../../shared/auth/principal.service';
 })
 export class MaterialhistoryStockAndSalesUtilityDialogComponent
   implements OnInit, OnDestroy {
+    @ViewChild('transferClassif') editForm: any;
     thirdsfrom: ThirdStockAndSalesUtility[];
     user: User;
     authThirdsList: UserAuthorizedThird[];
@@ -69,6 +71,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
 
   ngOnInit() {
     this.isSaving = false;
+
     this.principal.identity().then((account) => {
         this.currentAccount = account;
         console.log(this.currentAccount);
@@ -76,6 +79,15 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
       (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
         this.transferclassifications = res.body;
+        this.materialhistoryService.transTypeEvent.subscribe((transType: MaterialclassificationStockAndSalesUtility) => {
+            this.materialhistory.transferClassifId = transType.id;
+            console.log('HHHHHHHHHHHHH');
+            console.log(transType);
+        //    this.editForm.form.patchValue({transferClassif: transType.id});
+        }, (error) => {
+            console.log(error);
+        }
+    );
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -121,6 +133,17 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
         this.materialClassifications = res.body;
       }
     );
+
+   /* this.editForm.form.patchValue({transferClassif:
+        {code: 'VEN',
+        comments  :  null,
+        id :  1001,
+        isIncomingTransfer :  false,
+        isInternalTransfer :  false,
+        isOutgoingTransfer :  true,
+                name    :      'VENTE'}});*/
+
+
   }
 
   clear() {
@@ -219,6 +242,7 @@ console.log(this.materialhistory);
     }
   }
   onSelectArticle() {
+    console.log(this.editForm);
       this.router.navigate(['/', { outlets: { popup: ['material-search-stock-and-sales-utility-popup'] } }], { queryParams:
         { matType: this.materialhistory.materialclassificationId,
          destination: this.materialhistory.warehousetoId,  source: this.materialhistory.warehousefromId }});

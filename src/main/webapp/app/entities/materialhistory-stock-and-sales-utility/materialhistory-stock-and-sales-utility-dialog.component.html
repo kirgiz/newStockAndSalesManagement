@@ -17,8 +17,8 @@
             <div class="form-group col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
                 <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="materialhistory.transferClassifId"
-                    required>
-                <option *ngIf="!editForm.value.transferClassif" [ngValue]="null" selected></option>
+                    required #transferClassif="ngModel">
+                <option *ngIf="!editForm.value.transferClassif" [ngValue]="transfType" selected></option>
                 <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
             </select>
             </div>
@@ -101,11 +101,11 @@
         replaceUrl="true"
             queryParamsHandling="merge"
             class="btn btn btn-info"
-            [disabled]="editForm.form.invalid || isSaving" >
+            >
             <span class="fa fa-eye"></span>&nbsp;
             <span class="d-none d-md-inline">Sélection des Articles</span>
         </button>
-   <!-- </div>-->
+   <!-- </div>  [disabled]="editForm.form.invalid || isSaving" -->
 </div>
         </div>
     <div class="form-group" *ngIf="materials">

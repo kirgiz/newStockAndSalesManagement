@@ -12,12 +12,14 @@ import { MaterialStockAndSalesUtility } from '../material-stock-and-sales-utilit
 import { Subject } from 'rxjs/Subject';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.service';
 import { Subscription } from 'rxjs/Subscription';
+import { TransferclassificationStockAndSalesUtility } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.model';
 
 export type EntityResponseType = HttpResponse<MaterialhistoryStockAndSalesUtility>;
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityService {
     private subsmat: Subscription;
+    transTypeEvent: Subject<TransferclassificationStockAndSalesUtility> = new Subject<TransferclassificationStockAndSalesUtility> ();
 
     @Output() selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
 
@@ -118,5 +120,9 @@ export class MaterialhistoryStockAndSalesUtilityService {
 
     selectMaterial(materials: MaterialStockAndSalesUtility[]) {
         this.selectedMaterial.emit(materials );
+    }
+
+    emitTransTypeEvent(transType: TransferclassificationStockAndSalesUtility) {
+        this.transTypeEvent.next(transType);
     }
 }
