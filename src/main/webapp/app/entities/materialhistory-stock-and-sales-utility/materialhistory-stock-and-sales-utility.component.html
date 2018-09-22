@@ -15,7 +15,7 @@
     <div class="row">
             <div class="col">
         <div class="col-xs-12 form-group">
-          <a class="list-group-item clearfix" (click)="OnSale()">
+          <a [routerLink]="['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }]" class="list-group-item clearfix" (click)="OnSale()">
             <div class="pull-left">
               <h5 class="list-group-item-heading">Vendre</h5>
             </div>

@@ -19,7 +19,7 @@ export type EntityResponseType = HttpResponse<MaterialhistoryStockAndSalesUtilit
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityService {
     private subsmat: Subscription;
-    transTypeEvent: Subject<TransferclassificationStockAndSalesUtility> = new Subject<TransferclassificationStockAndSalesUtility> ();
+    transTypeEvent: TransferclassificationStockAndSalesUtility;
 
     @Output() selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
 
@@ -123,6 +123,9 @@ export class MaterialhistoryStockAndSalesUtilityService {
     }
 
     emitTransTypeEvent(transType: TransferclassificationStockAndSalesUtility) {
-        this.transTypeEvent.next(transType);
-    }
+        this.transTypeEvent=transType;
+}
+getTransTypeEvent():TransferclassificationStockAndSalesUtility {
+    return this.transTypeEvent;
+}
 }

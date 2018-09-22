@@ -287,36 +287,37 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   }
 
   OnSale() {
-      console.log('transEvent');
       const saleTransfType = this.transferclassifications.find(
           (transferclassification) => {
               return transferclassification.isOutgoingTransfer === true;
           }
       );
-      console.log('transEvent');
-      console.log(saleTransfType);
-      this.materialhistoryService.emitTransTypeEvent(saleTransfType);
-      this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
+      this.openTransfDialog(saleTransfType);
   }
 
   OnBuy() {
-    console.log('transEvent');
     const buyTransfType = this.transferclassifications.find(
         (transferclassification) => {
             return transferclassification.isIncomingTransfer === true;
         }
     );
-    this.materialhistoryService.emitTransTypeEvent(buyTransfType);
+    this.openTransfDialog(buyTransfType);
 }
 
 OnTransf() {
-    console.log('transEvent');
     const intTransfType = this.transferclassifications.find(
         (transferclassification) => {
             return transferclassification.isInternalTransfer === true;
         }
     );
-    this.materialhistoryService.emitTransTypeEvent(intTransfType);
+    this.openTransfDialog(intTransfType);
+}
+
+private openTransfDialog(transfType: TransferclassificationStockAndSalesUtility){
+  this.materialhistoryService.emitTransTypeEvent(transfType);
+  this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
+
+
 }
 
 }
