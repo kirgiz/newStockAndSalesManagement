@@ -17,6 +17,8 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="defaultThird"><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultThird">Default Third</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="defaultDestination"><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultDestination">Default Destination</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="userAuthLogin"><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.userAuth">User Auth</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="thirdAuthName"><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.thirdAuth">Third Auth</span> <span class="fa fa-sort"></span></th>
             <th></th>
@@ -25,6 +27,8 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let userAuthorizedThird of userAuthorizedThirds ;trackBy: trackId">
                 <td><a [routerLink]="['../user-authorized-third', userAuthorizedThird.id ]">{{userAuthorizedThird.id}}</a></td>
+                <td>{{userAuthorizedThird.defaultThird}}</td>
+                <td>{{userAuthorizedThird.defaultDestination}}</td>
                 <td>
                     {{userAuthorizedThird.userAuthLogin}}
                 </td>

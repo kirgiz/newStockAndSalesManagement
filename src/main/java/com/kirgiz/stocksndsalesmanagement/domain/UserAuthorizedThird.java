@@ -23,6 +23,12 @@ public class UserAuthorizedThird implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "default_third")
+    private Boolean defaultThird;
+
+    @Column(name = "default_destination")
+    private Boolean defaultDestination;
+
     @ManyToOne
     private User userAuth;
 
@@ -36,6 +42,32 @@ public class UserAuthorizedThird implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean isDefaultThird() {
+        return defaultThird;
+    }
+
+    public UserAuthorizedThird defaultThird(Boolean defaultThird) {
+        this.defaultThird = defaultThird;
+        return this;
+    }
+
+    public void setDefaultThird(Boolean defaultThird) {
+        this.defaultThird = defaultThird;
+    }
+
+    public Boolean isDefaultDestination() {
+        return defaultDestination;
+    }
+
+    public UserAuthorizedThird defaultDestination(Boolean defaultDestination) {
+        this.defaultDestination = defaultDestination;
+        return this;
+    }
+
+    public void setDefaultDestination(Boolean defaultDestination) {
+        this.defaultDestination = defaultDestination;
     }
 
     public User getUserAuth() {
@@ -89,6 +121,8 @@ public class UserAuthorizedThird implements Serializable {
     public String toString() {
         return "UserAuthorizedThird{" +
             "id=" + getId() +
+            ", defaultThird='" + isDefaultThird() + "'" +
+            ", defaultDestination='" + isDefaultDestination() + "'" +
             "}";
     }
 }

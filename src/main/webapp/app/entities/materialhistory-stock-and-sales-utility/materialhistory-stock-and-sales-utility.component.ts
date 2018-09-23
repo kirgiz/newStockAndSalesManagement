@@ -116,6 +116,24 @@ export class MaterialhistoryStockAndSalesUtilityComponent
                         'userAuthId.equals': resuser.id
                     }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
                         this.authThirdsList = reslist.body;
+                        this.materialhistoryService.setDefaultThird(
+                            this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                return this.authThirdsList.find((thirdAuth) => {
+                                return thirdAuth.defaultThird === true;
+                            }).thirdAuthId === third.id;
+                        }
+                        )
+                        );
+
+                        this.materialhistoryService.setDefaultDestination(
+                            this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                return this.authThirdsList.find((thirdAuth) => {
+                                return thirdAuth.defaultDestination === true;
+                            }).thirdAuthId === third.id;
+                        }
+                        )
+                        );
+
                         const mat:  MaterialhistoryStockAndSalesUtility[] =  this.materialhistoriesToDisplay.slice();
                         this.materialhistoriesToDisplay = mat.filter((element) => {
                             for (const authList of this.authThirdsList) {
@@ -134,6 +152,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
                    }
                     }
                 });
+                this.transferDest = this.materialhistoryService.getDefaultDestination().id;
+                this.transferSource = this.materialhistoryService.getDefaultThird().id;
 
                     });
                 });
@@ -316,8 +336,6 @@ OnTransf() {
 private openTransfDialog(transfType: TransferclassificationStockAndSalesUtility){
   this.materialhistoryService.emitTransTypeEvent(transfType);
   this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
-
-
 }
 
 }

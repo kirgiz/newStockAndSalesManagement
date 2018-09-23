@@ -127,10 +127,12 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
       }
     );
     this.transferType = this.materialhistoryService.getTransTypeEvent();
+    this.materialhistory.warehousefromId = this.materialhistoryService.getDefaultThird().id;
+    this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
       this.materialhistory.transferClassifId = this.transferType.id;
       console.log('HHHHHHHHHHHHH');
      // console.log(transType);
-      console.log(this.materialhistory.transferClassifId);
+      console.log( this.materialhistory.warehousefromId);
 
 
 
@@ -149,6 +151,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
   }
 
   ngAfterViewInit() {
+  //  this.materialhistory.warehousefromId = 1201;
   }
 
   clear() {

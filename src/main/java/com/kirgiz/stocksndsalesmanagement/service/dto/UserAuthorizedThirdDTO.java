@@ -13,6 +13,10 @@ public class UserAuthorizedThirdDTO implements Serializable {
 
     private Long id;
 
+    private Boolean defaultThird;
+
+    private Boolean defaultDestination;
+
     private Long userAuthId;
 
     private String userAuthLogin;
@@ -27,6 +31,22 @@ public class UserAuthorizedThirdDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean isDefaultThird() {
+        return defaultThird;
+    }
+
+    public void setDefaultThird(Boolean defaultThird) {
+        this.defaultThird = defaultThird;
+    }
+
+    public Boolean isDefaultDestination() {
+        return defaultDestination;
+    }
+
+    public void setDefaultDestination(Boolean defaultDestination) {
+        this.defaultDestination = defaultDestination;
     }
 
     public Long getUserAuthId() {
@@ -86,6 +106,8 @@ public class UserAuthorizedThirdDTO implements Serializable {
     public String toString() {
         return "UserAuthorizedThirdDTO{" +
             "id=" + getId() +
+            ", defaultThird='" + isDefaultThird() + "'" +
+            ", defaultDestination='" + isDefaultDestination() + "'" +
             "}";
     }
 }

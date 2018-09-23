@@ -45,6 +45,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = StockAndSalesManagementApp.class)
 public class UserAuthorizedThirdResourceIntTest {
 
+    private static final Boolean DEFAULT_DEFAULT_THIRD = false;
+    private static final Boolean UPDATED_DEFAULT_THIRD = true;
+
+    private static final Boolean DEFAULT_DEFAULT_DESTINATION = false;
+    private static final Boolean UPDATED_DEFAULT_DESTINATION = true;
+
     @Autowired
     private UserAuthorizedThirdRepository userAuthorizedThirdRepository;
 
@@ -91,7 +97,9 @@ public class UserAuthorizedThirdResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static UserAuthorizedThird createEntity(EntityManager em) {
-        UserAuthorizedThird userAuthorizedThird = new UserAuthorizedThird();
+        UserAuthorizedThird userAuthorizedThird = new UserAuthorizedThird()
+            .defaultThird(DEFAULT_DEFAULT_THIRD)
+            .defaultDestination(DEFAULT_DEFAULT_DESTINATION);
         return userAuthorizedThird;
     }
 
@@ -116,6 +124,8 @@ public class UserAuthorizedThirdResourceIntTest {
         List<UserAuthorizedThird> userAuthorizedThirdList = userAuthorizedThirdRepository.findAll();
         assertThat(userAuthorizedThirdList).hasSize(databaseSizeBeforeCreate + 1);
         UserAuthorizedThird testUserAuthorizedThird = userAuthorizedThirdList.get(userAuthorizedThirdList.size() - 1);
+        assertThat(testUserAuthorizedThird.isDefaultThird()).isEqualTo(DEFAULT_DEFAULT_THIRD);
+        assertThat(testUserAuthorizedThird.isDefaultDestination()).isEqualTo(DEFAULT_DEFAULT_DESTINATION);
     }
 
     @Test
@@ -148,7 +158,9 @@ public class UserAuthorizedThirdResourceIntTest {
         restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())))
+            .andExpect(jsonPath("$.[*].defaultThird").value(hasItem(DEFAULT_DEFAULT_THIRD.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultDestination").value(hasItem(DEFAULT_DEFAULT_DESTINATION.booleanValue())));
     }
 
     @Test
@@ -161,7 +173,87 @@ public class UserAuthorizedThirdResourceIntTest {
         restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds/{id}", userAuthorizedThird.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(userAuthorizedThird.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(userAuthorizedThird.getId().intValue()))
+            .andExpect(jsonPath("$.defaultThird").value(DEFAULT_DEFAULT_THIRD.booleanValue()))
+            .andExpect(jsonPath("$.defaultDestination").value(DEFAULT_DEFAULT_DESTINATION.booleanValue()));
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultThirdIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultThird equals to DEFAULT_DEFAULT_THIRD
+        defaultUserAuthorizedThirdShouldBeFound("defaultThird.equals=" + DEFAULT_DEFAULT_THIRD);
+
+        // Get all the userAuthorizedThirdList where defaultThird equals to UPDATED_DEFAULT_THIRD
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultThird.equals=" + UPDATED_DEFAULT_THIRD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultThirdIsInShouldWork() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultThird in DEFAULT_DEFAULT_THIRD or UPDATED_DEFAULT_THIRD
+        defaultUserAuthorizedThirdShouldBeFound("defaultThird.in=" + DEFAULT_DEFAULT_THIRD + "," + UPDATED_DEFAULT_THIRD);
+
+        // Get all the userAuthorizedThirdList where defaultThird equals to UPDATED_DEFAULT_THIRD
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultThird.in=" + UPDATED_DEFAULT_THIRD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultThirdIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultThird is not null
+        defaultUserAuthorizedThirdShouldBeFound("defaultThird.specified=true");
+
+        // Get all the userAuthorizedThirdList where defaultThird is null
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultThird.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultDestinationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultDestination equals to DEFAULT_DEFAULT_DESTINATION
+        defaultUserAuthorizedThirdShouldBeFound("defaultDestination.equals=" + DEFAULT_DEFAULT_DESTINATION);
+
+        // Get all the userAuthorizedThirdList where defaultDestination equals to UPDATED_DEFAULT_DESTINATION
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultDestination.equals=" + UPDATED_DEFAULT_DESTINATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultDestinationIsInShouldWork() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultDestination in DEFAULT_DEFAULT_DESTINATION or UPDATED_DEFAULT_DESTINATION
+        defaultUserAuthorizedThirdShouldBeFound("defaultDestination.in=" + DEFAULT_DEFAULT_DESTINATION + "," + UPDATED_DEFAULT_DESTINATION);
+
+        // Get all the userAuthorizedThirdList where defaultDestination equals to UPDATED_DEFAULT_DESTINATION
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultDestination.in=" + UPDATED_DEFAULT_DESTINATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllUserAuthorizedThirdsByDefaultDestinationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
+        // Get all the userAuthorizedThirdList where defaultDestination is not null
+        defaultUserAuthorizedThirdShouldBeFound("defaultDestination.specified=true");
+
+        // Get all the userAuthorizedThirdList where defaultDestination is null
+        defaultUserAuthorizedThirdShouldNotBeFound("defaultDestination.specified=false");
     }
 
     @Test
@@ -208,7 +300,9 @@ public class UserAuthorizedThirdResourceIntTest {
         restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds?sort=id,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())))
+            .andExpect(jsonPath("$.[*].defaultThird").value(hasItem(DEFAULT_DEFAULT_THIRD.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultDestination").value(hasItem(DEFAULT_DEFAULT_DESTINATION.booleanValue())));
     }
 
     /**
@@ -242,6 +336,9 @@ public class UserAuthorizedThirdResourceIntTest {
         UserAuthorizedThird updatedUserAuthorizedThird = userAuthorizedThirdRepository.findOne(userAuthorizedThird.getId());
         // Disconnect from session so that the updates on updatedUserAuthorizedThird are not directly saved in db
         em.detach(updatedUserAuthorizedThird);
+        updatedUserAuthorizedThird
+            .defaultThird(UPDATED_DEFAULT_THIRD)
+            .defaultDestination(UPDATED_DEFAULT_DESTINATION);
         UserAuthorizedThirdDTO userAuthorizedThirdDTO = userAuthorizedThirdMapper.toDto(updatedUserAuthorizedThird);
 
         restUserAuthorizedThirdMockMvc.perform(put("/api/user-authorized-thirds")
@@ -253,6 +350,8 @@ public class UserAuthorizedThirdResourceIntTest {
         List<UserAuthorizedThird> userAuthorizedThirdList = userAuthorizedThirdRepository.findAll();
         assertThat(userAuthorizedThirdList).hasSize(databaseSizeBeforeUpdate);
         UserAuthorizedThird testUserAuthorizedThird = userAuthorizedThirdList.get(userAuthorizedThirdList.size() - 1);
+        assertThat(testUserAuthorizedThird.isDefaultThird()).isEqualTo(UPDATED_DEFAULT_THIRD);
+        assertThat(testUserAuthorizedThird.isDefaultDestination()).isEqualTo(UPDATED_DEFAULT_DESTINATION);
     }
 
     @Test

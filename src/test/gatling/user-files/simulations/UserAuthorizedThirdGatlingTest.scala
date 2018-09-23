@@ -68,7 +68,7 @@ class UserAuthorizedThirdGatlingTest extends Simulation {
             .exec(http("Create new userAuthorizedThird")
             .post("/api/user-authorized-thirds")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null}""")).asJSON
+            .body(StringBody("""{"id":null, "defaultThird":null, "defaultDestination":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_userAuthorizedThird_url"))).exitHereIfFailed
             .pause(10)

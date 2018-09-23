@@ -1,12 +1,12 @@
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
     <div class="modal-header">
-            <div class="pull-left">
-                    <h5 class="list-group-item-heading" id="myMaterialhistoryLabel" jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createOrEditLabel">Create or edit a Materialhistory</h5>
-                  </div>
-     <!--   <h4 class="modal-title" id="myMaterialhistoryLabel" jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createOrEditLabel">Create or edit a Materialhistory</h4>
+        <div class="pull-left">
+            <h5 class="list-group-item-heading" id="myMaterialhistoryLabel" jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createOrEditLabel">Create or edit a Materialhistory</h5>
+        </div>
+        <!--   <h4 class="modal-title" id="myMaterialhistoryLabel" jhiTranslate="stockAndSalesManagementApp.materialhistory.home.createOrEditLabel">Create or edit a Materialhistory</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="clear()">&times;</button>-->
-</div>
+    </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group" [hidden]="!materialhistory.id">
@@ -18,31 +18,32 @@
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
                 <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="materialhistory.transferClassifId"
                     required #transferClassif="ngModel">
-                <option *ngIf="!editForm.value.transferClassif" [ngValue]="null" selected></option>
-                <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
-            </select>
+                    <option *ngIf="!editForm.value.transferClassif" [ngValue]="null" selected></option>
+                    <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
+                </select>
 
             </div>
+
             <div [hidden]="!(editForm.controls.transferClassif?.dirty && editForm.controls.transferClassif?.invalid)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.transferClassif?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
+                    This field is required.
+                </small>
             </div>
 
             <div class="form-group col-md-6">
-                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d'article</label>
+                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d article</label>
                 <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialhistory.materialclassificationId"
                     required>
-                <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
-                <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
-            </select>
-
+                    <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
+                    <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
+                </select>
+            </div>
             <div [hidden]="!(editForm.controls.materialClassif?.dirty && editForm.controls.materialClassif?.invalid)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.materialClassif?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
+                    This field is required.
+                </small>
             </div>
-        </div>
+
         </div>
 
         <div class="form-row">
@@ -52,21 +53,21 @@
                 <div [hidden]="!(editForm.controls.code?.dirty && editForm.controls.code?.invalid)">
                     <small class="form-text text-danger" [hidden]="!editForm.controls.code?.errors?.maxlength" jhiTranslate="entity.validation.maxlength"
                         translateValues="{ max: 20 }">
-                   This field cannot be longer than 20 characters.
-                </small>
+                        This field cannot be longer than 20 characters.
+                    </small>
                 </div>
             </div>
 
             <div class="form-group  col-md-6">
                 <h5 class="list-group-item-heading" jhiTranslate="stockAndSalesManagementApp.materialhistory.price" for="field_price">Price</h5>
-                <input type="number" class="form-control" name="price" id="field_price" [(ngModel)]="materialhistory.price" [required]="(transferType.isIncomingTransfer || 
-                transferType.isOutgoingTransfer)"/>
+                <input type="number" class="form-control" name="price" id="field_price" [(ngModel)]="materialhistory.price" [required]="(transferType.isIncomingTransfer ||
+                transferType.isOutgoingTransfer)" />
             </div>
-            <div [hidden]="!(editForm.controls.field_price?.dirty && editForm.controls.field_price?.invalid) && (transferType.isIncomingTransfer || 
+            <div [hidden]="!(editForm.controls.field_price?.dirty && editForm.controls.field_price?.invalid) && (transferType.isIncomingTransfer ||
             transferType.isOutgoingTransfer)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.field_price?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
+                    This field is required.
+                </small>
             </div>
         </div>
 
@@ -74,92 +75,88 @@
             <div class="form-group  col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto" for="field_warehouseto">Warehouseto</label>
                 <select class="form-control" id="field_warehouseto" name="warehouseto" [(ngModel)]="materialhistory.warehousetoId" required>
-                <option *ngIf="!editForm.value.warehouseto" [ngValue]="null" selected></option>
-                <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirds; trackBy: trackThirdById">{{thirdOption.name}}</option>
-            </select>
+                    <option *ngIf="!editForm.value.warehouseto" [ngValue]="null" selected></option>
+                    <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirds; trackBy: trackThirdById">{{thirdOption.name}}</option>
+                </select>
             </div>
             <div [hidden]="!(editForm.controls.warehouseto?.dirty && editForm.controls.warehouseto?.invalid)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.warehouseto?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
+                    This field is required.
+                </small>
             </div>
 
             <div class="form-group  col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_warehousefrom">Warehousefrom</label>
-                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId" required>
-                <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
-                <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
-            </select>
+                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId"
+                    required #warehousefrom="ngModel">
+                    <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
+                    <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
+                </select>
             </div>
-            <div [hidden]="!(editForm.controls.warehouseto?.dirty && editForm.controls.warehouseto?.invalid)">
-                <small class="form-text text-danger" [hidden]="!editForm.controls.warehouseto?.errors?.required" jhiTranslate="entity.validation.required">
-                This field is required.
-            </small>
+            <div [hidden]="!(editForm.controls.warehousefrom?.dirty && editForm.controls.warehousefrom.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.warehousefrom?.errors?.required" jhiTranslate="entity.validation.required">
+                    This field is required.
+                </small>
             </div>
-    </div>
-    <div class="form-row">
-          <!-- <div class="form-group col-md-6">-->
-                    <br>
-    <div class="btn-group flex-btn-group-container">
-        <button type="button"
-        (click) = "onSelectArticle()"
-        [disabled]="editForm.form.invalid || isSaving"
-        replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn btn-info"
-            >
-            <span class="fa fa-eye"></span>&nbsp;
-            <span class="d-none d-md-inline">Sélection des Articles</span>
-        </button>
-   <!-- </div>   -->
-</div>
         </div>
-    <div class="form-group" *ngIf="materials">
-    <div class="form-row">
+        <div class="form-row">
+            <!-- <div class="form-group col-md-6">-->
+            <br>
+            <div class="btn-group flex-btn-group-container">
+                <button type="button" (click)="onSelectArticle()" [disabled]="editForm.form.invalid || isSaving" replaceUrl="true" queryParamsHandling="merge"
+                    class="btn btn btn-info">
+                    <span class="fa fa-eye"></span>&nbsp;
+                    <span class="d-none d-md-inline">Sélection des Articles</span>
+                </button>
+                <!-- </div>   -->
+            </div>
+        </div>
+        <div class="form-group" *ngIf="materials">
+            <div class="form-row">
 
-        <label jhiTranslate="stockAndSalesManagementApp.materialhistory.itemTransfered" for="field_itemTransfered">Item Transfered</label>
-        <div class="table-responsive">
-            <table class="table table-fixed table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th >Id</th>
-                        <th >Type</th>
-                        <th >Code</th>
-                        <th >Description</th>
-                    </tr>
-                </thead>
-                <tr *ngFor="let materialOption of materials; trackBy: trackMaterialById">
-                    <td >{{materialOption.id}}</td>
-                    <td >{{materialOption.materialTypeDefName}}</td>
-                    <td >{{materialOption.code}}</td>
-                    <td >{{materialOption.Description}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
-        <div class="form-group">
-                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.comments"
-                 for="field_comments">Comments</label>
-                <input type="text" class="form-control" name="comments" id="field_comments"
-                [(ngModel)]="materialhistory.comments" maxlength="500"/>
-                <div [hidden]="!(editForm.controls.comments?.dirty && editForm.controls.comments?.invalid)">
-                    <small class="form-text text-danger" [hidden]="!editForm.controls.comments?.errors?.maxlength"
-                    jhiTranslate="entity.validation.maxlength"
-                        translateValues="{ max: 500 }">
-                           This field cannot be longer than 500 characters.
-                        </small>
+                <label jhiTranslate="stockAndSalesManagementApp.materialhistory.itemTransfered" for="field_itemTransfered">Item Transfered</label>
+                <div class="table-responsive">
+                    <table class="table table-fixed table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Type</th>
+                                <th>Code</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tr *ngFor="let materialOption of materials; trackBy: trackMaterialById">
+                            <td>{{materialOption.id}}</td>
+                            <td>{{materialOption.materialTypeDefName}}</td>
+                            <td>{{materialOption.code}}</td>
+                            <td>{{materialOption.Description}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.comments" for="field_comments">Comments</label>
+            <input type="text" class="form-control" name="comments" id="field_comments" [(ngModel)]="materialhistory.comments" maxlength="500"
+            />
+            <div [hidden]="!(editForm.controls.comments?.dirty && editForm.controls.comments?.invalid)">
+                <small class="form-text text-danger" [hidden]="!editForm.controls.comments?.errors?.maxlength" jhiTranslate="entity.validation.maxlength"
+                    translateValues="{ max: 500 }">
+                    This field cannot be longer than 500 characters.
+                </small>
+            </div>
+        </div>
     </div>
     <br>
 
-      <div class="modal-footer">
+    <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            <span class="fa fa-ban"></span>&nbsp;
+            <span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+            <span class="fa fa-save"></span>&nbsp;
+            <span jhiTranslate="entity.action.save">Save</span>
         </button>
     </div>
 </form>
