@@ -13,13 +13,16 @@ import { Subject } from 'rxjs/Subject';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.service';
 import { Subscription } from 'rxjs/Subscription';
 import { TransferclassificationStockAndSalesUtility } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.model';
+import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.model';
 
 export type EntityResponseType = HttpResponse<MaterialhistoryStockAndSalesUtility>;
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityService {
+    defaultThirdDestination: ThirdStockAndSalesUtility;
     private subsmat: Subscription;
-    transTypeEvent: Subject<TransferclassificationStockAndSalesUtility> = new Subject<TransferclassificationStockAndSalesUtility> ();
+    transTypeEvent: TransferclassificationStockAndSalesUtility;
+    defaultThird: ThirdStockAndSalesUtility;
 
     @Output() selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
 
@@ -123,6 +126,25 @@ export class MaterialhistoryStockAndSalesUtilityService {
     }
 
     emitTransTypeEvent(transType: TransferclassificationStockAndSalesUtility) {
-        this.transTypeEvent.next(transType);
-    }
+        this.transTypeEvent = transType;
+}
+getTransTypeEvent(): TransferclassificationStockAndSalesUtility {
+    return this.transTypeEvent;
+}
+
+setDefaultThird(third: ThirdStockAndSalesUtility) {
+    this.defaultThird = third;
+}
+
+getDefaultThird(): ThirdStockAndSalesUtility{
+    return this.defaultThird;
+}
+
+setDefaultDestination(third: ThirdStockAndSalesUtility) {
+    this.defaultThirdDestination = third;
+}
+
+getDefaultDestination(): ThirdStockAndSalesUtility {
+    return this.defaultThirdDestination ;
+}
 }

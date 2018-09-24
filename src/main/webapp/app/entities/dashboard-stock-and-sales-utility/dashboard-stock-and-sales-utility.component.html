@@ -4,16 +4,16 @@
     </h2>
     <div class="row">
     </div>
-   <!--    <div class="row">     <div class="col-md-11">    
-        <span *ngIf="dashboards && dashboards.length">      
-                   <nvd3 [options]="bpOptions" [data]="bpData"               
-                       class="with-3d-shadow with-transitions"></nvd3>       
-                      </span>         <ngb-alert [dismissible]="false"           
-                        [hidden]="dashboards && dashboards.length">        
-                             <span >             
-                                     No material movements found      
-                                      </span>         </ngb-alert> 
-                                        </div> 
+   <!--    <div class="row">     <div class="col-md-11">  
+        <span *ngIf="dashboards && dashboards.length">  
+                   <nvd3 [options]="bpOptions" [data]="bpData"  
+                       class="with-3d-shadow with-transitions"></nvd3>  
+                      </span>         <ngb-alert [dismissible]="false"  
+                        [hidden]="dashboards && dashboards.length">  
+                             <span >  
+                                     No material movements found
+                                      </span>         </ngb-alert>
+                                        </div>
                                 </div>-->
     <br/>
     <div class="table-responsive" *ngIf="dashboards">
@@ -32,29 +32,29 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let dashboard of dashboards ;trackBy: trackId">
+            <tr *ngFor="let dashboard of dashboardsToDisplay ;trackBy: trackId">
                 <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td>
                 <td>{{dashboard.transferDate | date:'mediumDate'}}</td>
                 <td>{{dashboard.profitAndLoss}}</td>
                 <td>{{dashboard.numberOfItems}}</td>
                 <td>
-                    <div *ngIf="dashboard.currencyForDashboardId">
+                    <div *ngIf="dashboard.currencyForDashboardName">
                         <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]" >{{dashboard.currencyForDashboardName}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="dashboard.transferForDashboardId">
-                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]" >{{dashboard.transferForDashboardName}}</a>
+                    <div *ngIf="dashboard.transferClassifName">
+                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]" >{{dashboard.transferClassifName}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="dashboard.warehouseOutgId">
-                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId  ]" >{{dashboard.warehouseOutgName}}</a>
+                    <div *ngIf="dashboard.warehousefromName">
+                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId  ]" >{{dashboard.warehousefromName}}</a>
                     </div>
                 </td>
                 <td>
-                    <div *ngIf="dashboard.materialTypeDefDashboardId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]" >{{dashboard.materialTypeDefDashboardCode}}</a>
+                    <div *ngIf="dashboard.materialclassificationDescription">
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]" >{{dashboard.materialclassificationDescription}}</a>
                     </div>
                 </td>
                 <td class="text-right">
@@ -65,7 +65,7 @@
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
-                    </div>                 
+                    </div>
                 </td>
             </tr>
             </tbody>

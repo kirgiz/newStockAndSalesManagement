@@ -28,6 +28,10 @@ public class UserAuthorizedThirdCriteria implements Serializable {
 
     private LongFilter id;
 
+    private BooleanFilter defaultThird;
+
+    private BooleanFilter defaultDestination;
+
     private LongFilter userAuthId;
 
     private LongFilter thirdAuthId;
@@ -41,6 +45,22 @@ public class UserAuthorizedThirdCriteria implements Serializable {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public BooleanFilter getDefaultThird() {
+        return defaultThird;
+    }
+
+    public void setDefaultThird(BooleanFilter defaultThird) {
+        this.defaultThird = defaultThird;
+    }
+
+    public BooleanFilter getDefaultDestination() {
+        return defaultDestination;
+    }
+
+    public void setDefaultDestination(BooleanFilter defaultDestination) {
+        this.defaultDestination = defaultDestination;
     }
 
     public LongFilter getUserAuthId() {
@@ -63,6 +83,8 @@ public class UserAuthorizedThirdCriteria implements Serializable {
     public String toString() {
         return "UserAuthorizedThirdCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (defaultThird != null ? "defaultThird=" + defaultThird + ", " : "") +
+                (defaultDestination != null ? "defaultDestination=" + defaultDestination + ", " : "") +
                 (userAuthId != null ? "userAuthId=" + userAuthId + ", " : "") +
                 (thirdAuthId != null ? "thirdAuthId=" + thirdAuthId + ", " : "") +
             "}";

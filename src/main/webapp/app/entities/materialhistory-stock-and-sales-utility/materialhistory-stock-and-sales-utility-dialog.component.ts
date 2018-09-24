@@ -1,6 +1,6 @@
 import {User} from '../../shared/user/user.model';
 import { MaterialclassificationStockAndSalesUtility } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
@@ -29,7 +29,7 @@ import { NgForm } from '@angular/forms';
   templateUrl: './materialhistory-stock-and-sales-utility-dialog.component.html'
 })
 export class MaterialhistoryStockAndSalesUtilityDialogComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('transferClassif') editForm: any;
     thirdsfrom: ThirdStockAndSalesUtility[];
     user: User;
@@ -54,6 +54,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
   thirds: ThirdStockAndSalesUtility[];
   creationDateDp: any;
   materialTypeId: number;
+  transferType: TransferclassificationStockAndSalesUtility;
+//  selectedValue = 'AM';
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -79,15 +81,6 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
     this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
       (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
         this.transferclassifications = res.body;
-        this.materialhistoryService.transTypeEvent.subscribe((transType: MaterialclassificationStockAndSalesUtility) => {
-            this.materialhistory.transferClassifId = transType.id;
-            console.log('HHHHHHHHHHHHH');
-            console.log(transType);
-        //    this.editForm.form.patchValue({transferClassif: transType.id});
-        }, (error) => {
-            console.log(error);
-        }
-    );
       },
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -133,6 +126,16 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
         this.materialClassifications = res.body;
       }
     );
+    this.transferType = this.materialhistoryService.getTransTypeEvent();
+    this.materialhistory.warehousefromId = this.materialhistoryService.getDefaultThird().id;
+    this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
+      this.materialhistory.transferClassifId = this.transferType.id;
+      console.log('HHHHHHHHHHHHH');
+     // console.log(transType);
+      console.log( this.materialhistory.warehousefromId);
+
+
+
 
    /* this.editForm.form.patchValue({transferClassif:
         {code: 'VEN',
@@ -142,8 +145,13 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent
         isInternalTransfer :  false,
         isOutgoingTransfer :  true,
                 name    :      'VENTE'}});*/
+            //    this.selectedValue = 'AM';
+       //         this.materialhistory.transferClassifId=1001;
 
+  }
 
+  ngAfterViewInit() {
+  //  this.materialhistory.warehousefromId = 1201;
   }
 
   clear() {

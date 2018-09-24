@@ -116,6 +116,24 @@ export class MaterialhistoryStockAndSalesUtilityComponent
                         'userAuthId.equals': resuser.id
                     }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
                         this.authThirdsList = reslist.body;
+                        this.materialhistoryService.setDefaultThird(
+                            this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                return this.authThirdsList.find((thirdAuth) => {
+                                return thirdAuth.defaultThird === true;
+                            }).thirdAuthId === third.id;
+                        }
+                        )
+                        );
+
+                        this.materialhistoryService.setDefaultDestination(
+                            this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                return this.authThirdsList.find((thirdAuth) => {
+                                return thirdAuth.defaultDestination === true;
+                            }).thirdAuthId === third.id;
+                        }
+                        )
+                        );
+
                         const mat:  MaterialhistoryStockAndSalesUtility[] =  this.materialhistoriesToDisplay.slice();
                         this.materialhistoriesToDisplay = mat.filter((element) => {
                             for (const authList of this.authThirdsList) {
@@ -134,6 +152,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
                    }
                     }
                 });
+                this.transferDest = this.materialhistoryService.getDefaultDestination().id;
+                this.transferSource = this.materialhistoryService.getDefaultThird().id;
 
                     });
                 });
@@ -287,36 +307,35 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   }
 
   OnSale() {
-      console.log('transEvent');
       const saleTransfType = this.transferclassifications.find(
           (transferclassification) => {
               return transferclassification.isOutgoingTransfer === true;
           }
       );
-      console.log('transEvent');
-      console.log(saleTransfType);
-      this.materialhistoryService.emitTransTypeEvent(saleTransfType);
-      this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
+      this.openTransfDialog(saleTransfType);
   }
 
   OnBuy() {
-    console.log('transEvent');
     const buyTransfType = this.transferclassifications.find(
         (transferclassification) => {
             return transferclassification.isIncomingTransfer === true;
         }
     );
-    this.materialhistoryService.emitTransTypeEvent(buyTransfType);
+    this.openTransfDialog(buyTransfType);
 }
 
 OnTransf() {
-    console.log('transEvent');
     const intTransfType = this.transferclassifications.find(
         (transferclassification) => {
             return transferclassification.isInternalTransfer === true;
         }
     );
-    this.materialhistoryService.emitTransTypeEvent(intTransfType);
+    this.openTransfDialog(intTransfType);
+}
+
+private openTransfDialog(transfType: TransferclassificationStockAndSalesUtility){
+  this.materialhistoryService.emitTransTypeEvent(transfType);
+  this.router.navigate(['/', { outlets: { popup: ['materialhistory-stock-and-sales-utility-new'] } }] );
 }
 
 }

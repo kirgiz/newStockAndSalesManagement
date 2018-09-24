@@ -16,6 +16,8 @@
             "detail": {
                 "title": "User Authorized Third"
             },
+            "defaultThird": "Default Third",
+            "defaultDestination": "Default Destination",
             "userAuth": "User Auth",
             "thirdAuth": "Third Auth"
         }

@@ -16,7 +16,16 @@
             "otherEntityField": "name"
         }
     ],
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "defaultThird",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultDestination",
+            "fieldType": "Boolean"
+        }
+    ],
     "changelogDate": "20180827152040",
     "dto": "mapstruct",
     "service": "serviceClass",

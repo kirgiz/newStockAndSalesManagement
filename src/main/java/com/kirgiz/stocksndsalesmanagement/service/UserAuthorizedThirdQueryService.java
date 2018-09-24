@@ -78,6 +78,12 @@ public class UserAuthorizedThirdQueryService extends QueryService<UserAuthorized
             if (criteria.getId() != null) {
                 specification = specification.and(buildSpecification(criteria.getId(), UserAuthorizedThird_.id));
             }
+            if (criteria.getDefaultThird() != null) {
+                specification = specification.and(buildSpecification(criteria.getDefaultThird(), UserAuthorizedThird_.defaultThird));
+            }
+            if (criteria.getDefaultDestination() != null) {
+                specification = specification.and(buildSpecification(criteria.getDefaultDestination(), UserAuthorizedThird_.defaultDestination));
+            }
             if (criteria.getUserAuthId() != null) {
                 specification = specification.and(buildReferringEntitySpecification(criteria.getUserAuthId(), UserAuthorizedThird_.userAuth, User_.id));
             }

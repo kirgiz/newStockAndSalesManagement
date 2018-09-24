@@ -12,6 +12,16 @@
             <input type="text" class="form-control" id="id" name="id"
                    [(ngModel)]="userAuthorizedThird.id" readonly />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultThird" for="field_defaultThird">Default Third</label>
+            <input type="checkbox" class="form-control" name="defaultThird" id="field_defaultThird"
+                [(ngModel)]="userAuthorizedThird.defaultThird" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultDestination" for="field_defaultDestination">Default Destination</label>
+            <input type="checkbox" class="form-control" name="defaultDestination" id="field_defaultDestination"
+                [(ngModel)]="userAuthorizedThird.defaultDestination" />
+        </div>
 
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.userAuth" for="field_userAuth">User Auth</label>
