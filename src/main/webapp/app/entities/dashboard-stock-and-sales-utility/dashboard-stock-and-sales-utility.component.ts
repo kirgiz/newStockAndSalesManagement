@@ -185,32 +185,29 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 element.profitAndLoss = 0;
                                 element.currencyForDashboardName = 'CHF';
                             });
-
-                            if ((this.dashboardsToDisplay === undefined || this.dashboardsToDisplay === null) && this.dashboards) {
                                 this.dashboardsToDisplay = [];
-                                this.dashboardsToDisplay.push(this.dashboards[0]);
-                            }
-
                             if (this.dashboards && this.dashboardsToDisplay) {
-                                for (let index2 = 0; index2 < this.dashboardsToDisplay.length; index2++) {
-                                for (let index = 1; index < this.dashboards.length; index++) {
-                                        if (this.dashboards[index].warehousefromId === this.dashboardsToDisplay[index2].warehousefromId &&
-                                            this.dashboards[index].transferClassifId === this.dashboardsToDisplay[index2].transferClassifId &&
-                                            this.dashboards[index].creationDate.getTime() === this.dashboardsToDisplay[index2].creationDate.getTime()) {
-                                            if (!this.dashboards[index].numberOfItems) {
-                                             //   this.dashboards[index].numberOfItems = 0;
-                                            }
-                                            if (!this.dashboardsToDisplay[index2].numberOfItems) {
-                                                this.dashboardsToDisplay[index2].numberOfItems = 0;
-                                            }
-                                          ////  this.dashboardsToDisplay[index2].numberOfItems = this.dashboardsToDisplay[index2].numberOfItems +
-                                          //  this.dashboards[index].numberOfItems;
-                                        } else {
-                                          //  tmpDashboard.push(this.dashboards[index]);
+                                    for (let index = 0; index < this.dashboards.length; index++) {
+                                        const indexArray = this.dashboardsToDisplay.findIndex((element) => {
+                                            return ( this.dashboards[index].warehousefromId === element.warehousefromId &&
+                                                this.dashboards[index].transferClassifId === element.transferClassifId &&
+                                                this.dashboards[index].creationDate.getTime() === element.creationDate.getTime());
+                                        });
+                                        if (indexArray > -1) {
+                                          if (  !this.dashboardsToDisplay[indexArray].numberOfItems ) {
+                                            this.dashboardsToDisplay[indexArray].numberOfItems = 0;
+                                          }
+                                          if (  !this.dashboards[index].numberOfItems ) {
+                                            this.dashboards[index].numberOfItems = 0;
+                                          }
+                                            this.dashboardsToDisplay[indexArray].numberOfItems = this.dashboardsToDisplay[indexArray].numberOfItems +
+                                            this.dashboards[index].numberOfItems;
+                                        } else { this.dashboardsToDisplay.push(this.dashboards[index]);
                                         }
-                                }
-                                }
+
                             }
+                        }
+                        console.log(this.dashboardsToDisplay);
                             const thirds = this.thirdList.slice();
                             this.thirdList = thirds.filter((element) => {
                                 for (const authList of this.authThirdsList) {

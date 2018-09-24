@@ -16,13 +16,13 @@
             "detail": {
                 "title": "Dashboard"
             },
-            "transferDate": "Transfer Date",
-            "profitAndLoss": "Profit And Loss",
-            "numberOfItems": "Number Of Items",
-            "currencyForDashboard": "Currency For Dashboard",
-            "transferForDashboard": "Transfer For Dashboard",
-            "warehouseOutg": "Warehouse Outg",
-            "materialTypeDefDashboard": "Material Type Def Dashboard"
+            "transferDate": "Date",
+            "profitAndLoss": "Perte/Profit",
+            "numberOfItems": "Nombre d articles",
+            "currencyForDashboard": "Monnaie",
+            "transferForDashboard": "Type de transfert",
+            "warehouseOutg": "Source",
+            "materialTypeDefDashboard": "Type d articles"
         }
     }
 }

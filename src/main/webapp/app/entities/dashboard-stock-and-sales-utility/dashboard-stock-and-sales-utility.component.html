@@ -20,28 +20,21 @@
         <table class="table table-striped">
             <thead>
             <tr>
-            <th><span jhiTranslate="global.field.id">ID</span></th>
+           <!-- <th><span jhiTranslate="global.field.id">ID</span></th>-->
             <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferDate">Transfer Date</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss">Profit And Loss</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems">Number Of Items</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard">Currency For Dashboard</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferForDashboard">Transfer For Dashboard</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.warehouseOutg">Warehouse Outg</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.materialTypeDefDashboard">Material Type Def Dashboard</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems">Number Of Items</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss">Profit And Loss</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard">Currency For Dashboard</span></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let dashboard of dashboardsToDisplay ;trackBy: trackId">
-                <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td>
-                <td>{{dashboard.transferDate | date:'mediumDate'}}</td>
-                <td>{{dashboard.profitAndLoss}}</td>
-                <td>{{dashboard.numberOfItems}}</td>
-                <td>
-                    <div *ngIf="dashboard.currencyForDashboardName">
-                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]" >{{dashboard.currencyForDashboardName}}</a>
-                    </div>
-                </td>
+             <!--   <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td> -->
+                <td>{{dashboard.creationDate | date:'mediumDate'}}</td>
                 <td>
                     <div *ngIf="dashboard.transferClassifName">
                         <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]" >{{dashboard.transferClassifName}}</a>
@@ -57,6 +50,14 @@
                         <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]" >{{dashboard.materialclassificationDescription}}</a>
                     </div>
                 </td>
+                <td>{{dashboard.numberOfItems}}</td>
+                <td>{{dashboard.profitAndLoss}}</td>
+                <td>
+                    <div *ngIf="dashboard.currencyForDashboardName">
+                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]" >{{dashboard.currencyForDashboardName}}</a>
+                    </div>
+                </td>
+
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
