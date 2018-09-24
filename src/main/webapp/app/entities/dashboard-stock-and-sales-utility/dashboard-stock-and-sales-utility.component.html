@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let dashboard of dashboards ;trackBy: trackId">
+            <tr *ngFor="let dashboard of dashboardsToDisplay ;trackBy: trackId">
                 <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td>
                 <td>{{dashboard.transferDate | date:'mediumDate'}}</td>
                 <td>{{dashboard.profitAndLoss}}</td>

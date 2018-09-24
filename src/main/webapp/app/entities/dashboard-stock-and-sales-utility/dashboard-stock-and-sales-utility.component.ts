@@ -194,26 +194,21 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                             if (this.dashboards && this.dashboardsToDisplay) {
                                 for (let index2 = 0; index2 < this.dashboardsToDisplay.length; index2++) {
                                 for (let index = 1; index < this.dashboards.length; index++) {
-                                   /* console.log('RRRRRRRRRRRR');
-                                    console.log(this.dashboards[index].creationDate.getTime()) ;
-
-                                        console.log(parseFloat(this.dashboardsToDisplay[index2].creationDate)) ;*/
-
                                         if (this.dashboards[index].warehousefromId === this.dashboardsToDisplay[index2].warehousefromId &&
                                             this.dashboards[index].transferClassifId === this.dashboardsToDisplay[index2].transferClassifId &&
                                             this.dashboards[index].creationDate.getTime() === this.dashboardsToDisplay[index2].creationDate.getTime()) {
                                             if (!this.dashboards[index].numberOfItems) {
-                                                this.dashboards[index].numberOfItems = 0;
+                                             //   this.dashboards[index].numberOfItems = 0;
                                             }
                                             if (!this.dashboardsToDisplay[index2].numberOfItems) {
                                                 this.dashboardsToDisplay[index2].numberOfItems = 0;
                                             }
-                                            this.dashboardsToDisplay[index2].numberOfItems = this.dashboardsToDisplay[index2].numberOfItems +
-                                            this.dashboards[index].numberOfItems;
+                                          ////  this.dashboardsToDisplay[index2].numberOfItems = this.dashboardsToDisplay[index2].numberOfItems +
+                                          //  this.dashboards[index].numberOfItems;
                                         } else {
-                                            this.dashboardsToDisplay.push(this.dashboards[index]);
+                                          //  tmpDashboard.push(this.dashboards[index]);
                                         }
-                                    }
+                                }
                                 }
                             }
                             const thirds = this.thirdList.slice();
