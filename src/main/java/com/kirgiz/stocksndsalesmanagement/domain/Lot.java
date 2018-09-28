@@ -62,6 +62,10 @@ public class Lot implements Serializable {
     @NotNull
     private Currency buycurrencylot;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    private Materialclassification materialclassification;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -185,6 +189,19 @@ public class Lot implements Serializable {
 
     public void setBuycurrencylot(Currency currency) {
         this.buycurrencylot = currency;
+    }
+
+    public Materialclassification getMaterialclassification() {
+        return materialclassification;
+    }
+
+    public Lot materialclassification(Materialclassification materialclassification) {
+        this.materialclassification = materialclassification;
+        return this;
+    }
+
+    public void setMaterialclassification(Materialclassification materialclassification) {
+        this.materialclassification = materialclassification;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

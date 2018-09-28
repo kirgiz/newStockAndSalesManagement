@@ -33,6 +33,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="default_warehouse" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="third_classif_id" type="bigint">
                 <constraints nullable="false" />
             </column>

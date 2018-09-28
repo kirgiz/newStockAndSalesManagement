@@ -20,6 +20,7 @@
             <th><span jhiTranslate="stockAndSalesManagementApp.third.code">Code</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.third.name">Name</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.third.comments">Comments</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.third.defaultWarehouse">Default Warehouse</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.third.addressthird">Addressthird</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.third.thirdClassif">Third Classif</span></th>
             <th><span jhiTranslate="stockAndSalesManagementApp.third.civilityClassif">Civility Classif</span></th>
@@ -32,6 +33,7 @@
                 <td>{{third.code}}</td>
                 <td>{{third.name}}</td>
                 <td>{{third.comments}}</td>
+                <td>{{third.defaultWarehouse}}</td>
                 <td>
                     <span *ngFor="let addressthird of third.addressthirds; let last = last">
                             <a class="form-control-static" [routerLink]="['../address-stock-and-sales-utility', addressthird?.id ]">{{addressthird.id}}</a>{{last ? '' : ', '}}

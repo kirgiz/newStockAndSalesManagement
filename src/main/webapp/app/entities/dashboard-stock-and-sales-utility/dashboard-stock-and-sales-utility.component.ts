@@ -207,6 +207,9 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 
                             }
                         }
+
+// TO DO : Allow grouping by month instead of days + chart
+
                         console.log(this.dashboardsToDisplay);
                             const thirds = this.thirdList.slice();
                             this.thirdList = thirds.filter((element) => {

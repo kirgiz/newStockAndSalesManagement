@@ -41,6 +41,9 @@ public class Third implements Serializable {
     @Column(name = "comments", length = 500)
     private String comments;
 
+    @Column(name = "default_warehouse")
+    private Boolean defaultWarehouse;
+
     @OneToMany(mappedBy = "warehousefrom")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -117,6 +120,19 @@ public class Third implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Boolean isDefaultWarehouse() {
+        return defaultWarehouse;
+    }
+
+    public Third defaultWarehouse(Boolean defaultWarehouse) {
+        this.defaultWarehouse = defaultWarehouse;
+        return this;
+    }
+
+    public void setDefaultWarehouse(Boolean defaultWarehouse) {
+        this.defaultWarehouse = defaultWarehouse;
     }
 
     public Set<Materialhistory> getMaterialhistoryfroms() {
@@ -273,6 +289,7 @@ public class Third implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", comments='" + getComments() + "'" +
+            ", defaultWarehouse='" + isDefaultWarehouse() + "'" +
             "}";
     }
 }

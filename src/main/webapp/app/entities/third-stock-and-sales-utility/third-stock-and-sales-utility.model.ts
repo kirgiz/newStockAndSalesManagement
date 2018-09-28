@@ -6,6 +6,7 @@ export class ThirdStockAndSalesUtility implements BaseEntity {
         public code?: string,
         public name?: string,
         public comments?: string,
+        public defaultWarehouse?: boolean,
         public materialhistoryfroms?: BaseEntity[],
         public materialhistorytos?: BaseEntity[],
         public warehouseOuts?: BaseEntity[],
@@ -13,5 +14,6 @@ export class ThirdStockAndSalesUtility implements BaseEntity {
         public thirdClassifId?: number,
         public civilityClassifId?: number,
     ) {
+        this.defaultWarehouse = false;
     }
 }

@@ -18,12 +18,13 @@
             },
             "code": "Code",
             "description": "Description",
-            "creationDate": "Creation Date",
+            "creationDate": "Date Achat",
             "numberOfItems": "Number Of Items",
             "comments": "Comments",
             "unitBuyPrice": "Unit Buy Price",
             "materialLot": "Material Lot",
-            "buycurrencylot": "Buycurrencylot"
+            "buycurrencylot": "Monnaie d'achat",
+            "materialclassification": "Materialclassification"
         }
     }
 }

@@ -19,6 +19,7 @@
             "code": "Code",
             "name": "Name",
             "comments": "Comments",
+            "defaultWarehouse": "Default Warehouse",
             "materialhistoryfrom": "Materialhistoryfrom",
             "materialhistoryto": "Materialhistoryto",
             "warehouseOut": "Warehouse Out",

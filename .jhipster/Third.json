@@ -68,13 +68,17 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "defaultWarehouse",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180704054147",
-    "entityTableName": "third",
     "dto": "mapstruct",
-    "pagination": "no",
     "service": "serviceClass",
+    "entityTableName": "third",
     "jpaMetamodelFiltering": false,
+    "pagination": "no",
     "angularJSSuffix": "StockAndSalesUtility"
 }

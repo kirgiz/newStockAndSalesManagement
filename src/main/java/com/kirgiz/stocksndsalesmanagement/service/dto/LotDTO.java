@@ -38,6 +38,10 @@ public class LotDTO implements Serializable {
 
     private String buycurrencylotIsoCode;
 
+    private Long materialclassificationId;
+
+    private String materialclassificationName;
+
     public Long getId() {
         return id;
     }
@@ -108,6 +112,22 @@ public class LotDTO implements Serializable {
 
     public void setBuycurrencylotIsoCode(String currencyIsoCode) {
         this.buycurrencylotIsoCode = currencyIsoCode;
+    }
+
+    public Long getMaterialclassificationId() {
+        return materialclassificationId;
+    }
+
+    public void setMaterialclassificationId(Long materialclassificationId) {
+        this.materialclassificationId = materialclassificationId;
+    }
+
+    public String getMaterialclassificationName() {
+        return materialclassificationName;
+    }
+
+    public void setMaterialclassificationName(String materialclassificationName) {
+        this.materialclassificationName = materialclassificationName;
     }
 
     @Override

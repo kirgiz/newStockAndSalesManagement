@@ -42,7 +42,7 @@
                 </small>
             </div>
         </div>
-      <!--  <div class="form-group">
+        <div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.lot.creationDate" for="field_creationDate">Creation Date</label>
             <div class="input-group">
                 <input id="field_creationDate" type="text" class="form-control" name="creationDate" ngbDatepicker  #creationDateDp="ngbDatepicker" [(ngModel)]="lot.creationDate"
@@ -57,7 +57,7 @@
                    This field is required.
                 </small>
             </div>
-        </div>-->
+        </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems" for="field_numberOfItems">Number Of Items</label>
             <input type="number" class="form-control" name="numberOfItems" id="field_numberOfItems"
@@ -103,6 +103,19 @@
                 This field is required.
             </small>
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.lot.materialclassification" for="field_materialclassification">Materialclassification</label>
+            <select class="form-control" id="field_materialclassification" name="materialclassification" [(ngModel)]="lot.materialclassificationId"  required>
+                <option *ngIf="!editForm.value.materialclassification" [ngValue]="null" selected></option>
+                <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialclassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.materialclassification?.dirty && editForm.controls.materialclassification?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.materialclassification?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
@@ -111,5 +124,9 @@
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
             <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
+        <button type="button" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary" (click)="createLotAndArticle()">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+
     </div>
 </form>

@@ -34,6 +34,12 @@
                 <a [routerLink]="['/currency-stock-and-sales-utility', lot.buycurrencylotId]">{{lot.buycurrencylotIsoCode}}</a>
             </div>
         </dd>
+        <dt><span jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span></dt>
+        <dd>
+            <div *ngIf="lot.materialclassificationId">
+                <a [routerLink]="['/materialclassification-stock-and-sales-utility', lot.materialclassificationId]">{{lot.materialclassificationName}}</a>
+            </div>
+        </dd>
     </dl>
 
     <button type="submit"

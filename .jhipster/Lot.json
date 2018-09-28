@@ -13,6 +13,15 @@
             "relationshipName": "buycurrencylot",
             "otherEntityName": "currency",
             "otherEntityField": "isoCode"
+        },
+        {
+            "relationshipName": "materialclassification",
+            "otherEntityName": "materialclassification",
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": [
+                "required"
+            ],
+            "otherEntityField": "name"
         }
     ],
     "fields": [
@@ -62,10 +71,10 @@
         }
     ],
     "changelogDate": "20180704054153",
-    "entityTableName": "lot",
     "dto": "mapstruct",
-    "pagination": "pagination",
     "service": "serviceClass",
+    "entityTableName": "lot",
     "jpaMetamodelFiltering": false,
+    "pagination": "pagination",
     "angularJSSuffix": "StockAndSalesUtility"
 }

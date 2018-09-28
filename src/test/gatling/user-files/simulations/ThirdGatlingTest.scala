@@ -68,7 +68,7 @@ class ThirdGatlingTest extends Simulation {
             .exec(http("Create new third")
             .post("/api/thirds")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "code":"SAMPLE_TEXT", "name":"SAMPLE_TEXT", "comments":"SAMPLE_TEXT"}""")).asJSON
+            .body(StringBody("""{"id":null, "code":"SAMPLE_TEXT", "name":"SAMPLE_TEXT", "comments":"SAMPLE_TEXT", "defaultWarehouse":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_third_url"))).exitHereIfFailed
             .pause(10)

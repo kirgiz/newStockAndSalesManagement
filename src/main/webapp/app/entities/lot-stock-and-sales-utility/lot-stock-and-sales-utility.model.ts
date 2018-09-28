@@ -11,6 +11,7 @@ export class LotStockAndSalesUtility implements BaseEntity {
         public unitBuyPrice?: number,
         public materialLots?: BaseEntity[],
         public buycurrencylotId?: number,
+        public materialclassificationId?: number,
     ) {
     }
 }

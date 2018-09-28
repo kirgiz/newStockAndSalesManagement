@@ -52,6 +52,9 @@ public class ThirdResourceIntTest {
     private static final String DEFAULT_COMMENTS = "AAAAAAAAAA";
     private static final String UPDATED_COMMENTS = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_DEFAULT_WAREHOUSE = false;
+    private static final Boolean UPDATED_DEFAULT_WAREHOUSE = true;
+
     @Autowired
     private ThirdRepository thirdRepository;
 
@@ -98,7 +101,8 @@ public class ThirdResourceIntTest {
         Third third = new Third()
             .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
-            .comments(DEFAULT_COMMENTS);
+            .comments(DEFAULT_COMMENTS)
+            .defaultWarehouse(DEFAULT_DEFAULT_WAREHOUSE);
         // Add required entity
         Thirdclassification thirdClassif = ThirdclassificationResourceIntTest.createEntity(em);
         em.persist(thirdClassif);
@@ -136,6 +140,7 @@ public class ThirdResourceIntTest {
         assertThat(testThird.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testThird.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testThird.getComments()).isEqualTo(DEFAULT_COMMENTS);
+        assertThat(testThird.isDefaultWarehouse()).isEqualTo(DEFAULT_DEFAULT_WAREHOUSE);
     }
 
     @Test
@@ -209,7 +214,8 @@ public class ThirdResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(third.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].defaultWarehouse").value(hasItem(DEFAULT_DEFAULT_WAREHOUSE.booleanValue())));
     }
 
     @Test
@@ -225,7 +231,8 @@ public class ThirdResourceIntTest {
             .andExpect(jsonPath("$.id").value(third.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()));
+            .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
+            .andExpect(jsonPath("$.defaultWarehouse").value(DEFAULT_DEFAULT_WAREHOUSE.booleanValue()));
     }
 
     @Test
@@ -250,7 +257,8 @@ public class ThirdResourceIntTest {
         updatedThird
             .code(UPDATED_CODE)
             .name(UPDATED_NAME)
-            .comments(UPDATED_COMMENTS);
+            .comments(UPDATED_COMMENTS)
+            .defaultWarehouse(UPDATED_DEFAULT_WAREHOUSE);
         ThirdDTO thirdDTO = thirdMapper.toDto(updatedThird);
 
         restThirdMockMvc.perform(put("/api/thirds")
@@ -265,6 +273,7 @@ public class ThirdResourceIntTest {
         assertThat(testThird.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testThird.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testThird.getComments()).isEqualTo(UPDATED_COMMENTS);
+        assertThat(testThird.isDefaultWarehouse()).isEqualTo(UPDATED_DEFAULT_WAREHOUSE);
     }
 
     @Test

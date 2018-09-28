@@ -10,6 +10,7 @@ import { LotStockAndSalesUtilityDialogComponent } from '../../../../../../main/w
 import { LotStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/lot-stock-and-sales-utility/lot-stock-and-sales-utility.service';
 import { LotStockAndSalesUtility } from '../../../../../../main/webapp/app/entities/lot-stock-and-sales-utility/lot-stock-and-sales-utility.model';
 import { CurrencyStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/currency-stock-and-sales-utility';
+import { MaterialclassificationStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/materialclassification-stock-and-sales-utility';
 
 describe('Component Tests', () => {
 
@@ -26,6 +27,7 @@ describe('Component Tests', () => {
                 declarations: [LotStockAndSalesUtilityDialogComponent],
                 providers: [
                     CurrencyStockAndSalesUtilityService,
+                    MaterialclassificationStockAndSalesUtilityService,
                     LotStockAndSalesUtilityService
                 ]
             })

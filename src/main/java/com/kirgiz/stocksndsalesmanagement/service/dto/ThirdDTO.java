@@ -25,6 +25,8 @@ public class ThirdDTO implements Serializable {
     @Size(max = 500)
     private String comments;
 
+    private Boolean defaultWarehouse;
+
     private Set<AddressDTO> addressthirds = new HashSet<>();
 
     private Long thirdClassifId;
@@ -65,6 +67,14 @@ public class ThirdDTO implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public Boolean isDefaultWarehouse() {
+        return defaultWarehouse;
+    }
+
+    public void setDefaultWarehouse(Boolean defaultWarehouse) {
+        this.defaultWarehouse = defaultWarehouse;
     }
 
     public Set<AddressDTO> getAddressthirds() {
@@ -135,6 +145,7 @@ public class ThirdDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", comments='" + getComments() + "'" +
+            ", defaultWarehouse='" + isDefaultWarehouse() + "'" +
             "}";
     }
 }

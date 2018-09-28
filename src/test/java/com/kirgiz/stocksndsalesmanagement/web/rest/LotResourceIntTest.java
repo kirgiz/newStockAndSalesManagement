@@ -4,6 +4,7 @@ import com.kirgiz.stocksndsalesmanagement.StockAndSalesManagementApp;
 
 import com.kirgiz.stocksndsalesmanagement.domain.Lot;
 import com.kirgiz.stocksndsalesmanagement.domain.Currency;
+import com.kirgiz.stocksndsalesmanagement.domain.Materialclassification;
 import com.kirgiz.stocksndsalesmanagement.repository.LotRepository;
 import com.kirgiz.stocksndsalesmanagement.service.LotService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.LotDTO;
@@ -117,6 +118,11 @@ public class LotResourceIntTest {
         em.persist(buycurrencylot);
         em.flush();
         lot.setBuycurrencylot(buycurrencylot);
+        // Add required entity
+        Materialclassification materialclassification = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialclassification);
+        em.flush();
+        lot.setMaterialclassification(materialclassification);
         return lot;
     }
 

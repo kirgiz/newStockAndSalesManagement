@@ -19,12 +19,13 @@
             "code": "Code",
             "name": "Name",
             "comments": "Comments",
+            "defaultWarehouse": "Dépôt principal",
             "materialhistoryfrom": "Materialhistoryfrom",
             "materialhistoryto": "Materialhistoryto",
             "warehouseOut": "Warehouse Out",
-            "addressthird": "Addressthird",
-            "thirdClassif": "Third Classif",
-            "civilityClassif": "Civility Classif"
+            "addressthird": "Adresse",
+            "thirdClassif": "Type",
+            "civilityClassif": "Civilité"
         }
     }
 }

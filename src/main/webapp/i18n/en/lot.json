@@ -23,7 +23,8 @@
             "comments": "Comments",
             "unitBuyPrice": "Unit Buy Price",
             "materialLot": "Material Lot",
-            "buycurrencylot": "Buycurrencylot"
+            "buycurrencylot": "Buycurrencylot",
+            "materialclassification": "Materialclassification"
         }
     }
 }
