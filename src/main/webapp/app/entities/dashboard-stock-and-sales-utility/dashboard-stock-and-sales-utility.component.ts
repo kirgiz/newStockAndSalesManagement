@@ -73,6 +73,12 @@ import {
     templateUrl: './dashboard-stock-and-sales-utility.component.html'
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
+    data: any;
+    options: { chart: { type: string; height: number; margin:
+        { top: number; right: number; bottom: number; left: number; };
+        x: (d: any) => any; y: (d: any) => any; useInteractiveGuideline: boolean;
+        xAxis: { axisLabel: string; }; yAxis: { axisLabel: string; tickFormat: (d: any) => string; axisLabelDistance: number; };
+     }; };
     transferclassifications: TransferclassificationStockAndSalesUtility[];
     hasAdminAuth: boolean;
     materialhistories: MaterialhistoryStockAndSalesUtility[];
@@ -81,25 +87,25 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     thirdAuthSubscription: Subscription;
     usrSubscription: Subscription;
     materialhistoriesToDisplay: {
-        id ? : number,
-        code ? : string,
-        creationDate ? : any,
-        price ? : number,
-        comments ? : string,
-        userMod ? : number,
-        itemTransfereds ? : BaseEntity[],
-        transferClassifId ? : number,
-        warehousefromId ? : number,
-        warehousetoId ? : number,
-        userModName ? : string,
-        materialclassificationDescription ? : string
+        id ?: number,
+        code ?: string,
+        creationDate ?: any,
+        price ?: number,
+        comments ?: string,
+        userMod ?: number,
+        itemTransfereds ?: BaseEntity[],
+        transferClassifId ?: number,
+        warehousefromId ?: number,
+        warehousetoId ?: number,
+        userModName ?: string,
+        materialclassificationDescription ?: string
     }[];
     authThirdsList: UserAuthorizedThird[];
 
     userList: User[];
     userServiceSubscription: Subscription;
     historySubscription: Subscription;
-    dashboards: any[]; //DashboardStockAndSalesUtility[];
+    dashboards: any[]; // DashboardStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
     bpReadings: any = {};
@@ -108,6 +114,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     transferSource: number;
     transferDest: number;
     dashboardsToDisplay: any[];
+    transferClassifId: number;
+    dashboardsToDisplay2: any[];
 
     constructor(
         private dashboardService: DashboardStockAndSalesUtilityService,
@@ -122,14 +130,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     ) {}
 
     loadAll() {
-        this.dashboardService.query().subscribe(
-            (res: HttpResponse < DashboardStockAndSalesUtility[] > ) => {
-             /*   this.dashboards = res.body;
-                this.dashboards.push(new DashboardStockAndSalesUtility(1, new Date(), 12, 1, 1001, 1401, 1251, 12));
-                this.dashboards[0].warehouseOutgName = 'haaaa';*/
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
         this.historySubscription = this.materialhistoryService
             .query({})
             .subscribe(
@@ -206,6 +206,15 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                         }
 
                             }
+                            this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
+                            for (let i = 0; i < 60; i++) {
+                                this.dashboardsToDisplay2.push(this.dashboardsToDisplay2[0]);
+                                this.dashboardsToDisplay2[i + 1].creationDate.setDate(this.dashboardsToDisplay2[ i + 1].creationDate.getDate() + i);
+                                this.dashboardsToDisplay2[i + 1].numberOfItems = this.dashboardsToDisplay2[i + 1].numberOfItems + 1;
+                                this.dashboardsToDisplay2.push(this.dashboardsToDisplay2[1]);
+                                this.dashboardsToDisplay2[i + 2].creationDate.setDate(this.dashboardsToDisplay2[i + 1].creationDate.getDate() + i);
+                                this.dashboardsToDisplay2[i + 2].numberOfItems = this.dashboardsToDisplay2[ i + 2 ].numberOfItems + 1;
+                            }
                         }
 
 // TO DO : Allow grouping by month instead of days + chart
@@ -221,7 +230,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                             });
                             this.transferDest = this.materialhistoryService.getDefaultDestination().id;
                             this.transferSource = this.materialhistoryService.getDefaultThird().id;
-
+                            this.filterResults();
                         });
                     });
                 },
@@ -248,14 +257,73 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             this.hasAdminAuth = hasAuth;
         });
 
+        this.options = {
+            chart: {
+              type: 'lineChart',
+              height: 450,
+              margin : {
+                top: 20,
+                right: 20,
+                bottom: 40,
+                left: 55
+              },
+              x: function(d){ return d.x; },
+              y: function(d){ return d.y; },
+              useInteractiveGuideline: true,
+              xAxis: {
+                axisLabel: 'Jours',
+             //   tickFormat:
+              },
+              yAxis: {
+                axisLabel: 'Ventes',
+                tickFormat: function(d){
+                  return d3.format('.02f')(d);
+                },
+                axisLabelDistance: -10
+              }
+            }
+          };
+
+          this.data = this.sinAndCos();
+
     }
+
+    sinAndCos() {
+        let sin = [],sin2 = [],
+          cos = [];
+      this.dashboardsToDisplay2.forEach((element) => {
+        sin.push({x: element.creationDate , y: element.numberOfItems});
+      });
+        //Data is represented as an array of {x,y} pairs.
+      /*  for (var i = 0; i < 100; i++) {
+          sin.push({x: i, y: Math.sin(i/10)});
+          sin2.push({x: i, y: i % 10 == 5 ? null : Math.sin(i/10) *0.25 + 0.5});
+          cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
+        }*/
+        //Line chart data should be sent as an array of series objects.
+        return [
+          {
+            values: sin,      //values - represents the array of {x,y} data points
+            key: 'Sine Wave', //key  - the name of the series.
+            color: '#ff7f0e'  //color - optional: choose your own line color.
+          },
+          {
+            values: cos,
+            key: 'Cosine Wave',
+            color: '#2ca02c'
+          },
+          {
+            values: sin2,
+            key: 'Another sine wave',
+            color: '#7777ff',
+            area: true      //area - set to true if you want this line to turn into a filled area chart.
+          }
+        ];
+      }
 
     private onSuccess(data, headers) {
         this.materialhistories = data;
-        console.log(this.materialhistories);
         this.materialhistoriesToDisplay = this.materialhistories.slice();
-        console.log('PUTAIN');
-        console.log( this.materialhistoriesToDisplay);
     }
 
     ngOnInit() {
@@ -264,6 +332,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             this.currentAccount = account;
         });
         this.registerChangeInDashboards();
+
     }
 
     ngOnDestroy() {
@@ -280,4 +349,26 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     private onError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }
+
+    private filterResults(){
+       // this.dashboards
+            const dash = this.dashboardsToDisplay2.filter(
+              (item) => {
+                return (
+                  (item.transferClassifId === this.transferClassifId ||
+                    this.transferClassifId === null ||
+                    !this.transferClassifId) &&
+                  (item.warehousefromId === this.transferSource ||
+                    this.transferSource === null ||
+                    !this.transferSource) /*  &&
+                 (item.warehousetoId === this.transferDest ||
+                    this.transferDest === null ||
+                    !this.transferDest)*/
+                );
+              }
+            );
+            this.dashboardsToDisplay =  dash.slice();
+            //console.log(this.materialhistoriesToDisplay);
+          }
+
 }

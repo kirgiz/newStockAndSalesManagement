@@ -154,7 +154,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent
                 });
                 this.transferDest = this.materialhistoryService.getDefaultDestination().id;
                 this.transferSource = this.materialhistoryService.getDefaultThird().id;
-
+                this.filterResults();
                     });
                 });
             }

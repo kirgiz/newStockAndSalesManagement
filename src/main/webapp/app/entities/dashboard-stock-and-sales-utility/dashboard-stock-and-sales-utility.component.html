@@ -4,6 +4,10 @@
     </h2>
     <div class="row">
     </div>
+    <hr>
+    <div>
+        <nvd3 [options]="options" [data]="data"></nvd3>
+      </div>
    <!--    <div class="row">     <div class="col-md-11">  
         <span *ngIf="dashboards && dashboards.length">  
                    <nvd3 [options]="bpOptions" [data]="bpData"  
@@ -15,6 +19,24 @@
                                       </span>         </ngb-alert>
                                         </div>
                                 </div>-->
+                                <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
+                                    <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="transferClassifId"  (ngModelChange)="filterResults()">
+                                   <option [ngValue]="null" selected></option>
+                                    <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
+                                </select>
+                                </div>    
+                                
+                                <div class="form-group col-md-2">
+                                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_transferSource">Source</label>
+                                    <select class="form-control" id="field_transferSource" name="transferSource" [(ngModel)]="transferSource"  (ngModelChange)="filterResults()">
+                                   <option [ngValue]="null" selected></option>
+                                    <option [ngValue]="third.id" *ngFor="let third of thirdList; trackBy: trackTransferclassificationById">{{third.name}}</option>
+                                </select>
+                                </div>
+                        </div>
+                    </div>
     <br/>
     <div class="table-responsive" *ngIf="dashboards">
         <table class="table table-striped">

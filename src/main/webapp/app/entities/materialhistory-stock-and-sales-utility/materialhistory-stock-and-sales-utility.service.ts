@@ -136,7 +136,7 @@ setDefaultThird(third: ThirdStockAndSalesUtility) {
     this.defaultThird = third;
 }
 
-getDefaultThird(): ThirdStockAndSalesUtility{
+getDefaultThird(): ThirdStockAndSalesUtility {
     return this.defaultThird;
 }
 

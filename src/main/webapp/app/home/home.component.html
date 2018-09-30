@@ -100,7 +100,7 @@
       </div>
 
       <div class="row">
-        <div class="col">
+        <div class="col" *ngIf="hasAdminAuth"> 
           <a routerLink="material-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="list-group-item clearfix">
             <div class="pull-left">
               <h5 class="list-group-item-heading">Créer des Articles</h5>

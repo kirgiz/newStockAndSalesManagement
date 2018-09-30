@@ -1,6 +1,8 @@
 <nav class="navbar navbar-dark navbar-expand-md jh-navbar">
     <div class="jh-logo-container float-left">
-        <a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleNavbar()">
+        <a class="jh-navbar-toggler d-lg-none float-right" href="javascript:void(0);" data-toggle="collapse"
+            data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"
+            (click)="toggleNavbar()">
             <i class="fa fa-bars"></i>
         </a>
         <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
@@ -19,7 +21,135 @@
                 </a>
             </li>
             <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="configuration-menu">
+                    <span>
+                        <i class="fa fa-th-list" aria-hidden="true"></i>
+                        <span jhiTranslate="global.menu.entities.config">
+                            Entities
+                        </span>
+                    </span>
+                </a>
+                <ul class="dropdown-menu" ngbDropdownMenu>
+                    <li>
+                        <a class="list-group-item  clearfix" routerLink="company-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text">
+                                <span jhiTranslate="global.menu.entities.companyStockAndSalesUtility">Company Stock And
+                                    Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="list-group-item  clearfix" routerLink="country-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text">
+                                <span jhiTranslate="global.menu.entities.countryStockAndSalesUtility">Country Stock And
+                                    Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="currency-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.currencyStockAndSalesUtility">Currency
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="forexrates-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.forexratesStockAndSalesUtility">Forexrates
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="thirdclassification-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.thirdclassificationStockAndSalesUtility">Thirdclassification
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="third-stock-and-sales-utility" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.thirdStockAndSalesUtility">Third
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="addressclassification-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.addressclassificationStockAndSalesUtility">Addressclassification
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="address-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.addressStockAndSalesUtility">Address
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="civility-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.civilityStockAndSalesUtility">Civility
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="transferclassification-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.transferclassificationStockAndSalesUtility">Transferclassification
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="materialclassification-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.materialclassificationStockAndSalesUtility">Materialclassification
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="list-group-item clearfix" routerLink="user-authorized-third" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.userAuthorizedThird">User
+                                    Authorized Third</span>
+                            </p>
+                        </a>
+                    </li>
+
+                </ul>
+
+            <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
                     <span>
                         <i class="fa fa-th-list" aria-hidden="true"></i>
@@ -29,106 +159,48 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
-                        <a class="dropdown-item" routerLink="company-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.companyStockAndSalesUtility">Company Stock And Sales Utility</span>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="list-group-item clearfix" routerLink="lot-stock-and-sales-utility" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.lotStockAndSalesUtility">Lot
+                                    Stock And Sales Utility</span>
+                            </p>
+                        </a>
+                    </li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
+                        <a class="list-group-item clearfix" routerLink="material-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.materialStockAndSalesUtility">Material
+                                    Stock And Sales Utility</span>
+                            </p>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="country-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.countryStockAndSalesUtility">Country Stock And Sales Utility</span>
+                        <a class="list-group-item clearfix" routerLink="materialhistory-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.materialhistoryStockAndSalesUtility">Materialhistory
+                                    Stock And Sales Utility</span>
+                            </p>
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" routerLink="currency-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.currencyStockAndSalesUtility">Currency Stock And Sales Utility</span>
+                        <a class="list-group-item clearfix" routerLink="dashboard-stock-and-sales-utility"
+                            routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
+                            <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
+                            <p class="list-group-item-text"> <span jhiTranslate="global.menu.entities.dashboardStockAndSalesUtility">Dashboard
+                                    Stock And Sales Utility</span>
+                            </p>
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="forexrates-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.forexratesStockAndSalesUtility">Forexrates Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="thirdclassification-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.thirdclassificationStockAndSalesUtility">Thirdclassification Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="third-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.thirdStockAndSalesUtility">Third Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="addressclassification-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.addressclassificationStockAndSalesUtility">Addressclassification Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="address-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.addressStockAndSalesUtility">Address Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="civility-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.civilityStockAndSalesUtility">Civility Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="transferclassification-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.transferclassificationStockAndSalesUtility">Transferclassification Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="materialclassification-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.materialclassificationStockAndSalesUtility">Materialclassification Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="lot-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.lotStockAndSalesUtility">Lot Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="material-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.materialStockAndSalesUtility">Material Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="materialhistory-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.materialhistoryStockAndSalesUtility">Materialhistory Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="dashboard-stock-and-sales-utility" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.dashboardStockAndSalesUtility">Dashboard Stock And Sales Utility</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" routerLink="user-authorized-third" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                            <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i>
-                            <span jhiTranslate="global.menu.entities.userAuthorizedThird">User Authorized Third</span>
-                        </a>
-                    </li>
+
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </ul>
             </li>
-            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li *jhiHasAnyAuthority="'ROLE_ADMIN'" ngbDropdown class="nav-item dropdown pointer" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
                     <span>
                         <i class="fa fa-user-plus" aria-hidden="true"></i>
@@ -188,7 +260,8 @@
                 </ul>
             </li>
             <li ngbDropdown class="nav-item dropdown pointer" *ngIf="languages">
-                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown" *ngIf="languages.length > 1">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown"
+                    *ngIf="languages.length > 1">
                     <span>
                         <i class="fa fa-flag" aria-hidden="true"></i>
                         <span jhiTranslate="global.menu.language">Language</span>
@@ -196,21 +269,23 @@
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu *ngIf="languages.length > 1">
                     <li *ngFor="let language of languages">
-                        <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language | findLanguageFromKey}}</a>
+                        <a class="dropdown-item" [jhiActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{language
+                            | findLanguageFromKey}}</a>
                     </li>
                 </ul>
             </li>
-            <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <li ngbDropdown class="nav-item dropdown pointer" placement="bottom-right" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">
                 <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
-                  <span *ngIf="!getImageUrl()">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    <span jhiTranslate="global.menu.account.main">
-                      Account
+                    <span *ngIf="!getImageUrl()">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <span jhiTranslate="global.menu.account.main">
+                            Account
+                        </span>
                     </span>
-                  </span>
-                  <span *ngIf="getImageUrl()">
-                      <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
-                  </span>
+                    <span *ngIf="getImageUrl()">
+                        <img [src]="getImageUrl()" class="profile-image img-circle" alt="Avatar">
+                    </span>
                 </a>
                 <ul class="dropdown-menu" ngbDropdownMenu>
                     <li *ngSwitchCase="true">
