@@ -3,7 +3,7 @@
     "stockAndSalesManagementApp": {
         "materialclassification" : {
             "home": {
-                "title": "Materialclassifications",
+                "title": "Type d'Article",
                 "createLabel": "Créer un nouveau Materialclassification",
                 "createOrEditLabel": "Créer ou éditer un Materialclassification"
             },

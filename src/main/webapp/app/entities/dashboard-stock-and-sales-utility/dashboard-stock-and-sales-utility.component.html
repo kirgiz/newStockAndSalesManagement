@@ -7,8 +7,8 @@
     <hr>
     <div>
         <nvd3 [options]="options" [data]="data"></nvd3>
-      </div>
-   <!--    <div class="row">     <div class="col-md-11">  
+    </div>
+    <!--    <div class="row">     <div class="col-md-11">  
         <span *ngIf="dashboards && dashboards.length">  
                    <nvd3 [options]="bpOptions" [data]="bpData"  
                        class="with-3d-shadow with-transitions"></nvd3>  
@@ -19,79 +19,85 @@
                                       </span>         </ngb-alert>
                                         </div>
                                 </div>-->
-                                <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
-                                    <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="transferClassifId"  (ngModelChange)="filterResults()">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
+            <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="transferClassifId" (ngModelChange)="filterResults()">
                                    <option [ngValue]="null" selected></option>
                                     <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
                                 </select>
-                                </div>    
-                                
-                                <div class="form-group col-md-2">
-                                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_transferSource">Source</label>
-                                    <select class="form-control" id="field_transferSource" name="transferSource" [(ngModel)]="transferSource"  (ngModelChange)="filterResults()">
+        </div>
+
+        <div class="form-group col-md-2">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_transferSource">Source</label>
+            <select class="form-control" id="field_transferSource" name="transferSource" [(ngModel)]="transferSource" (ngModelChange)="filterResults()">
                                    <option [ngValue]="null" selected></option>
                                     <option [ngValue]="third.id" *ngFor="let third of thirdList; trackBy: trackTransferclassificationById">{{third.name}}</option>
                                 </select>
-                                </div>
-                        </div>
-                    </div>
-    <br/>
-    <div class="table-responsive" *ngIf="dashboards">
-        <table class="table table-striped">
-            <thead>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.home.title" for="field_MatType">Destination</label>
+            <select class="form-control" id="field_MatType" name="materialType" [(ngModel)]="materialType" (ngModelChange)="filterResults()">
+                                   <option [ngValue]="null" selected></option>
+                                    <option [ngValue]="matType.id" *ngFor="let matType of materialTypeList; trackBy: trackTransferclassificationById">{{matType.name}}</option>
+                                </select>
+        </div>
+
+    </div>
+</div>
+<br/>
+<div class="table-responsive" *ngIf="dashboards">
+    <table class="table table-striped">
+        <thead>
             <tr>
-           <!-- <th><span jhiTranslate="global.field.id">ID</span></th>-->
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferDate">Transfer Date</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferForDashboard">Transfer For Dashboard</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.warehouseOutg">Warehouse Outg</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.materialTypeDefDashboard">Material Type Def Dashboard</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems">Number Of Items</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss">Profit And Loss</span></th>
-            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard">Currency For Dashboard</span></th>
-            <th></th>
+                <!-- <th><span jhiTranslate="global.field.id">ID</span></th>-->
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferDate">Transfer Date</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferForDashboard">Transfer For Dashboard</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.warehouseOutg">Warehouse Outg</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.materialTypeDefDashboard">Material Type Def Dashboard</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems">Number Of Items</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss">Profit And Loss</span></th>
+                <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard">Currency For Dashboard</span></th>
+                <th></th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <tr *ngFor="let dashboard of dashboardsToDisplay ;trackBy: trackId">
-             <!--   <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td> -->
+                <!--   <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td> -->
                 <td>{{dashboard.creationDate | date:'mediumDate'}}</td>
                 <td>
                     <div *ngIf="dashboard.transferClassifName">
-                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]" >{{dashboard.transferClassifName}}</a>
+                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]">{{dashboard.transferClassifName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dashboard.warehousefromName">
-                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId  ]" >{{dashboard.warehousefromName}}</a>
+                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId  ]">{{dashboard.warehousefromName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dashboard.materialclassificationDescription">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]" >{{dashboard.materialclassificationDescription}}</a>
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]">{{dashboard.materialclassificationDescription}}</a>
                     </div>
                 </td>
                 <td>{{dashboard.numberOfItems}}</td>
                 <td>{{dashboard.profitAndLoss}}</td>
                 <td>
                     <div *ngIf="dashboard.currencyForDashboardName">
-                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]" >{{dashboard.currencyForDashboardName}}</a>
+                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]">{{dashboard.currencyForDashboardName}}</a>
                     </div>
                 </td>
 
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]"
-                                class="btn btn-info btn-sm">
+                        <button type="submit" [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]" class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                     </div>
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 </div>

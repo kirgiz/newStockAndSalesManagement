@@ -14,6 +14,8 @@ import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utili
 import { UserService } from '../../shared/user/user.service';
 import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
 import { UserAuthorizedThird } from '../user-authorized-third';
+import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.service';
+import { MaterialclassificationStockAndSalesUtility} from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility',
@@ -21,6 +23,8 @@ import { UserAuthorizedThird } from '../user-authorized-third';
 })
 export class MaterialhistoryStockAndSalesUtilityComponent
   implements OnInit, OnDestroy {
+    materialTypeList: MaterialclassificationStockAndSalesUtility[];
+    materialClassificationSubscription: Subscription;
     hasAdminAuth: boolean;
     thirdAuthSubscription: Subscription;
     usrSubscription: Subscription;
@@ -66,6 +70,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent
    warehousetoId?: number ,
    userModName?: string,
    materialclassificationDescription?: string} [];
+   materialType: number;
 
   constructor(
     private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
@@ -78,7 +83,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     private eventManager: JhiEventManager,
     private thirdService: ThirdStockAndSalesUtilityService,
     private userService: UserService,
-    private autThirds: UserAuthorizedThirdService
+    private autThirds: UserAuthorizedThirdService,
+    private materialClassificationService: MaterialclassificationStockAndSalesUtilityService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -90,6 +96,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
   }
 
   loadAll() {
+
+
     this.historySubscription = this.materialhistoryService
       .query({
         page: this.page - 1,
@@ -178,6 +186,13 @@ export class MaterialhistoryStockAndSalesUtilityComponent
       (res: HttpErrorResponse) => this.onError(res.message)
     );
 
+    this.materialClassificationSubscription = this.materialClassificationService.query().subscribe(
+        (res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+          this.materialTypeList = res.body;
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+
     this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
         this.hasAdminAuth = hasAuth;
       });
@@ -219,6 +234,9 @@ export class MaterialhistoryStockAndSalesUtilityComponent
           (item.transferClassifId === this.transferClassifId ||
             this.transferClassifId === null ||
             !this.transferClassifId) &&
+            (item.materialclassificationId === this.materialType ||
+                this.materialType === null ||
+                !this.materialType) &&
           (item.warehousefromId === this.transferSource ||
             this.transferSource === null ||
             !this.transferSource) &&

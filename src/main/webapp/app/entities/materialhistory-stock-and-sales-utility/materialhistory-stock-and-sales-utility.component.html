@@ -77,6 +77,13 @@
                     #datePicker="ngbDatepicker">
         </div>
         <div class="form-group col-md-2">
+            <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.home.title" for="field_MatType">Destination</label>
+            <select class="form-control" id="field_MatType" name="materialType" [(ngModel)]="materialType"  (ngModelChange)="filterResults()">
+           <option [ngValue]="null" selected></option>
+            <option [ngValue]="matType.id" *ngFor="let matType of materialTypeList; trackBy: trackTransferclassificationById">{{matType.name}}</option>
+        </select>
+        </div>
+        <div class="form-group col-md-2">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto" for="field_transferDest">Destination</label>
                 <select class="form-control" id="field_transferDest" name="transferDest" [(ngModel)]="transferDest"  (ngModelChange)="filterResults()">
                <option [ngValue]="null" selected></option>
