@@ -121,6 +121,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     dashboardsToDisplay: any[];
     transferClassifId: number;
     dashboardsToDisplay2: any[];
+    dashboardsToDisplay3:any[];
 
     constructor(
         private dashboardService: DashboardStockAndSalesUtilityService,
@@ -185,12 +186,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 }
                             });
 
-                            this.materialClassificationSubscription = this.materialClassificationService.query().subscribe(
-                                (res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
-                                  this.materialTypeList = res1.body;
-                                },
-                                (res1: HttpErrorResponse) => this.onError(res1.message)
-                              );
+
 
                             this.dashboards = this.materialhistoriesToDisplay.slice();
                             this.dashboards.forEach((element) => {
@@ -229,6 +225,11 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 this.dashboardsToDisplay2[i + 2].creationDate.setDate(this.dashboardsToDisplay2[i + 1].creationDate.getDate() + i );
                                 this.dashboardsToDisplay2[i + 2].numberOfItems = this.dashboardsToDisplay2[ i + 2 ].numberOfItems + 1;*/
                             }
+
+
+
+
+
                             this.options = {
                                 chart: {
                                   type: 'lineChart',
@@ -258,7 +259,58 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 }
                               };
 
-                              this.data = this.sinAndCos();
+                              this.materialClassificationSubscription = this.materialClassificationService.query().subscribe(
+                                (res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+                                  this.materialTypeList = res1.body;
+                                  for (let index = 0; index < this.materialTypeList.length; index++) {
+                                     let tmpData = this.dashboardsToDisplay2.filter( (element) => {
+                                         return element.materialclassification === this.materialTypeList[index];
+                                     } );
+                                   //  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
+                                     const groupBy = (items, key) => items.reduce(
+                                        (result, item) => ({
+                                          ...result,
+                                          [item[key]]: [
+                                            ...(result[item[key]] || []),
+                                            item,
+                                          ],
+                                        }),
+                                        {},
+                                      );
+
+                                      groupBy(tmpData, 'creationDate');
+                                      this.dashboardsToDisplay3.push(tmpData);
+
+// https://stackoverflow.com/questions/14446511/what-is-the-most-efficient-method-to-groupby-on-a-javascript-array-of-objects
+                                 /*    tmpData.sort(function(a, b) {
+                                        return a.getTime() - b.getTime();
+                                      });;
+
+                                   for (let index = 0; index < tmpData.length; index++) {
+                                      if (this.dashboardsToDisplay3  && )
+
+                                   }
+
+
+          */
+
+                                  }
+
+                                  this.data = this.buildGraphData();
+                                },
+                                (res1: HttpErrorResponse) => this.onError(res1.message)
+                              );
+
+
+                              this.transferClassificationSubscription = this.transferclassificationService
+                              .query()
+                              .subscribe(
+                                  (res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
+                                      this.transferclassifications = res.body;
+                                  },
+                                  (res: HttpErrorResponse) => this.onError(res.message)
+                              );
+
                         }
 
 // TO DO : Allow grouping by month instead of days + chart
@@ -275,17 +327,9 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                             this.transferDest = this.materialhistoryService.getDefaultDestination().id;
                             this.transferSource = this.materialhistoryService.getDefaultThird().id;
                             this.filterResults();
+
                         });
                     });
-                },
-                (res: HttpErrorResponse) => this.onError(res.message)
-            );
-
-        this.transferClassificationSubscription = this.transferclassificationService
-            .query()
-            .subscribe(
-                (res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
-                    this.transferclassifications = res.body;
                 },
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
@@ -303,12 +347,23 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 
     }
 
-    sinAndCos() {
+    buildGraphData() {
+        let retvar: {values:any[],key: string, color: string }[]=[];
+       let tmp = [] ;
+       let matTypeDesc : string;
+        /* let all_return
         let sin = [],sin2 = [],
-          cos = [];
-     this.dashboardsToDisplay2.forEach((element) => {
-        sin.push({x: element.creationDate , y: element.numberOfItems});
+          cos = [];*/
+     this.dashboardsToDisplay3.forEach((element) => {
+        tmp.push({x: element.creationDate , y: element.numberOfItems});
       });
+
+      matTypeDesc =  this.materialTypeList.find( (elementMat) => {
+        return elementMat.materialCategories ===  tmp[0].id
+   }).name;
+
+   retvar.push({values:tmp,key: matTypeDesc, color: '#ff7f0e' });
+
         //Data is represented as an array of {x,y} pairs.
       /*  for (var i = 0; i < 100; i++) {
           sin.push({x: i, y: Math.sin(i/10)});
@@ -316,7 +371,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
           cos.push({x: i, y: .5 * Math.cos(i/10+ 2) + Math.random() / 10});
         }*/
         //Line chart data should be sent as an array of series objects.
-        return [
+        return  retvar;
+        /* [
           {
             values: sin,      //values - represents the array of {x,y} data points
             key: 'Sine Wave', //key  - the name of the series.
@@ -334,7 +390,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             area: true      //area - set to true if you want
             //this line to turn into a filled area chart.
           }
-        ];
+        ];*/
       }
 
     private onSuccess(data, headers) {
