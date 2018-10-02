@@ -258,28 +258,40 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                   }
                                 }
                               };
-
+                              this.dashboardsToDisplay3 = [];
+                              let result = [];
                               this.materialClassificationSubscription = this.materialClassificationService.query().subscribe(
                                 (res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
                                   this.materialTypeList = res1.body;
                                   for (let index = 0; index < this.materialTypeList.length; index++) {
                                      let tmpData = this.dashboardsToDisplay2.filter( (element) => {
-                                         return element.materialclassification === this.materialTypeList[index];
+                                         return element.materialclassificationId === this.materialTypeList[index].id;
                                      } );
                                    //  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
-                                     const groupBy = (items, key) => items.reduce(
-                                        (result, item) => ({
-                                          ...result,
-                                          [item[key]]: [
-                                            ...(result[item[key]] || []),
-                                            item,
-                                          ],
-                                        }),
-                                        {},
-                                      );
 
-                                      groupBy(tmpData, 'creationDate');
-                                      this.dashboardsToDisplay3.push(tmpData);
+                                    tmpData.reduce(function( res2, value) {
+                                        if (!res2[value.creationDate]) {
+                                            res2[value.creationDate] = {
+                                                ...value,
+                                                numberOfItems: 0};
+                                            result.push(res2[value.creationDate]);
+                                        }
+                                        res2[value.creationDate].numberOfItems += value.numberOfItems;
+                                        return res2;
+                                    }, {});
+                                    console.log('OOOOOOOOOOOOOO');
+                                    console.log(result);
+
+                                    console.log(result);
+                                      console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPPP');
+                                      console.log(tmpData);
+                                     // groupBy(tmpData, 'creationDate');
+                                   //   if (tmpData) {
+                                    //  this.dashboardsToDisplay3.push(...tmpData);
+                                   //   console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ');
+                                  //    console.log(tmpData);
+                                   //   console.log(  this.dashboardsToDisplay3);
+                                   // }
 
 // https://stackoverflow.com/questions/14446511/what-is-the-most-efficient-method-to-groupby-on-a-javascript-array-of-objects
                                  /*    tmpData.sort(function(a, b) {
@@ -295,7 +307,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
           */
 
                                   }
-
+this.dashboardsToDisplay = result;
                                   this.data = this.buildGraphData();
                                 },
                                 (res1: HttpErrorResponse) => this.onError(res1.message)
@@ -305,10 +317,10 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                               this.transferClassificationSubscription = this.transferclassificationService
                               .query()
                               .subscribe(
-                                  (res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
-                                      this.transferclassifications = res.body;
+                                  (res1: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
+                                      this.transferclassifications = res1.body;
                                   },
-                                  (res: HttpErrorResponse) => this.onError(res.message)
+                                  (res1: HttpErrorResponse) => this.onError(res1.message)
                               );
 
                         }
@@ -354,7 +366,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
         /* let all_return
         let sin = [],sin2 = [],
           cos = [];*/
-     this.dashboardsToDisplay3.forEach((element) => {
+     this.dashboardsToDisplay.forEach((element) => {
         tmp.push({x: element.creationDate , y: element.numberOfItems});
       });
 
@@ -442,7 +454,33 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                 );
               }
             );
-            this.dashboardsToDisplay =  dash.slice();
+
+
+            let result = [];
+                for (let index = 0; index < this.materialTypeList.length; index++) {
+                   let tmpData = dash.filter( (element) => {
+                       return element.materialclassificationId === this.materialTypeList[index].id;
+                   } );
+                 //  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
+
+                  tmpData.reduce(function( res2, value) {
+                      if (!res2[value.creationDate]) {
+                          res2[value.creationDate] = {
+                              ...value,
+                              numberOfItems: 0};
+                          result.push(res2[value.creationDate]);
+                      }
+                      res2[value.creationDate].numberOfItems += value.numberOfItems;
+                      return res2;
+                  }, {});
+
+
+                }
+                this.dashboardsToDisplay =  result.slice();
+                this.data = this.buildGraphData();
+// this.dashboardsToDisplay = result;
+
+
             // console.log(this.materialhistoriesToDisplay);
           }
 
