@@ -195,8 +195,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 element.currencyForDashboardName = 'CHF';
                             });
                                 this.dashboardsToDisplay = [];
-                            if (this.dashboards && this.dashboardsToDisplay) {
-                                    for (let index = 0; index < this.dashboards.length; index++) {
+                           if (this.dashboards && this.dashboardsToDisplay) {
+                                   /* for (let index = 0; index < this.dashboards.length; index++) {
                                         const indexArray = this.dashboardsToDisplay.findIndex((element) => {
                                             return ( this.dashboards[index].warehousefromId === element.warehousefromId &&
                                                 this.dashboards[index].transferClassifId === element.transferClassifId &&
@@ -214,9 +214,16 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                         } else { this.dashboardsToDisplay.push(this.dashboards[index]);
                                         }
 
-                            }
+                            }*/
+                            this.dashboardsToDisplay = this.dashboards;
+
                             this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
-                            for (let i = 0; i < 60; i++) {
+                            console.log('AAAAAAAAAAAAAA');
+                            console.log(   this.dashboardsToDisplay2);
+                            for (let i = 0; i < 15; i++) {
+                                 this.dashboardsToDisplay2.push({...this.dashboardsToDisplay2[1], creationDate:
+                                    new Date(this.dashboardsToDisplay2[1].creationDate.getTime() + i * 60 * 60 * 1000 * 24) , numberOfItems: i + 2 });
+
                                 this.dashboardsToDisplay2.push({...this.dashboardsToDisplay2[0], creationDate:
                                     new Date(this.dashboardsToDisplay2[0].creationDate.getTime() + i * 60 * 60 * 1000 * 24) , numberOfItems: i + 1 });
                                /*  this.dashboardsToDisplay2[i + 1].creationDate.setDate(this.dashboardsToDisplay2[ i + 1].creationDate.getDate() + i );
@@ -225,6 +232,16 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 this.dashboardsToDisplay2[i + 2].creationDate.setDate(this.dashboardsToDisplay2[i + 1].creationDate.getDate() + i );
                                 this.dashboardsToDisplay2[i + 2].numberOfItems = this.dashboardsToDisplay2[ i + 2 ].numberOfItems + 1;*/
                             }
+
+                        /*     for (let i = 0; i < 10; i++) {
+                                this.dashboardsToDisplay2.push({...this.dashboardsToDisplay2[1], creationDate:
+                                    new Date(this.dashboardsToDisplay2[1].creationDate.getTime() + i * 60 * 60 * 1000 * 24) , numberOfItems: i + 2 });
+                                this.dashboardsToDisplay2[i + 1].creationDate.setDate(this.dashboardsToDisplay2[ i + 1].creationDate.getDate() + i );
+                                this.dashboardsToDisplay2[i + 1].numberOfItems = this.dashboardsToDisplay2[i + 1].numberOfItems + 1;
+                               this.dashboardsToDisplay2.push(this.dashboardsToDisplay2[1]);
+                                this.dashboardsToDisplay2[i + 2].creationDate.setDate(this.dashboardsToDisplay2[i + 1].creationDate.getDate() + i );
+                                this.dashboardsToDisplay2[i + 2].numberOfItems = this.dashboardsToDisplay2[ i + 2 ].numberOfItems + 1;
+                            }*/
 
 
 
@@ -267,7 +284,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                      let tmpData = this.dashboardsToDisplay2.filter( (element) => {
                                          return element.materialclassificationId === this.materialTypeList[index].id;
                                      } );
-                                   //  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
+                                  
 
                                     tmpData.reduce(function( res2, value) {
                                         if (!res2[value.creationDate]) {
@@ -282,16 +299,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                     console.log('OOOOOOOOOOOOOO');
                                     console.log(result);
 
-                                    console.log(result);
-                                      console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPPP');
-                                      console.log(tmpData);
-                                     // groupBy(tmpData, 'creationDate');
-                                   //   if (tmpData) {
-                                    //  this.dashboardsToDisplay3.push(...tmpData);
-                                   //   console.log('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ');
-                                  //    console.log(tmpData);
-                                   //   console.log(  this.dashboardsToDisplay3);
-                                   // }
+                                   
 
 // https://stackoverflow.com/questions/14446511/what-is-the-most-efficient-method-to-groupby-on-a-javascript-array-of-objects
                                  /*    tmpData.sort(function(a, b) {
@@ -307,7 +315,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
           */
 
                                   }
-this.dashboardsToDisplay = result;
+this.dashboardsToDisplay = result.slice();
                                   this.data = this.buildGraphData();
                                 },
                                 (res1: HttpErrorResponse) => this.onError(res1.message)
@@ -360,21 +368,30 @@ this.dashboardsToDisplay = result;
     }
 
     buildGraphData() {
-        let retvar: {values:any[],key: string, color: string }[]=[];
+        let retvar: {values:any[],key: string, color: string,area: boolean }[]=[];
        let tmp = [] ;
        let matTypeDesc : string;
         /* let all_return
         let sin = [],sin2 = [],
           cos = [];*/
-     this.dashboardsToDisplay.forEach((element) => {
+
+          for (let i = 0; i < this.materialTypeList.length; i++) { 
+            let tmp = [] ;   
+              let tmpdash =  this.dashboardsToDisplay.filter((elle) =>{
+                  return this.materialTypeList[i].id === elle.materialclassificationId                  
+              });
+      tmpdash.forEach((element) => {
         tmp.push({x: element.creationDate , y: element.numberOfItems});
       });
 
-      matTypeDesc =  this.materialTypeList.find( (elementMat) => {
+      matTypeDesc =  this.materialTypeList[i].name; 
+      /*this.materialTypeList.find( (elementMat) => {
         return elementMat.materialCategories ===  tmp[0].id
-   }).name;
-
-   retvar.push({values:tmp,key: matTypeDesc, color: '#ff7f0e' });
+   }).name;*/
+   let lcolor = '#ff7f0e';
+if (i>0) {lcolor = '#ff7700';}
+   retvar.push({values:tmp,key: matTypeDesc, color: lcolor, area: false });
+}
 
         //Data is represented as an array of {x,y} pairs.
       /*  for (var i = 0; i < 100; i++) {
@@ -457,6 +474,7 @@ this.dashboardsToDisplay = result;
 
 
             let result = [];
+            if ( this.materialTypeList) {
                 for (let index = 0; index < this.materialTypeList.length; index++) {
                    let tmpData = dash.filter( (element) => {
                        return element.materialclassificationId === this.materialTypeList[index].id;
@@ -478,6 +496,7 @@ this.dashboardsToDisplay = result;
                 }
                 this.dashboardsToDisplay =  result.slice();
                 this.data = this.buildGraphData();
+            }
 // this.dashboardsToDisplay = result;
 
 
