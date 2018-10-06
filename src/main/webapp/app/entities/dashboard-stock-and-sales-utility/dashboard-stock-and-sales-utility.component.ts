@@ -4,12 +4,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-
 import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
-import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
-
 import { TransferclassificationStockAndSalesUtility } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.model';
-
 import { MaterialhistoryStockAndSalesUtility } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.service';
 import { ITEMS_PER_PAGE, Principal, User, BaseEntity } from '../../shared';
@@ -242,7 +238,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 													}, {});
 													console.log('OOOOOOOOOOOOOO');
 													console.log(result);
-}
+												}
 												this.dashboardsToDisplay = result.slice();
 												this.data = this.buildGraphData();
 											},
@@ -333,6 +329,11 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 	trackId(index: number, item: DashboardStockAndSalesUtility) {
 		return item.id;
 	}
+
+	trackTransferclassificationById(index: number, item: TransferclassificationStockAndSalesUtility) {
+		return item.id;
+	}
+
 	registerChangeInDashboards() {
 		this.eventSubscriber = this.eventManager.subscribe('dashboardListModification', (response) => this.loadAll());
 	}
@@ -350,10 +351,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 				(item.materialclassificationId === this.materialType ||
 					this.materialType === null ||
 					!this.materialType) &&
-				(item.warehousefromId === this.transferSource ||
-					this.transferSource === null ||
-					!this
-						.transferSource)
+				(item.warehousefromId === this.transferSource || this.transferSource === null || !this.transferSource)
 			);
 		});
 
@@ -363,8 +361,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 				const tmpData = dash.filter((element) => {
 					return element.materialclassificationId === this.materialTypeList[index].id;
 				});
-				//  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
-
 				tmpData.reduce(function(res2, value) {
 					if (!res2[value.creationDate]) {
 						res2[value.creationDate] = {
