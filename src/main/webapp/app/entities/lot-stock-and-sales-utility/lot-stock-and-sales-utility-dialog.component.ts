@@ -173,7 +173,7 @@ export class LotStockAndSalesUtilityDialogComponent implements OnInit {
 
     }
 
-   private createLotAndArticle() {
+   createLotAndArticle() {
 
         this.save();
       /*  const theDate = new Date(Date.now());
