@@ -7,11 +7,8 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
 import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
-import { D3ChartService } from './D3ChartService';
 
 import { TransferclassificationStockAndSalesUtility } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { JhiParseLinks, JhiDateUtils } from 'ng-jhipster';
 
 import { MaterialhistoryStockAndSalesUtility } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.service';
@@ -24,7 +21,6 @@ import { UserAuthorizedThirdService } from '../user-authorized-third/user-author
 import { UserAuthorizedThird } from '../user-authorized-third';
 
 @Component({
-	// tslint:disable-next-line:indent
 	selector: 'jhi-dashboard-stock-and-sales-utility',
 	templateUrl: './dashboard-stock-and-sales-utility.component.html'
 })
@@ -85,7 +81,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 	dashboardsToDisplay3: any[];
 
 	constructor(
-		private dashboardService: DashboardStockAndSalesUtilityService,
 		private jhiAlertService: JhiAlertService,
 		private eventManager: JhiEventManager,
 		private principal: Principal,
@@ -165,7 +160,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 								this.dashboardsToDisplay = [];
 								if (this.dashboards && this.dashboardsToDisplay) {
 									this.dashboardsToDisplay = this.dashboards;
-
 									this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
 									console.log('AAAAAAAAAAAAAA');
 									console.log(this.dashboardsToDisplay2);
@@ -187,7 +181,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 											),
 											numberOfItems: i + 1
 										});
-
+									}
 									this.options = {
 										chart: {
 											type: 'lineChart',
@@ -198,23 +192,22 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 												bottom: 40,
 												left: 55
 											},
-											x: function(d) {
+											x(d) {
 												return d.x;
 											},
-											y: function(d) {
+											y(d) {
 												return d.y;
 											},
 											useInteractiveGuideline: true,
 											xAxis: {
 												axisLabel: 'Jours',
-												//   tickFormat:
-												tickFormat: function(d) {
+												tickFormat(d) {
 													return d3.time.format('%b %d')(new Date(d));
 												}
 											},
 											yAxis: {
 												axisLabel: 'Ventes',
-												tickFormat: function(d) {
+												tickFormat(d) {
 													return d3.format('.02f')(d);
 												},
 												axisLabelDistance: -10
@@ -222,14 +215,14 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 										}
 									};
 									this.dashboardsToDisplay3 = [];
-									let result = [];
+									const result = [];
 									this.materialClassificationSubscription = this.materialClassificationService
 										.query()
 										.subscribe(
 											(res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
 												this.materialTypeList = res1.body;
 												for (let index = 0; index < this.materialTypeList.length; index++) {
-													let tmpData = this.dashboardsToDisplay2.filter((element) => {
+													const tmpData = this.dashboardsToDisplay2.filter((element) => {
 														return (
 															element.materialclassificationId ===
 															this.materialTypeList[index].id
@@ -249,7 +242,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 													}, {});
 													console.log('OOOOOOOOOOOOOO');
 													console.log(result);
-												}
+}
 												this.dashboardsToDisplay = result.slice();
 												this.data = this.buildGraphData();
 											},
@@ -299,13 +292,11 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 	}
 
 	buildGraphData() {
-		let retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
-		let tmp = [];
+		const retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
 		let matTypeDesc: string;
-
 		for (let i = 0; i < this.materialTypeList.length; i++) {
-			let tmp = [];
-			let tmpdash = this.dashboardsToDisplay.filter((elle) => {
+			const tmp = [];
+			const tmpdash = this.dashboardsToDisplay.filter((elle) => {
 				return this.materialTypeList[i].id === elle.materialclassificationId;
 			});
 			tmpdash.forEach((element) => {
@@ -366,12 +357,14 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 			);
 		});
 
-		let result = [];
+		const result = [];
 		if (this.materialTypeList) {
 			for (let index = 0; index < this.materialTypeList.length; index++) {
-				let tmpData = dash.filter((element) => {
+				const tmpData = dash.filter((element) => {
 					return element.materialclassificationId === this.materialTypeList[index].id;
 				});
+				//  let tmpData = this.dashboardsToDisplay2.filter( (element) => {
+
 				tmpData.reduce(function(res2, value) {
 					if (!res2[value.creationDate]) {
 						res2[value.creationDate] = {
@@ -385,9 +378,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 				}, {});
 			}
 			this.dashboardsToDisplay = result.slice();
-			this.data = this.buildGraphData(); }
-}
-	trackTransferclassificationById(index: number, item: TransferclassificationStockAndSalesUtility) {
-		return item.id;
+			this.data = this.buildGraphData();
+		}
 	}
 }
