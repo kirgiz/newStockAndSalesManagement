@@ -21,6 +21,7 @@
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "ng-jhipster": "0.4.0",
+    "ng2-nvd3": "^2.0.0",
     "ngx-cookie": "2.0.1",
     "ngx-infinite-scroll": "0.5.1",
     "ngx-webstorage": "2.0.1",
@@ -28,8 +29,7 @@
     "rxjs": "5.5.6",
     "swagger-ui": "2.2.10",
     "tether": "1.4.0",
-    "zone.js": "0.8.19",
-    "ng2-nvd3": "^2.0.0"
+    "zone.js": "0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "1.6.6",

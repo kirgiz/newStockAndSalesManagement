@@ -302,7 +302,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 			matTypeDesc = this.materialTypeList[i].name;
 			let lcolor = '#ff7f0e';
 			if (i > 0) {
-				lcolor = '#ff7700';
+				lcolor = '#f77700';
 			}
 			retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
 		}
