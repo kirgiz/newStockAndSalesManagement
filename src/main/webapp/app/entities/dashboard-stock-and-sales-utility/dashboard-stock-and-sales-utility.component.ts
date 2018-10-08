@@ -15,12 +15,16 @@ import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utili
 import { UserService } from '../../shared/user/user.service';
 import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
 import { UserAuthorizedThird } from '../user-authorized-third';
+import { CompanyStockAndSalesUtilityService, CompanyStockAndSalesUtility } from '../company-stock-and-sales-utility';
+import { CurrencyStockAndSalesUtilityService, CurrencyStockAndSalesUtility } from '../currency-stock-and-sales-utility';
 
 @Component({
 	selector: 'jhi-dashboard-stock-and-sales-utility',
 	templateUrl: './dashboard-stock-and-sales-utility.component.html'
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
+    currency: CurrencyStockAndSalesUtility;
+    company: CompanyStockAndSalesUtility[];
 	materialTypeList: MaterialclassificationStockAndSalesUtility[];
 	materialType: number;
 	materialClassificationSubscription: any;
@@ -85,7 +89,9 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 		private autThirds: UserAuthorizedThirdService,
 		private thirdService: ThirdStockAndSalesUtilityService,
 		private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
-		private materialClassificationService: MaterialclassificationStockAndSalesUtilityService
+        private materialClassificationService: MaterialclassificationStockAndSalesUtilityService,
+        private companyService: CompanyStockAndSalesUtilityService,
+        private currencyService: CurrencyStockAndSalesUtilityService
 	) {}
 
 	loadAll() {
@@ -133,7 +139,9 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 											}).thirdAuthId === third.id
 										);
 									})
-								);
+                                );
+                                
+
 
 								const mat: MaterialhistoryStockAndSalesUtility[] = this.materialhistoriesToDisplay.slice();
 								this.materialhistoriesToDisplay = mat.filter((element) => {
@@ -145,14 +153,21 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 											return true;
 										}
 									}
-								});
-
+                                });
+                                
+                                this.companyService.query().take(1).subscribe(
+                                    (company: HttpResponse<CompanyStockAndSalesUtility[]>) => {
+                                        this.company = company.body;
+                                        this.currencyService.find(this.company[0].baseCurrencyId).subscribe(
+                                            (currency: HttpResponse<CurrencyStockAndSalesUtility>) => {
+                                                this.currency = currency.body;
 								this.dashboards = this.materialhistoriesToDisplay.slice();
 								this.dashboards.forEach((element) => {
 									element.numberOfItems = element.itemTransfereds.length;
 									element.profitAndLoss = 0;
-									element.currencyForDashboardName = 'CHF';
-								});
+									element.currencyForDashboardName = this.currency.isoCode;
+                                });
+                               
 								this.dashboardsToDisplay = [];
 								if (this.dashboards && this.dashboardsToDisplay) {
 									this.dashboardsToDisplay = this.dashboards;
@@ -268,7 +283,13 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 								});
 								this.transferDest = this.materialhistoryService.getDefaultDestination().id;
 								this.transferSource = this.materialhistoryService.getDefaultThird().id;
-								this.filterResults();
+                                this.filterResults();
+                                console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY');
+                                console.log(this.currency);
+                            }
+                        );
+                    }
+                );
 							});
 					});
 			},

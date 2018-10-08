@@ -24,6 +24,7 @@ import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility';
 	templateUrl: './lot-stock-and-sales-utility-dialog.component.html'
 })
 export class LotStockAndSalesUtilityDialogComponent implements OnInit {
+	createArticle: boolean = false;
 	lot: LotStockAndSalesUtility;
 	isSaving: boolean;
 
@@ -88,11 +89,13 @@ export class LotStockAndSalesUtilityDialogComponent implements OnInit {
 	}
 
 	private onSaveSuccess(result: LotStockAndSalesUtility) {
+		
 		this.lot.id = result.id;
 		this.eventManager.broadcast({
 			name: 'lotListModification',
 			content: 'OK'
 		});
+		if (this.createArticle) {
 		console.log('default lot');
 		console.log(this.lot);
 		for (let index = 0; index < this.lot.numberOfItems; index++) {
@@ -112,8 +115,10 @@ export class LotStockAndSalesUtilityDialogComponent implements OnInit {
 				)
 				.subscribe((rtr) => {});
 		}
+	}
 		this.isSaving = false;
 		this.activeModal.dismiss(result);
+		this.createArticle = false;
 	}
 
 	private onSaveError() {
@@ -145,6 +150,7 @@ export class LotStockAndSalesUtilityDialogComponent implements OnInit {
 	}
 
 	createLotAndArticle() {
+		this.createArticle = true;
 		this.save();
 	}
 }
