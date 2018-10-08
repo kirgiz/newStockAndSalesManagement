@@ -1,6 +1,6 @@
 import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.service';
 import { MaterialclassificationStockAndSalesUtility } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
@@ -20,7 +20,11 @@ import { CurrencyStockAndSalesUtilityService, CurrencyStockAndSalesUtility } fro
 
 @Component({
 	selector: 'jhi-dashboard-stock-and-sales-utility',
-	templateUrl: './dashboard-stock-and-sales-utility.component.html'
+    templateUrl: './dashboard-stock-and-sales-utility.component.html',
+    styleUrls: [
+        '../../../../../../node_modules/nvd3/build/nv.d3.css'
+      ],
+      encapsulation: ViewEncapsulation.None
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
     currency: CurrencyStockAndSalesUtility;
@@ -140,7 +144,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 										);
 									})
                                 );
-                                
+
 
 
 								const mat: MaterialhistoryStockAndSalesUtility[] = this.materialhistoriesToDisplay.slice();
@@ -154,7 +158,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 										}
 									}
                                 });
-                                
+
                                 this.companyService.query().take(1).subscribe(
                                     (company: HttpResponse<CompanyStockAndSalesUtility[]>) => {
                                         this.company = company.body;
@@ -167,7 +171,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 									element.profitAndLoss = 0;
 									element.currencyForDashboardName = this.currency.isoCode;
                                 });
-                               
+
 								this.dashboardsToDisplay = [];
 								if (this.dashboards && this.dashboardsToDisplay) {
 									this.dashboardsToDisplay = this.dashboards;
@@ -306,9 +310,38 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 		this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
 			this.hasAdminAuth = hasAuth;
 		});
-	}
+    }
+
+
+    /*
+ * Return a random number within the defined range,
+ * random(0, 5) would return a number between 0 and 5.
+ */
+random(max, min) {
+    return Math.floor((Math.random() * (max - min)) + min)
+  }
+
+toHex(numbers) {
+    var r = numbers.r.toString(16),
+        g = numbers.g.toString(16),
+        b = numbers.b.toString(16);
+
+    if(r.length === 1) {
+      r = 0 + r;
+    }
+      if(g.length === 1) {
+      g = 0 + g;
+    }
+      if(b.length === 1) {
+      b = 0 + b;
+    }
+
+    return r + g + b;
+  }
 
 	buildGraphData() {
+
+
 		const retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
 		let matTypeDesc: string;
 		for (let i = 0; i < this.materialTypeList.length; i++) {
@@ -320,11 +353,17 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 				tmp.push({ x: element.creationDate, y: element.numberOfItems });
 			});
 
-			matTypeDesc = this.materialTypeList[i].name;
-			let lcolor = '#ff7f0e';
+            matTypeDesc = this.materialTypeList[i].name;
+            const rgb = {
+                r: this.random(0, 255), /* 2 */
+                g: this.random(0, 255),
+                b: this.random(0, 255)
+              };
+            const lcolor = this.toHex(rgb);
+		/*	let lcolor = '#ff7f0e';
 			if (i > 0) {
-				lcolor = '#f77700';
-			}
+				lcolor = '#f00000';
+			}*/
 			retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
 		}
 		return retvar;
