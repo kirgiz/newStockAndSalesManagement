@@ -16,6 +16,7 @@ import { UserAuthorizedThirdService } from '../user-authorized-third/user-author
 import { UserAuthorizedThird } from '../user-authorized-third';
 import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.service';
 import { MaterialclassificationStockAndSalesUtility} from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility, MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 
 @Component({
   selector: 'jhi-materialhistory-stock-and-sales-utility',
@@ -23,6 +24,7 @@ import { MaterialclassificationStockAndSalesUtility} from '../materialclassifica
 })
 export class MaterialhistoryStockAndSalesUtilityComponent
   implements OnInit, OnDestroy {
+  inventories: any[];
     materialTypeList: MaterialclassificationStockAndSalesUtility[];
     materialClassificationSubscription: Subscription;
     hasAdminAuth: boolean;
@@ -84,7 +86,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     private thirdService: ThirdStockAndSalesUtilityService,
     private userService: UserService,
     private autThirds: UserAuthorizedThirdService,
-    private materialClassificationService: MaterialclassificationStockAndSalesUtilityService
+    private materialClassificationService: MaterialclassificationStockAndSalesUtilityService,
+    private materialService: MaterialStockAndSalesUtilityService
   ) {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.routeData = this.activatedRoute.data.subscribe((data) => {
@@ -249,6 +252,42 @@ export class MaterialhistoryStockAndSalesUtilityComponent
     );
     this.materialhistoriesToDisplay = mat.slice();
     console.log(this.materialhistoriesToDisplay);
+
+
+    this.materialService.queryAll()
+    .subscribe(
+     (materialsres:HttpResponse<MaterialStockAndSalesUtility[]>) => {
+     let materials = materialsres.body; 
+     const tmpData = materials.filter((element) => {
+       return (
+         element.currentLocation ===
+         this.transferSource
+       );
+     });
+
+     const result = [];
+
+     tmpData.reduce(function(res2, value) {
+       if (!res2[value.materialTypeCatId]) {
+         res2[value.materialTypeCatId] = {
+           ...value,
+           numberOfItems: 0
+         };
+         result.push(res2[value.materialTypeCatId]);
+       }
+       res2[value.materialTypeCatId].numberOfItems += 1;
+       return res2;
+     }, {});
+
+     console.log('AGGREGATE STOCKSSS');
+     console.log(tmpData);
+     console.log(result);
+     this.inventories = result;
+
+     }
+   );
+
+
   }
 
   onDateSelect(event: any) {

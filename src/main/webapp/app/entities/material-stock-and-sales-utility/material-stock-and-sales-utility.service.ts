@@ -14,6 +14,8 @@ export type EntityResponseType = HttpResponse<MaterialStockAndSalesUtility>;
 export class MaterialStockAndSalesUtilityService {
 
     private resourceUrl =  SERVER_API_URL + 'api/materials';
+    private resourceUrlall =  SERVER_API_URL + 'api/allmaterials';
+    
 
     constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
 
@@ -38,6 +40,12 @@ export class MaterialStockAndSalesUtilityService {
     query(req?: any): Observable<HttpResponse<MaterialStockAndSalesUtility[]>> {
         const options = createRequestOption(req);
         return this.http.get<MaterialStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .map((res: HttpResponse<MaterialStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+    }
+
+    queryAll(req?: any): Observable<HttpResponse<MaterialStockAndSalesUtility[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<MaterialStockAndSalesUtility[]>(this.resourceUrlall, { params: options, observe: 'response' })
             .map((res: HttpResponse<MaterialStockAndSalesUtility[]>) => this.convertArrayResponse(res));
     }
 

@@ -32,8 +32,8 @@
                         </span>
                     </span>
                 </a>
-                <ul class="dropdown-menu" ngbDropdownMenu>
-                    <li>
+                <ul *jhiHasAnyAuthority="'ROLE_ADMIN'" class="dropdown-menu" ngbDropdownMenu>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item  clearfix" routerLink="company-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -44,7 +44,7 @@
                         </a>
                     </li>
 
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item  clearfix" routerLink="country-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -54,7 +54,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="currency-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -63,7 +63,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="forexrates-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -72,7 +72,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="thirdclassification-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -81,7 +81,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="third-stock-and-sales-utility" routerLinkActive="active"
                             [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -90,7 +90,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="addressclassification-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -99,7 +99,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="address-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -108,7 +108,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="civility-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -117,7 +117,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="transferclassification-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -126,7 +126,7 @@
                             </p>
                         </a>
                     </li>
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="materialclassification-stock-and-sales-utility"
                             routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -136,7 +136,7 @@
                         </a>
                     </li>
 
-                    <li>
+                    <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
                         <a class="list-group-item clearfix" routerLink="user-authorized-third" routerLinkActive="active"
                             [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                             <!-- <i class="fa fa-fw fa-asterisk" aria-hidden="true"></i> -->
@@ -232,7 +232,7 @@
                             <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
                         </a>
                     </li>
-                    <li>
+                    <li >
                         <a class="dropdown-item" routerLink="audits" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
                             <span jhiTranslate="global.menu.admin.audits">Audits</span>

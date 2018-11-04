@@ -10,6 +10,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -96,6 +97,22 @@ public class MaterialResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materials");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+    /**
+     * GET  /allmaterials : get all all the materials.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of materials in body
+     */
+
+     @GetMapping("/allmaterials")
+    @Timed
+    public ResponseEntity<List<MaterialDTO>> getAllAllMaterials() {
+        log.debug("REST request to get all all Materials");
+      //  int count = materialService.count();
+  Page<MaterialDTO> page =  materialService.findAll(new PageRequest(0, 1000000000));
+  HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/allmaterials");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        }
 
     /**
      * GET  /materials/:id : get the "id" material.

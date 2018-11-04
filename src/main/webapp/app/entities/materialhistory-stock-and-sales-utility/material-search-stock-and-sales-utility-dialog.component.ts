@@ -159,13 +159,16 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         this.destination = +this.activatedRoute.snapshot.queryParams['destination'];
         this.source = +this.activatedRoute.snapshot.queryParams['source'];
 this.matSubscription = this.materialService.query({
-    page: this.page - 1,
-    size: this.itemsPerPage,
+   page: this.page - 1,
+  size: 10000,
     sort: this.sort()
-}).subscribe(
+}
+).subscribe(
     (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
     this.onSuccess(res.body, res.headers);
     console.log('found mat type' +  this.selectedMaterialType );
+    console.log('HOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+    console.log(res.body);
    // console.log('found mat type' +  this.selectedMaterialType );
 },
     (res: HttpErrorResponse) => {
@@ -215,6 +218,7 @@ this.matSubscription = this.materialService.query({
                             console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJ');
                             console.log(element);
                             console.log(authList.thirdAuthId);
+                            console.log('MATERIAL TYPE' + element.materialTypeDefId);
                        if ( (authList.thirdAuthId === element.currentLocation &&  this.destination !== element.currentLocation &&  this.source === element.currentLocation) ||
                     ((!element.currentLocation || element.currentLocation === null)
                     && this.hasAdminAuth)) {
@@ -233,7 +237,8 @@ this.matSubscription = this.materialService.query({
                             let mat = this.materialsToDisplay;
                             if  (this.selectedMaterialType !== null) {
                                 mat = this.materialsToDisplay.filter((item) => {
-                                    console.log('mat type' + item.materialTypeDefId);
+                                    console.log('HAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' + this.selectedMaterialType);
+                                    
                                     return item.materialTypeDefId === this.selectedMaterialType; }
                                 ); }
                                 this.materialsToDisplay.forEach((element) => {

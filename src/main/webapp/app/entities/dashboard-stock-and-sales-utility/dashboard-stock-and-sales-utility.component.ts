@@ -17,6 +17,7 @@ import { UserAuthorizedThirdService } from '../user-authorized-third/user-author
 import { UserAuthorizedThird } from '../user-authorized-third';
 import { CompanyStockAndSalesUtilityService, CompanyStockAndSalesUtility } from '../company-stock-and-sales-utility';
 import { CurrencyStockAndSalesUtilityService, CurrencyStockAndSalesUtility } from '../currency-stock-and-sales-utility';
+import { MaterialStockAndSalesUtilityService, MaterialStockAndSalesUtility } from '../material-stock-and-sales-utility';
 
 @Component({
 	selector: 'jhi-dashboard-stock-and-sales-utility',
@@ -27,6 +28,12 @@ import { CurrencyStockAndSalesUtilityService, CurrencyStockAndSalesUtility } fro
       encapsulation: ViewEncapsulation.None
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
+	inventories: any[];
+	predicate: string;
+	reverse: string;
+	previousPage: number;
+	page: number;
+	materials: MaterialStockAndSalesUtility[];
     currency: CurrencyStockAndSalesUtility;
     company: CompanyStockAndSalesUtility[];
 	materialTypeList: MaterialclassificationStockAndSalesUtility[];
@@ -95,8 +102,16 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
 		private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
         private materialClassificationService: MaterialclassificationStockAndSalesUtilityService,
         private companyService: CompanyStockAndSalesUtilityService,
-        private currencyService: CurrencyStockAndSalesUtilityService
-	) {}
+		private currencyService: CurrencyStockAndSalesUtilityService,
+		private materialService: MaterialStockAndSalesUtilityService
+		
+	) {
+		this.page = 1; // data.pagingParams.page;
+		this.previousPage = 1; // data.pagingParams.page;
+		this.reverse = 'asc'; // data.pagingParams.ascending;
+		this.predicate = 'id'; // data.pagingParams.predicate;
+
+	}
 
 	loadAll() {
 		this.historySubscription = this.materialhistoryService.query({}).subscribe(
@@ -402,6 +417,14 @@ toHex(numbers) {
 		this.jhiAlertService.error(error.message, null, null);
 	}
 
+	sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
+
 	filterResults() {
 		const dash = this.dashboardsToDisplay2.filter((item) => {
 			return (
@@ -436,5 +459,39 @@ toHex(numbers) {
 			this.dashboardsToDisplay = result.slice();
 			this.data = this.buildGraphData();
 		}
+
+		this.materialService.queryAll()
+		 .subscribe(
+			(materialsres:HttpResponse<MaterialStockAndSalesUtility[]>) => {
+			let materials = materialsres.body; 
+			const tmpData = materials.filter((element) => {
+				return (
+					element.currentLocation ===
+					this.transferSource
+				);
+			});
+
+			const result = [];
+
+			tmpData.reduce(function(res2, value) {
+				if (!res2[value.materialTypeCatId]) {
+					res2[value.materialTypeCatId] = {
+						...value,
+						numberOfItems: 0
+					};
+					result.push(res2[value.materialTypeCatId]);
+				}
+				res2[value.materialTypeCatId].numberOfItems += 1;
+				return res2;
+			}, {});
+
+			console.log('AGGREGATE STOCKSSS');
+			console.log(tmpData);
+			console.log(result);
+			this.inventories = result;
+
+			}
+		);
+
 	}
 }
