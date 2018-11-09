@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054142_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054143_added_entity_Country.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054144_added_entity_Currency.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054145_added_entity_Forexrates.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054146_added_entity_Thirdclassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054147_added_entity_Third.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054148_added_entity_Addressclassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054149_added_entity_Address.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054150_added_entity_Civility.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054151_added_entity_Transferclassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054152_added_entity_Materialclassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054153_added_entity_Lot.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054154_added_entity_Material.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054155_added_entity_Materialhistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054156_added_entity_Dashboard.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180827152040_added_entity_UserAuthorizedThird.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20180704054142_added_entity_constraints_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054145_added_entity_constraints_Forexrates.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054147_added_entity_constraints_Third.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054149_added_entity_constraints_Address.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054153_added_entity_constraints_Lot.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054154_added_entity_constraints_Material.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054155_added_entity_constraints_Materialhistory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180704054156_added_entity_constraints_Dashboard.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20180827152040_added_entity_constraints_UserAuthorizedThird.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+</databaseChangeLog>

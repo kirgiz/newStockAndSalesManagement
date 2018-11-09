@@ -1,0 +1,84 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "materialhistoryfrom",
+            "otherEntityName": "materialhistory",
+            "otherEntityRelationshipName": "warehousefrom"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "materialhistoryto",
+            "otherEntityName": "materialhistory",
+            "otherEntityRelationshipName": "warehouseto"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "warehouseOut",
+            "otherEntityName": "dashboard",
+            "otherEntityRelationshipName": "warehouseOutg"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "thirdaddress",
+            "relationshipName": "addressthird",
+            "otherEntityName": "address",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "thirdClassif",
+            "otherEntityName": "thirdclassification",
+            "otherEntityField": "name"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "civilityClassif",
+            "otherEntityName": "civility",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 3
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength",
+                "required"
+            ],
+            "fieldValidateRulesMaxlength": 60
+        },
+        {
+            "fieldName": "comments",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 500
+        },
+        {
+            "fieldName": "defaultWarehouse",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20180704054147",
+    "dto": "mapstruct",
+    "service": "serviceClass",
+    "entityTableName": "third",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no",
+    "angularJSSuffix": "StockAndSalesUtility"
+}

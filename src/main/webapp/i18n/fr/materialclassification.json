@@ -1,0 +1,27 @@
+
+{
+    "stockAndSalesManagementApp": {
+        "materialclassification" : {
+            "home": {
+                "title": "Materialclassifications",
+                "createLabel": "Créer un nouveau Materialclassification",
+                "createOrEditLabel": "Créer ou éditer un Materialclassification"
+            },
+            "created": "Un nouveau Materialclassification a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Materialclassification avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Materialclassification avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Materialclassification {{ id }} ?"
+            },
+            "detail": {
+                "title": "Materialclassification"
+            },
+            "code": "Code",
+            "name": "Name",
+            "comments": "Comments",
+            "materialCategory": "Material Category",
+            "materialCat": "Material Cat",
+            "materialCategoryDashboard": "Material Category Dashboard"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+
+{
+    "stockAndSalesManagementApp": {
+        "userAuthorizedThird" : {
+            "home": {
+                "title": "User Authorized Thirds",
+                "createLabel": "Create a new User Authorized Third",
+                "createOrEditLabel": "Create or edit a User Authorized Third"
+            },
+            "created": "A new User Authorized Third is created with identifier {{ param }}",
+            "updated": "A User Authorized Third is updated with identifier {{ param }}",
+            "deleted": "A User Authorized Third is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete User Authorized Third {{ id }}?"
+            },
+            "detail": {
+                "title": "User Authorized Third"
+            },
+            "defaultThird": "Default Third",
+            "defaultDestination": "Default Destination",
+            "userAuth": "User Auth",
+            "thirdAuth": "Third Auth"
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "userAuth",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "userAuthorizedThird"
+        },
+        {
+            "relationshipName": "thirdAuth",
+            "otherEntityName": "third",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "defaultThird",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultDestination",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20180827152040",
+    "dto": "mapstruct",
+    "service": "serviceClass",
+    "entityTableName": "user_authorized_third",
+    "jpaMetamodelFiltering": true,
+    "pagination": "infinite-scroll"
+}
