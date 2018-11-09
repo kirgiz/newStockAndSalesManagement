@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { TransferclassificationStockAndSalesUtility } from './transferclassification-stock-and-sales-utility.model';
-import { TransferclassificationStockAndSalesUtilityPopupService } from './transferclassification-stock-and-sales-utility-popup.service';
+import { ITransferclassificationStockAndSalesUtility } from 'app/shared/model/transferclassification-stock-and-sales-utility.model';
 import { TransferclassificationStockAndSalesUtilityService } from './transferclassification-stock-and-sales-utility.service';
 
 @Component({
@@ -13,22 +12,20 @@ import { TransferclassificationStockAndSalesUtilityService } from './transfercla
     templateUrl: './transferclassification-stock-and-sales-utility-delete-dialog.component.html'
 })
 export class TransferclassificationStockAndSalesUtilityDeleteDialogComponent {
-
-    transferclassification: TransferclassificationStockAndSalesUtility;
+    transferclassification: ITransferclassificationStockAndSalesUtility;
 
     constructor(
         private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.transferclassificationService.delete(id).subscribe((response) => {
+        this.transferclassificationService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'transferclassificationListModification',
                 content: 'Deleted an transferclassification'
@@ -43,22 +40,33 @@ export class TransferclassificationStockAndSalesUtilityDeleteDialogComponent {
     template: ''
 })
 export class TransferclassificationStockAndSalesUtilityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private transferclassificationPopupService: TransferclassificationStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.transferclassificationPopupService
-                .open(TransferclassificationStockAndSalesUtilityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ transferclassification }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(TransferclassificationStockAndSalesUtilityDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.transferclassification = transferclassification;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

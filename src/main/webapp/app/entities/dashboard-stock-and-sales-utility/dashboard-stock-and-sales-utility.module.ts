@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    DashboardStockAndSalesUtilityService,
-    DashboardStockAndSalesUtilityPopupService,
     DashboardStockAndSalesUtilityComponent,
     DashboardStockAndSalesUtilityDetailComponent,
-    DashboardStockAndSalesUtilityDialogComponent,
-    DashboardStockAndSalesUtilityPopupComponent,
+    DashboardStockAndSalesUtilityUpdateComponent,
     DashboardStockAndSalesUtilityDeletePopupComponent,
     DashboardStockAndSalesUtilityDeleteDialogComponent,
     dashboardRoute,
-    dashboardPopupRoute,
+    dashboardPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...dashboardRoute,
-    ...dashboardPopupRoute,
-];
+const ENTITY_STATES = [...dashboardRoute, ...dashboardPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         DashboardStockAndSalesUtilityComponent,
         DashboardStockAndSalesUtilityDetailComponent,
-        DashboardStockAndSalesUtilityDialogComponent,
+        DashboardStockAndSalesUtilityUpdateComponent,
         DashboardStockAndSalesUtilityDeleteDialogComponent,
-        DashboardStockAndSalesUtilityPopupComponent,
-        DashboardStockAndSalesUtilityDeletePopupComponent,
+        DashboardStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         DashboardStockAndSalesUtilityComponent,
-        DashboardStockAndSalesUtilityDialogComponent,
-        DashboardStockAndSalesUtilityPopupComponent,
+        DashboardStockAndSalesUtilityUpdateComponent,
         DashboardStockAndSalesUtilityDeleteDialogComponent,
-        DashboardStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        DashboardStockAndSalesUtilityService,
-        DashboardStockAndSalesUtilityPopupService,
+        DashboardStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

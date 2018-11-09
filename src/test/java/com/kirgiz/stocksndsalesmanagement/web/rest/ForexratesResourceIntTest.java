@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -97,10 +98,10 @@ public class ForexratesResourceIntTest {
             .rateDate(DEFAULT_RATE_DATE)
             .straighRate(DEFAULT_STRAIGH_RATE);
         // Add required entity
-        Currency rateForCurrency = CurrencyResourceIntTest.createEntity(em);
-        em.persist(rateForCurrency);
+        Currency currency = CurrencyResourceIntTest.createEntity(em);
+        em.persist(currency);
         em.flush();
-        forexrates.setRateForCurrency(rateForCurrency);
+        forexrates.setRateForCurrency(currency);
         return forexrates;
     }
 
@@ -201,7 +202,7 @@ public class ForexratesResourceIntTest {
             .andExpect(jsonPath("$.[*].rateDate").value(hasItem(DEFAULT_RATE_DATE.toString())))
             .andExpect(jsonPath("$.[*].straighRate").value(hasItem(DEFAULT_STRAIGH_RATE.doubleValue())));
     }
-
+    
     @Test
     @Transactional
     public void getForexrates() throws Exception {
@@ -230,10 +231,11 @@ public class ForexratesResourceIntTest {
     public void updateForexrates() throws Exception {
         // Initialize the database
         forexratesRepository.saveAndFlush(forexrates);
+
         int databaseSizeBeforeUpdate = forexratesRepository.findAll().size();
 
         // Update the forexrates
-        Forexrates updatedForexrates = forexratesRepository.findOne(forexrates.getId());
+        Forexrates updatedForexrates = forexratesRepository.findById(forexrates.getId()).get();
         // Disconnect from session so that the updates on updatedForexrates are not directly saved in db
         em.detach(updatedForexrates);
         updatedForexrates
@@ -262,15 +264,15 @@ public class ForexratesResourceIntTest {
         // Create the Forexrates
         ForexratesDTO forexratesDTO = forexratesMapper.toDto(forexrates);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restForexratesMockMvc.perform(put("/api/forexrates")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(forexratesDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Forexrates in the database
         List<Forexrates> forexratesList = forexratesRepository.findAll();
-        assertThat(forexratesList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(forexratesList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -278,6 +280,7 @@ public class ForexratesResourceIntTest {
     public void deleteForexrates() throws Exception {
         // Initialize the database
         forexratesRepository.saveAndFlush(forexrates);
+
         int databaseSizeBeforeDelete = forexratesRepository.findAll().size();
 
         // Get the forexrates

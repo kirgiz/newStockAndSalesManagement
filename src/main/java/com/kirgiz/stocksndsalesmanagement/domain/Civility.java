@@ -42,10 +42,8 @@ public class Civility implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "civilityClassif")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Third> thirdCivilities = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

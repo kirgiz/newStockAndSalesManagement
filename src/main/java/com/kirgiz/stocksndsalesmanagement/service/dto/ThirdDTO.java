@@ -1,6 +1,5 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -127,7 +126,7 @@ public class ThirdDTO implements Serializable {
         }
 
         ThirdDTO thirdDTO = (ThirdDTO) o;
-        if(thirdDTO.getId() == null || getId() == null) {
+        if (thirdDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), thirdDTO.getId());
@@ -146,6 +145,10 @@ public class ThirdDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", comments='" + getComments() + "'" +
             ", defaultWarehouse='" + isDefaultWarehouse() + "'" +
+            ", thirdClassif=" + getThirdClassifId() +
+            ", thirdClassif='" + getThirdClassifName() + "'" +
+            ", civilityClassif=" + getCivilityClassifId() +
+            ", civilityClassif='" + getCivilityClassifName() + "'" +
             "}";
     }
 }

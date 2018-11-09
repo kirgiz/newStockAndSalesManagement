@@ -1,74 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
 
-import { CurrencyStockAndSalesUtility } from './currency-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { ICurrencyStockAndSalesUtility } from 'app/shared/model/currency-stock-and-sales-utility.model';
 
-export type EntityResponseType = HttpResponse<CurrencyStockAndSalesUtility>;
+type EntityResponseType = HttpResponse<ICurrencyStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<ICurrencyStockAndSalesUtility[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CurrencyStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/currencies';
 
-    private resourceUrl =  SERVER_API_URL + 'api/currencies';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) { }
-
-    create(currency: CurrencyStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(currency);
-        return this.http.post<CurrencyStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(currency: ICurrencyStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.post<ICurrencyStockAndSalesUtility>(this.resourceUrl, currency, { observe: 'response' });
     }
 
-    update(currency: CurrencyStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(currency);
-        return this.http.put<CurrencyStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(currency: ICurrencyStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.put<ICurrencyStockAndSalesUtility>(this.resourceUrl, currency, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<CurrencyStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.get<ICurrencyStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    query(req?: any): Observable<HttpResponse<CurrencyStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<CurrencyStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<CurrencyStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http.get<ICurrencyStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
-    }
-
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: CurrencyStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
-    }
-
-    private convertArrayResponse(res: HttpResponse<CurrencyStockAndSalesUtility[]>): HttpResponse<CurrencyStockAndSalesUtility[]> {
-        const jsonResponse: CurrencyStockAndSalesUtility[] = res.body;
-        const body: CurrencyStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({body});
-    }
-
-    /**
-     * Convert a returned JSON object to CurrencyStockAndSalesUtility.
-     */
-    private convertItemFromServer(currency: CurrencyStockAndSalesUtility): CurrencyStockAndSalesUtility {
-        const copy: CurrencyStockAndSalesUtility = Object.assign({}, currency);
-        return copy;
-    }
-
-    /**
-     * Convert a CurrencyStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(currency: CurrencyStockAndSalesUtility): CurrencyStockAndSalesUtility {
-        const copy: CurrencyStockAndSalesUtility = Object.assign({}, currency);
-        return copy;
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 }

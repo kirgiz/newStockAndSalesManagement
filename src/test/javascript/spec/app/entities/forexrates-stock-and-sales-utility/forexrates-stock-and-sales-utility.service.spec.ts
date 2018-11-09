@@ -1,70 +1,131 @@
 /* tslint:disable max-line-length */
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { JhiDateUtils } from 'ng-jhipster';
-
-import { ForexratesStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/forexrates-stock-and-sales-utility/forexrates-stock-and-sales-utility.service';
-import { SERVER_API_URL } from '../../../../../../main/webapp/app/app.constants';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { of } from 'rxjs';
+import { take, map } from 'rxjs/operators';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { ForexratesStockAndSalesUtilityService } from 'app/entities/forexrates-stock-and-sales-utility/forexrates-stock-and-sales-utility.service';
+import { IForexratesStockAndSalesUtility, ForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-stock-and-sales-utility.model';
 
 describe('Service Tests', () => {
-
     describe('ForexratesStockAndSalesUtility Service', () => {
         let injector: TestBed;
         let service: ForexratesStockAndSalesUtilityService;
         let httpMock: HttpTestingController;
-
+        let elemDefault: IForexratesStockAndSalesUtility;
+        let currentDate: moment.Moment;
         beforeEach(() => {
             TestBed.configureTestingModule({
-                imports: [
-                    HttpClientTestingModule
-                ],
-                providers: [
-                    JhiDateUtils,
-                    ForexratesStockAndSalesUtilityService
-                ]
+                imports: [HttpClientTestingModule]
             });
             injector = getTestBed();
             service = injector.get(ForexratesStockAndSalesUtilityService);
             httpMock = injector.get(HttpTestingController);
+            currentDate = moment();
+
+            elemDefault = new ForexratesStockAndSalesUtility(0, currentDate, 0);
         });
 
-        describe('Service methods', () => {
-            it('should call correct URL', () => {
-                service.find(123).subscribe(() => {});
-
-                const req  = httpMock.expectOne({ method: 'GET' });
-
-                const resourceUrl = SERVER_API_URL + 'api/forexrates';
-                expect(req.request.url).toEqual(resourceUrl + '/' + 123);
-            });
-            it('should return ForexratesStockAndSalesUtility', () => {
-
-                service.find(123).subscribe((received) => {
-                    expect(received.body.id).toEqual(123);
-                });
+        describe('Service methods', async () => {
+            it('should find an element', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        rateDate: currentDate.format(DATE_FORMAT)
+                    },
+                    elemDefault
+                );
+                service
+                    .find(123)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: elemDefault }));
 
                 const req = httpMock.expectOne({ method: 'GET' });
-                req.flush({id: 123});
+                req.flush(JSON.stringify(returnedFromService));
             });
 
-            it('should propagate not found response', () => {
+            it('should create a ForexratesStockAndSalesUtility', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        id: 0,
+                        rateDate: currentDate.format(DATE_FORMAT)
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign(
+                    {
+                        rateDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .create(new ForexratesStockAndSalesUtility(null))
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
+                const req = httpMock.expectOne({ method: 'POST' });
+                req.flush(JSON.stringify(returnedFromService));
+            });
 
-                service.find(123).subscribe(null, (_error: any) => {
-                    expect(_error.status).toEqual(404);
-                });
+            it('should update a ForexratesStockAndSalesUtility', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        rateDate: currentDate.format(DATE_FORMAT),
+                        straighRate: 1
+                    },
+                    elemDefault
+                );
 
-                const req  = httpMock.expectOne({ method: 'GET' });
-                req.flush('Invalid request parameters', {
-                    status: 404, statusText: 'Bad Request'
-                });
+                const expected = Object.assign(
+                    {
+                        rateDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .update(expected)
+                    .pipe(take(1))
+                    .subscribe(resp => expect(resp).toMatchObject({ body: expected }));
+                const req = httpMock.expectOne({ method: 'PUT' });
+                req.flush(JSON.stringify(returnedFromService));
+            });
 
+            it('should return a list of ForexratesStockAndSalesUtility', async () => {
+                const returnedFromService = Object.assign(
+                    {
+                        rateDate: currentDate.format(DATE_FORMAT),
+                        straighRate: 1
+                    },
+                    elemDefault
+                );
+                const expected = Object.assign(
+                    {
+                        rateDate: currentDate
+                    },
+                    returnedFromService
+                );
+                service
+                    .query(expected)
+                    .pipe(
+                        take(1),
+                        map(resp => resp.body)
+                    )
+                    .subscribe(body => expect(body).toContainEqual(expected));
+                const req = httpMock.expectOne({ method: 'GET' });
+                req.flush(JSON.stringify([returnedFromService]));
+                httpMock.verify();
+            });
+
+            it('should delete a ForexratesStockAndSalesUtility', async () => {
+                const rxPromise = service.delete(123).subscribe(resp => expect(resp.ok));
+
+                const req = httpMock.expectOne({ method: 'DELETE' });
+                req.flush({ status: 200 });
             });
         });
 
         afterEach(() => {
             httpMock.verify();
         });
-
     });
-
 });

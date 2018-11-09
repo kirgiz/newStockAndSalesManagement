@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    CivilityStockAndSalesUtilityService,
-    CivilityStockAndSalesUtilityPopupService,
     CivilityStockAndSalesUtilityComponent,
     CivilityStockAndSalesUtilityDetailComponent,
-    CivilityStockAndSalesUtilityDialogComponent,
-    CivilityStockAndSalesUtilityPopupComponent,
+    CivilityStockAndSalesUtilityUpdateComponent,
     CivilityStockAndSalesUtilityDeletePopupComponent,
     CivilityStockAndSalesUtilityDeleteDialogComponent,
     civilityRoute,
-    civilityPopupRoute,
+    civilityPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...civilityRoute,
-    ...civilityPopupRoute,
-];
+const ENTITY_STATES = [...civilityRoute, ...civilityPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         CivilityStockAndSalesUtilityComponent,
         CivilityStockAndSalesUtilityDetailComponent,
-        CivilityStockAndSalesUtilityDialogComponent,
+        CivilityStockAndSalesUtilityUpdateComponent,
         CivilityStockAndSalesUtilityDeleteDialogComponent,
-        CivilityStockAndSalesUtilityPopupComponent,
-        CivilityStockAndSalesUtilityDeletePopupComponent,
+        CivilityStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         CivilityStockAndSalesUtilityComponent,
-        CivilityStockAndSalesUtilityDialogComponent,
-        CivilityStockAndSalesUtilityPopupComponent,
+        CivilityStockAndSalesUtilityUpdateComponent,
         CivilityStockAndSalesUtilityDeleteDialogComponent,
-        CivilityStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        CivilityStockAndSalesUtilityService,
-        CivilityStockAndSalesUtilityPopupService,
+        CivilityStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

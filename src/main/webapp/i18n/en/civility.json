@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "civility" : {
+        "civility": {
             "home": {
                 "title": "Civilities",
                 "createLabel": "Create a new Civility",

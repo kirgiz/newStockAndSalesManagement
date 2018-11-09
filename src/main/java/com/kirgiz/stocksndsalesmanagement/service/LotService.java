@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.LotDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.LotMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Lot.
@@ -38,6 +40,7 @@ public class LotService {
      */
     public LotDTO save(LotDTO lotDTO) {
         log.debug("Request to save Lot : {}", lotDTO);
+
         Lot lot = lotMapper.toEntity(lotDTO);
         lot = lotRepository.save(lot);
         return lotMapper.toDto(lot);
@@ -56,6 +59,7 @@ public class LotService {
             .map(lotMapper::toDto);
     }
 
+
     /**
      * Get one lot by id.
      *
@@ -63,10 +67,10 @@ public class LotService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public LotDTO findOne(Long id) {
+    public Optional<LotDTO> findOne(Long id) {
         log.debug("Request to get Lot : {}", id);
-        Lot lot = lotRepository.findOne(id);
-        return lotMapper.toDto(lot);
+        return lotRepository.findById(id)
+            .map(lotMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class LotService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Lot : {}", id);
-        lotRepository.delete(id);
+        lotRepository.deleteById(id);
     }
 }

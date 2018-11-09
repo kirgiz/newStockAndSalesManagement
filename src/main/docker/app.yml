@@ -3,6 +3,7 @@ services:
     stockandsalesmanagement-app:
         image: stockandsalesmanagement
         environment:
+            - _JAVA_OPTIONS=-Xmx512m -Xms256m
             - SPRING_PROFILES_ACTIVE=prod,swagger
             - SPRING_DATASOURCE_URL=jdbc:postgresql://stockandsalesmanagement-postgresql:5432/stockAndSalesManagement
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application

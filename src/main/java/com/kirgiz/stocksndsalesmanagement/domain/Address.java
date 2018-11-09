@@ -1,6 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -69,14 +70,16 @@ public class Address implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("addressCategories")
     private Addressclassification addressClassif;
 
     @ManyToOne
+    @JsonIgnoreProperties("addressCountries")
     private Country countryAddress;
 
     @ManyToMany(mappedBy = "addressthirds")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
     private Set<Third> thirdaddresses = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

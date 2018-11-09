@@ -1,84 +1,77 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
-import { JhiDateUtils } from 'ng-jhipster';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IAddressStockAndSalesUtility } from 'app/shared/model/address-stock-and-sales-utility.model';
 
-import { AddressStockAndSalesUtility } from './address-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+type EntityResponseType = HttpResponse<IAddressStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<IAddressStockAndSalesUtility[]>;
 
-export type EntityResponseType = HttpResponse<AddressStockAndSalesUtility>;
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AddressStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/addresses';
 
-    private resourceUrl =  SERVER_API_URL + 'api/addresses';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
-
-    create(address: AddressStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(address);
-        return this.http.post<AddressStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(address: IAddressStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(address);
+        return this.http
+            .post<IAddressStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(address: AddressStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(address);
-        return this.http.put<AddressStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(address: IAddressStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(address);
+        return this.http
+            .put<IAddressStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<AddressStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http
+            .get<IAddressStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<AddressStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<AddressStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<AddressStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<IAddressStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: AddressStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
+    protected convertDateFromClient(address: IAddressStockAndSalesUtility): IAddressStockAndSalesUtility {
+        const copy: IAddressStockAndSalesUtility = Object.assign({}, address, {
+            validFrom: address.validFrom != null && address.validFrom.isValid() ? address.validFrom.format(DATE_FORMAT) : null,
+            validTo: address.validTo != null && address.validTo.isValid() ? address.validTo.format(DATE_FORMAT) : null
+        });
+        return copy;
     }
 
-    private convertArrayResponse(res: HttpResponse<AddressStockAndSalesUtility[]>): HttpResponse<AddressStockAndSalesUtility[]> {
-        const jsonResponse: AddressStockAndSalesUtility[] = res.body;
-        const body: AddressStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.validFrom = res.body.validFrom != null ? moment(res.body.validFrom) : null;
+            res.body.validTo = res.body.validTo != null ? moment(res.body.validTo) : null;
         }
-        return res.clone({body});
+        return res;
     }
 
-    /**
-     * Convert a returned JSON object to AddressStockAndSalesUtility.
-     */
-    private convertItemFromServer(address: AddressStockAndSalesUtility): AddressStockAndSalesUtility {
-        const copy: AddressStockAndSalesUtility = Object.assign({}, address);
-        copy.validFrom = this.dateUtils
-            .convertLocalDateFromServer(address.validFrom);
-        copy.validTo = this.dateUtils
-            .convertLocalDateFromServer(address.validTo);
-        return copy;
-    }
-
-    /**
-     * Convert a AddressStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(address: AddressStockAndSalesUtility): AddressStockAndSalesUtility {
-        const copy: AddressStockAndSalesUtility = Object.assign({}, address);
-        copy.validFrom = this.dateUtils
-            .convertLocalDateToServer(address.validFrom);
-        copy.validTo = this.dateUtils
-            .convertLocalDateToServer(address.validTo);
-        return copy;
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((address: IAddressStockAndSalesUtility) => {
+                address.validFrom = address.validFrom != null ? moment(address.validFrom) : null;
+                address.validTo = address.validTo != null ? moment(address.validTo) : null;
+            });
+        }
+        return res;
     }
 }

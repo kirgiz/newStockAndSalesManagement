@@ -1,55 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
 
-import { ThirdclassificationStockAndSalesUtility } from './thirdclassification-stock-and-sales-utility.model';
-import { ThirdclassificationStockAndSalesUtilityService } from './thirdclassification-stock-and-sales-utility.service';
+import { IThirdclassificationStockAndSalesUtility } from 'app/shared/model/thirdclassification-stock-and-sales-utility.model';
 
 @Component({
     selector: 'jhi-thirdclassification-stock-and-sales-utility-detail',
     templateUrl: './thirdclassification-stock-and-sales-utility-detail.component.html'
 })
-export class ThirdclassificationStockAndSalesUtilityDetailComponent implements OnInit, OnDestroy {
+export class ThirdclassificationStockAndSalesUtilityDetailComponent implements OnInit {
+    thirdclassification: IThirdclassificationStockAndSalesUtility;
 
-    thirdclassification: ThirdclassificationStockAndSalesUtility;
-    private subscription: Subscription;
-    private eventSubscriber: Subscription;
-
-    constructor(
-        private eventManager: JhiEventManager,
-        private thirdclassificationService: ThirdclassificationStockAndSalesUtilityService,
-        private route: ActivatedRoute
-    ) {
-    }
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+        this.activatedRoute.data.subscribe(({ thirdclassification }) => {
+            this.thirdclassification = thirdclassification;
         });
-        this.registerChangeInThirdclassifications();
     }
 
-    load(id) {
-        this.thirdclassificationService.find(id)
-            .subscribe((thirdclassificationResponse: HttpResponse<ThirdclassificationStockAndSalesUtility>) => {
-                this.thirdclassification = thirdclassificationResponse.body;
-            });
-    }
     previousState() {
         window.history.back();
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    registerChangeInThirdclassifications() {
-        this.eventSubscriber = this.eventManager.subscribe(
-            'thirdclassificationListModification',
-            (response) => this.load(this.thirdclassification.id)
-        );
     }
 }

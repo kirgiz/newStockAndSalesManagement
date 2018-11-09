@@ -1,80 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
-import { JhiDateUtils } from 'ng-jhipster';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-stock-and-sales-utility.model';
 
-import { ForexratesStockAndSalesUtility } from './forexrates-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+type EntityResponseType = HttpResponse<IForexratesStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<IForexratesStockAndSalesUtility[]>;
 
-export type EntityResponseType = HttpResponse<ForexratesStockAndSalesUtility>;
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ForexratesStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/forexrates';
 
-    private resourceUrl =  SERVER_API_URL + 'api/forexrates';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
-
-    create(forexrates: ForexratesStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(forexrates);
-        return this.http.post<ForexratesStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(forexrates: IForexratesStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(forexrates);
+        return this.http
+            .post<IForexratesStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(forexrates: ForexratesStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(forexrates);
-        return this.http.put<ForexratesStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(forexrates: IForexratesStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(forexrates);
+        return this.http
+            .put<IForexratesStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<ForexratesStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http
+            .get<IForexratesStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<ForexratesStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<ForexratesStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<ForexratesStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<IForexratesStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: ForexratesStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
+    protected convertDateFromClient(forexrates: IForexratesStockAndSalesUtility): IForexratesStockAndSalesUtility {
+        const copy: IForexratesStockAndSalesUtility = Object.assign({}, forexrates, {
+            rateDate: forexrates.rateDate != null && forexrates.rateDate.isValid() ? forexrates.rateDate.format(DATE_FORMAT) : null
+        });
+        return copy;
     }
 
-    private convertArrayResponse(res: HttpResponse<ForexratesStockAndSalesUtility[]>): HttpResponse<ForexratesStockAndSalesUtility[]> {
-        const jsonResponse: ForexratesStockAndSalesUtility[] = res.body;
-        const body: ForexratesStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.rateDate = res.body.rateDate != null ? moment(res.body.rateDate) : null;
         }
-        return res.clone({body});
+        return res;
     }
 
-    /**
-     * Convert a returned JSON object to ForexratesStockAndSalesUtility.
-     */
-    private convertItemFromServer(forexrates: ForexratesStockAndSalesUtility): ForexratesStockAndSalesUtility {
-        const copy: ForexratesStockAndSalesUtility = Object.assign({}, forexrates);
-        copy.rateDate = this.dateUtils
-            .convertLocalDateFromServer(forexrates.rateDate);
-        return copy;
-    }
-
-    /**
-     * Convert a ForexratesStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(forexrates: ForexratesStockAndSalesUtility): ForexratesStockAndSalesUtility {
-        const copy: ForexratesStockAndSalesUtility = Object.assign({}, forexrates);
-        copy.rateDate = this.dateUtils
-            .convertLocalDateToServer(forexrates.rateDate);
-        return copy;
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((forexrates: IForexratesStockAndSalesUtility) => {
+                forexrates.rateDate = forexrates.rateDate != null ? moment(forexrates.rateDate) : null;
+            });
+        }
+        return res;
     }
 }

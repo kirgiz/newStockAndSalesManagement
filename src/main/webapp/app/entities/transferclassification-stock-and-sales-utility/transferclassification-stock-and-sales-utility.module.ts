@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    TransferclassificationStockAndSalesUtilityService,
-    TransferclassificationStockAndSalesUtilityPopupService,
     TransferclassificationStockAndSalesUtilityComponent,
     TransferclassificationStockAndSalesUtilityDetailComponent,
-    TransferclassificationStockAndSalesUtilityDialogComponent,
-    TransferclassificationStockAndSalesUtilityPopupComponent,
+    TransferclassificationStockAndSalesUtilityUpdateComponent,
     TransferclassificationStockAndSalesUtilityDeletePopupComponent,
     TransferclassificationStockAndSalesUtilityDeleteDialogComponent,
     transferclassificationRoute,
-    transferclassificationPopupRoute,
+    transferclassificationPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...transferclassificationRoute,
-    ...transferclassificationPopupRoute,
-];
+const ENTITY_STATES = [...transferclassificationRoute, ...transferclassificationPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         TransferclassificationStockAndSalesUtilityComponent,
         TransferclassificationStockAndSalesUtilityDetailComponent,
-        TransferclassificationStockAndSalesUtilityDialogComponent,
+        TransferclassificationStockAndSalesUtilityUpdateComponent,
         TransferclassificationStockAndSalesUtilityDeleteDialogComponent,
-        TransferclassificationStockAndSalesUtilityPopupComponent,
-        TransferclassificationStockAndSalesUtilityDeletePopupComponent,
+        TransferclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         TransferclassificationStockAndSalesUtilityComponent,
-        TransferclassificationStockAndSalesUtilityDialogComponent,
-        TransferclassificationStockAndSalesUtilityPopupComponent,
+        TransferclassificationStockAndSalesUtilityUpdateComponent,
         TransferclassificationStockAndSalesUtilityDeleteDialogComponent,
-        TransferclassificationStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        TransferclassificationStockAndSalesUtilityService,
-        TransferclassificationStockAndSalesUtilityPopupService,
+        TransferclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

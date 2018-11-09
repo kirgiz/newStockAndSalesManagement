@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "userAuthorizedThird" : {
+        "userAuthorizedThird": {
             "home": {
                 "title": "UserAuthorizedThirds",
                 "createLabel": "Créer un nouveau User Authorized Third",

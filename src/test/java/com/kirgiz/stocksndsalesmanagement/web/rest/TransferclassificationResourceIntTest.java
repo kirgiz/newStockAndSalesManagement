@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -274,7 +275,7 @@ public class TransferclassificationResourceIntTest {
             .andExpect(jsonPath("$.[*].isInternalTransfer").value(hasItem(DEFAULT_IS_INTERNAL_TRANSFER.booleanValue())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getTransferclassification() throws Exception {
@@ -307,10 +308,11 @@ public class TransferclassificationResourceIntTest {
     public void updateTransferclassification() throws Exception {
         // Initialize the database
         transferclassificationRepository.saveAndFlush(transferclassification);
+
         int databaseSizeBeforeUpdate = transferclassificationRepository.findAll().size();
 
         // Update the transferclassification
-        Transferclassification updatedTransferclassification = transferclassificationRepository.findOne(transferclassification.getId());
+        Transferclassification updatedTransferclassification = transferclassificationRepository.findById(transferclassification.getId()).get();
         // Disconnect from session so that the updates on updatedTransferclassification are not directly saved in db
         em.detach(updatedTransferclassification);
         updatedTransferclassification
@@ -347,15 +349,15 @@ public class TransferclassificationResourceIntTest {
         // Create the Transferclassification
         TransferclassificationDTO transferclassificationDTO = transferclassificationMapper.toDto(transferclassification);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTransferclassificationMockMvc.perform(put("/api/transferclassifications")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(transferclassificationDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Transferclassification in the database
         List<Transferclassification> transferclassificationList = transferclassificationRepository.findAll();
-        assertThat(transferclassificationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(transferclassificationList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -363,6 +365,7 @@ public class TransferclassificationResourceIntTest {
     public void deleteTransferclassification() throws Exception {
         // Initialize the database
         transferclassificationRepository.saveAndFlush(transferclassification);
+
         int databaseSizeBeforeDelete = transferclassificationRepository.findAll().size();
 
         // Get the transferclassification

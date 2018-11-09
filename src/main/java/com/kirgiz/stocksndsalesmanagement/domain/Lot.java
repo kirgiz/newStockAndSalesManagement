@@ -1,6 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -54,16 +55,16 @@ public class Lot implements Serializable {
     private Double unitBuyPrice;
 
     @OneToMany(mappedBy = "lotIdentifier")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Material> materialLots = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("lotBuyCurrencies")
     private Currency buycurrencylot;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("")
     private Materialclassification materialclassification;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

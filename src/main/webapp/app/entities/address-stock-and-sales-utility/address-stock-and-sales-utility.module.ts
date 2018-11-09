@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    AddressStockAndSalesUtilityService,
-    AddressStockAndSalesUtilityPopupService,
     AddressStockAndSalesUtilityComponent,
     AddressStockAndSalesUtilityDetailComponent,
-    AddressStockAndSalesUtilityDialogComponent,
-    AddressStockAndSalesUtilityPopupComponent,
+    AddressStockAndSalesUtilityUpdateComponent,
     AddressStockAndSalesUtilityDeletePopupComponent,
     AddressStockAndSalesUtilityDeleteDialogComponent,
     addressRoute,
-    addressPopupRoute,
+    addressPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...addressRoute,
-    ...addressPopupRoute,
-];
+const ENTITY_STATES = [...addressRoute, ...addressPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         AddressStockAndSalesUtilityComponent,
         AddressStockAndSalesUtilityDetailComponent,
-        AddressStockAndSalesUtilityDialogComponent,
+        AddressStockAndSalesUtilityUpdateComponent,
         AddressStockAndSalesUtilityDeleteDialogComponent,
-        AddressStockAndSalesUtilityPopupComponent,
-        AddressStockAndSalesUtilityDeletePopupComponent,
+        AddressStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         AddressStockAndSalesUtilityComponent,
-        AddressStockAndSalesUtilityDialogComponent,
-        AddressStockAndSalesUtilityPopupComponent,
+        AddressStockAndSalesUtilityUpdateComponent,
         AddressStockAndSalesUtilityDeleteDialogComponent,
-        AddressStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        AddressStockAndSalesUtilityService,
-        AddressStockAndSalesUtilityPopupService,
+        AddressStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

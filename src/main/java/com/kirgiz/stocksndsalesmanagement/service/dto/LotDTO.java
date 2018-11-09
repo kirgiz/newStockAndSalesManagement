@@ -1,11 +1,8 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -140,7 +137,7 @@ public class LotDTO implements Serializable {
         }
 
         LotDTO lotDTO = (LotDTO) o;
-        if(lotDTO.getId() == null || getId() == null) {
+        if (lotDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), lotDTO.getId());
@@ -161,6 +158,10 @@ public class LotDTO implements Serializable {
             ", numberOfItems=" + getNumberOfItems() +
             ", comments='" + getComments() + "'" +
             ", unitBuyPrice=" + getUnitBuyPrice() +
+            ", buycurrencylot=" + getBuycurrencylotId() +
+            ", buycurrencylot='" + getBuycurrencylotIsoCode() + "'" +
+            ", materialclassification=" + getMaterialclassificationId() +
+            ", materialclassification='" + getMaterialclassificationName() + "'" +
             "}";
     }
 }

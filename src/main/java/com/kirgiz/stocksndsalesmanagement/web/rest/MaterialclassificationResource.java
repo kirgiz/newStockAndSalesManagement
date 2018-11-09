@@ -74,7 +74,7 @@ public class MaterialclassificationResource {
     public ResponseEntity<MaterialclassificationDTO> updateMaterialclassification(@Valid @RequestBody MaterialclassificationDTO materialclassificationDTO) throws URISyntaxException {
         log.debug("REST request to update Materialclassification : {}", materialclassificationDTO);
         if (materialclassificationDTO.getId() == null) {
-            return createMaterialclassification(materialclassificationDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         MaterialclassificationDTO result = materialclassificationService.save(materialclassificationDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class MaterialclassificationResource {
         log.debug("REST request to get a page of Materialclassifications");
         Page<MaterialclassificationDTO> page = materialclassificationService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materialclassifications");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class MaterialclassificationResource {
     @Timed
     public ResponseEntity<MaterialclassificationDTO> getMaterialclassification(@PathVariable Long id) {
         log.debug("REST request to get Materialclassification : {}", id);
-        MaterialclassificationDTO materialclassificationDTO = materialclassificationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(materialclassificationDTO));
+        Optional<MaterialclassificationDTO> materialclassificationDTO = materialclassificationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(materialclassificationDTO);
     }
 
     /**

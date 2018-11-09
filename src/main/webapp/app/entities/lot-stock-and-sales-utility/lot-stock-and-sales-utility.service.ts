@@ -1,80 +1,74 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
-import { JhiDateUtils } from 'ng-jhipster';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { ILotStockAndSalesUtility } from 'app/shared/model/lot-stock-and-sales-utility.model';
 
-import { LotStockAndSalesUtility } from './lot-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+type EntityResponseType = HttpResponse<ILotStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<ILotStockAndSalesUtility[]>;
 
-export type EntityResponseType = HttpResponse<LotStockAndSalesUtility>;
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class LotStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/lots';
 
-    private resourceUrl =  SERVER_API_URL + 'api/lots';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
-
-    create(lot: LotStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(lot);
-        return this.http.post<LotStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(lot: ILotStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(lot);
+        return this.http
+            .post<ILotStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(lot: LotStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(lot);
-        return this.http.put<LotStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(lot: ILotStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(lot);
+        return this.http
+            .put<ILotStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<LotStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http
+            .get<ILotStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<LotStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<LotStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<LotStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<ILotStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: LotStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
+    protected convertDateFromClient(lot: ILotStockAndSalesUtility): ILotStockAndSalesUtility {
+        const copy: ILotStockAndSalesUtility = Object.assign({}, lot, {
+            creationDate: lot.creationDate != null && lot.creationDate.isValid() ? lot.creationDate.format(DATE_FORMAT) : null
+        });
+        return copy;
     }
 
-    private convertArrayResponse(res: HttpResponse<LotStockAndSalesUtility[]>): HttpResponse<LotStockAndSalesUtility[]> {
-        const jsonResponse: LotStockAndSalesUtility[] = res.body;
-        const body: LotStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.creationDate = res.body.creationDate != null ? moment(res.body.creationDate) : null;
         }
-        return res.clone({body});
+        return res;
     }
 
-    /**
-     * Convert a returned JSON object to LotStockAndSalesUtility.
-     */
-    private convertItemFromServer(lot: LotStockAndSalesUtility): LotStockAndSalesUtility {
-        const copy: LotStockAndSalesUtility = Object.assign({}, lot);
-        copy.creationDate = this.dateUtils
-            .convertLocalDateFromServer(lot.creationDate);
-        return copy;
-    }
-
-    /**
-     * Convert a LotStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(lot: LotStockAndSalesUtility): LotStockAndSalesUtility {
-        const copy: LotStockAndSalesUtility = Object.assign({}, lot);
-        copy.creationDate = this.dateUtils
-            .convertLocalDateToServer(lot.creationDate);
-        return copy;
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((lot: ILotStockAndSalesUtility) => {
+                lot.creationDate = lot.creationDate != null ? moment(lot.creationDate) : null;
+            });
+        }
+        return res;
     }
 }

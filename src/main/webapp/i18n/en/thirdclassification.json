@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "thirdclassification" : {
+        "thirdclassification": {
             "home": {
                 "title": "Thirdclassifications",
                 "createLabel": "Create a new Thirdclassification",

@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-forexrates-stock-and-sales-utility-heading" jhiTranslate="stockAndSalesManagementApp.forexrates.home.createOrEditLabel">Create or edit a Forexrates</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!forexrates.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="forexrates.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.forexrates.rateDate" for="field_rateDate">Rate Date</label>
+                    <div class="input-group">
+                        <input id="field_rateDate" type="text" class="form-control" name="rateDate" ngbDatepicker  #rateDateDp="ngbDatepicker" [(ngModel)]="forexrates.rateDate"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="rateDateDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.rateDate?.dirty && editForm.controls.rateDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.rateDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.forexrates.straighRate" for="field_straighRate">Straigh Rate</label>
+                    <input type="number" class="form-control" name="straighRate" id="field_straighRate"
+                        [(ngModel)]="forexrates.straighRate" required/>
+                    <div [hidden]="!(editForm.controls.straighRate?.dirty && editForm.controls.straighRate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.straighRate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.straighRate?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.forexrates.rateForCurrency" for="field_rateForCurrency">Rate For Currency</label>
+                    <select class="form-control" id="field_rateForCurrency" name="rateForCurrency" [(ngModel)]="forexrates.rateForCurrencyId"  required>
+                        <option *ngIf="!editForm.value.rateForCurrency" [ngValue]="null" selected></option>
+                        <option [ngValue]="currencyOption.id" *ngFor="let currencyOption of currencies; trackBy: trackCurrencyById">{{currencyOption.isoCode}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.rateForCurrency?.dirty && editForm.controls.rateForCurrency?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.rateForCurrency?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -4,18 +4,22 @@ import { StockAndSalesManagementCompanyStockAndSalesUtilityModule } from './comp
 import { StockAndSalesManagementCountryStockAndSalesUtilityModule } from './country-stock-and-sales-utility/country-stock-and-sales-utility.module';
 import { StockAndSalesManagementCurrencyStockAndSalesUtilityModule } from './currency-stock-and-sales-utility/currency-stock-and-sales-utility.module';
 import { StockAndSalesManagementForexratesStockAndSalesUtilityModule } from './forexrates-stock-and-sales-utility/forexrates-stock-and-sales-utility.module';
+// prettier-ignore
 import {
     StockAndSalesManagementThirdclassificationStockAndSalesUtilityModule
 } from './thirdclassification-stock-and-sales-utility/thirdclassification-stock-and-sales-utility.module';
 import { StockAndSalesManagementThirdStockAndSalesUtilityModule } from './third-stock-and-sales-utility/third-stock-and-sales-utility.module';
+// prettier-ignore
 import {
     StockAndSalesManagementAddressclassificationStockAndSalesUtilityModule
 } from './addressclassification-stock-and-sales-utility/addressclassification-stock-and-sales-utility.module';
 import { StockAndSalesManagementAddressStockAndSalesUtilityModule } from './address-stock-and-sales-utility/address-stock-and-sales-utility.module';
 import { StockAndSalesManagementCivilityStockAndSalesUtilityModule } from './civility-stock-and-sales-utility/civility-stock-and-sales-utility.module';
+// prettier-ignore
 import {
     StockAndSalesManagementTransferclassificationStockAndSalesUtilityModule
 } from './transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.module';
+// prettier-ignore
 import {
     StockAndSalesManagementMaterialclassificationStockAndSalesUtilityModule
 } from './materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.module';
@@ -27,6 +31,7 @@ import { StockAndSalesManagementUserAuthorizedThirdModule } from './user-authori
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
+    // prettier-ignore
     imports: [
         StockAndSalesManagementCompanyStockAndSalesUtilityModule,
         StockAndSalesManagementCountryStockAndSalesUtilityModule,

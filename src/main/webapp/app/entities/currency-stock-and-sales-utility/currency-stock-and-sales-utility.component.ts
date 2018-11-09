@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { CurrencyStockAndSalesUtility } from './currency-stock-and-sales-utility.model';
+import { ICurrencyStockAndSalesUtility } from 'app/shared/model/currency-stock-and-sales-utility.model';
+import { Principal } from 'app/core';
+
+import { ITEMS_PER_PAGE } from 'app/shared';
 import { CurrencyStockAndSalesUtilityService } from './currency-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-currency-stock-and-sales-utility',
     templateUrl: './currency-stock-and-sales-utility.component.html'
 })
 export class CurrencyStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-
-    currencies: CurrencyStockAndSalesUtility[];
+    currencies: ICurrencyStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
@@ -42,14 +43,16 @@ export class CurrencyStockAndSalesUtilityComponent implements OnInit, OnDestroy 
     }
 
     loadAll() {
-        this.currencyService.query({
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse<CurrencyStockAndSalesUtility[]>) => this.onSuccess(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.currencyService
+            .query({
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            })
+            .subscribe(
+                (res: HttpResponse<ICurrencyStockAndSalesUtility[]>) => this.paginateCurrencies(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     reset() {
@@ -62,9 +65,10 @@ export class CurrencyStockAndSalesUtilityComponent implements OnInit, OnDestroy 
         this.page = page;
         this.loadAll();
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInCurrencies();
@@ -74,11 +78,12 @@ export class CurrencyStockAndSalesUtilityComponent implements OnInit, OnDestroy 
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: CurrencyStockAndSalesUtility) {
+    trackId(index: number, item: ICurrencyStockAndSalesUtility) {
         return item.id;
     }
+
     registerChangeInCurrencies() {
-        this.eventSubscriber = this.eventManager.subscribe('currencyListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('currencyListModification', response => this.reset());
     }
 
     sort() {
@@ -89,15 +94,15 @@ export class CurrencyStockAndSalesUtilityComponent implements OnInit, OnDestroy 
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private paginateCurrencies(data: ICurrencyStockAndSalesUtility[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
             this.currencies.push(data[i]);
         }
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

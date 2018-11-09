@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    ForexratesStockAndSalesUtilityService,
-    ForexratesStockAndSalesUtilityPopupService,
     ForexratesStockAndSalesUtilityComponent,
     ForexratesStockAndSalesUtilityDetailComponent,
-    ForexratesStockAndSalesUtilityDialogComponent,
-    ForexratesStockAndSalesUtilityPopupComponent,
+    ForexratesStockAndSalesUtilityUpdateComponent,
     ForexratesStockAndSalesUtilityDeletePopupComponent,
     ForexratesStockAndSalesUtilityDeleteDialogComponent,
     forexratesRoute,
-    forexratesPopupRoute,
+    forexratesPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...forexratesRoute,
-    ...forexratesPopupRoute,
-];
+const ENTITY_STATES = [...forexratesRoute, ...forexratesPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         ForexratesStockAndSalesUtilityComponent,
         ForexratesStockAndSalesUtilityDetailComponent,
-        ForexratesStockAndSalesUtilityDialogComponent,
+        ForexratesStockAndSalesUtilityUpdateComponent,
         ForexratesStockAndSalesUtilityDeleteDialogComponent,
-        ForexratesStockAndSalesUtilityPopupComponent,
-        ForexratesStockAndSalesUtilityDeletePopupComponent,
+        ForexratesStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         ForexratesStockAndSalesUtilityComponent,
-        ForexratesStockAndSalesUtilityDialogComponent,
-        ForexratesStockAndSalesUtilityPopupComponent,
+        ForexratesStockAndSalesUtilityUpdateComponent,
         ForexratesStockAndSalesUtilityDeleteDialogComponent,
-        ForexratesStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        ForexratesStockAndSalesUtilityService,
-        ForexratesStockAndSalesUtilityPopupService,
+        ForexratesStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

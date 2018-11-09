@@ -42,10 +42,8 @@ public class Thirdclassification implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "thirdClassif")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Third> thirdCategories = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -111,20 +112,17 @@ public class MaterialResourceIntTest {
             .comments(DEFAULT_COMMENTS)
             .currentLocation(DEFAULT_CURRENT_LOCATION);
         // Add required entity
-        Materialclassification materialTypeDef = MaterialclassificationResourceIntTest.createEntity(em);
-        em.persist(materialTypeDef);
+        Materialclassification materialclassification = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialclassification);
         em.flush();
-        material.setMaterialTypeDef(materialTypeDef);
+        material.setMaterialTypeDef(materialclassification);
         // Add required entity
-        Lot lotIdentifier = LotResourceIntTest.createEntity(em);
-        em.persist(lotIdentifier);
+        Lot lot = LotResourceIntTest.createEntity(em);
+        em.persist(lot);
         em.flush();
-        material.setLotIdentifier(lotIdentifier);
+        material.setLotIdentifier(lot);
         // Add required entity
-        Materialclassification materialTypeCat = MaterialclassificationResourceIntTest.createEntity(em);
-        em.persist(materialTypeCat);
-        em.flush();
-        material.setMaterialTypeCat(materialTypeCat);
+        material.setMaterialTypeCat(materialclassification);
         return material;
     }
 
@@ -250,7 +248,7 @@ public class MaterialResourceIntTest {
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
             .andExpect(jsonPath("$.[*].currentLocation").value(hasItem(DEFAULT_CURRENT_LOCATION)));
     }
-
+    
     @Test
     @Transactional
     public void getMaterial() throws Exception {
@@ -282,10 +280,11 @@ public class MaterialResourceIntTest {
     public void updateMaterial() throws Exception {
         // Initialize the database
         materialRepository.saveAndFlush(material);
+
         int databaseSizeBeforeUpdate = materialRepository.findAll().size();
 
         // Update the material
-        Material updatedMaterial = materialRepository.findOne(material.getId());
+        Material updatedMaterial = materialRepository.findById(material.getId()).get();
         // Disconnect from session so that the updates on updatedMaterial are not directly saved in db
         em.detach(updatedMaterial);
         updatedMaterial
@@ -320,15 +319,15 @@ public class MaterialResourceIntTest {
         // Create the Material
         MaterialDTO materialDTO = materialMapper.toDto(material);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMaterialMockMvc.perform(put("/api/materials")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(materialDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Material in the database
         List<Material> materialList = materialRepository.findAll();
-        assertThat(materialList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(materialList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -336,6 +335,7 @@ public class MaterialResourceIntTest {
     public void deleteMaterial() throws Exception {
         // Initialize the database
         materialRepository.saveAndFlush(material);
+
         int databaseSizeBeforeDelete = materialRepository.findAll().size();
 
         // Get the material

@@ -1,11 +1,8 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -149,7 +146,7 @@ public class MaterialDTO implements Serializable {
         }
 
         MaterialDTO materialDTO = (MaterialDTO) o;
-        if(materialDTO.getId() == null || getId() == null) {
+        if (materialDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), materialDTO.getId());
@@ -169,6 +166,12 @@ public class MaterialDTO implements Serializable {
             ", creationDate='" + getCreationDate() + "'" +
             ", comments='" + getComments() + "'" +
             ", currentLocation=" + getCurrentLocation() +
+            ", materialTypeDef=" + getMaterialTypeDefId() +
+            ", materialTypeDef='" + getMaterialTypeDefName() + "'" +
+            ", lotIdentifier=" + getLotIdentifierId() +
+            ", lotIdentifier='" + getLotIdentifierCode() + "'" +
+            ", materialTypeCat=" + getMaterialTypeCatId() +
+            ", materialTypeCat='" + getMaterialTypeCatName() + "'" +
             "}";
     }
 }

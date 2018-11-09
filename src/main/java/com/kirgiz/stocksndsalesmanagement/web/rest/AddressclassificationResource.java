@@ -74,7 +74,7 @@ public class AddressclassificationResource {
     public ResponseEntity<AddressclassificationDTO> updateAddressclassification(@Valid @RequestBody AddressclassificationDTO addressclassificationDTO) throws URISyntaxException {
         log.debug("REST request to update Addressclassification : {}", addressclassificationDTO);
         if (addressclassificationDTO.getId() == null) {
-            return createAddressclassification(addressclassificationDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         AddressclassificationDTO result = addressclassificationService.save(addressclassificationDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class AddressclassificationResource {
         log.debug("REST request to get a page of Addressclassifications");
         Page<AddressclassificationDTO> page = addressclassificationService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/addressclassifications");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class AddressclassificationResource {
     @Timed
     public ResponseEntity<AddressclassificationDTO> getAddressclassification(@PathVariable Long id) {
         log.debug("REST request to get Addressclassification : {}", id);
-        AddressclassificationDTO addressclassificationDTO = addressclassificationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(addressclassificationDTO));
+        Optional<AddressclassificationDTO> addressclassificationDTO = addressclassificationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(addressclassificationDTO);
     }
 
     /**

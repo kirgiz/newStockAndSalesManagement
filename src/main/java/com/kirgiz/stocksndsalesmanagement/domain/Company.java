@@ -1,5 +1,6 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,6 +41,7 @@ public class Company implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("companyBaseCurrencies")
     private Currency baseCurrency;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

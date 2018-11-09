@@ -30,6 +30,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -114,10 +115,10 @@ public class LotResourceIntTest {
             .comments(DEFAULT_COMMENTS)
             .unitBuyPrice(DEFAULT_UNIT_BUY_PRICE);
         // Add required entity
-        Currency buycurrencylot = CurrencyResourceIntTest.createEntity(em);
-        em.persist(buycurrencylot);
+        Currency currency = CurrencyResourceIntTest.createEntity(em);
+        em.persist(currency);
         em.flush();
-        lot.setBuycurrencylot(buycurrencylot);
+        lot.setBuycurrencylot(currency);
         // Add required entity
         Materialclassification materialclassification = MaterialclassificationResourceIntTest.createEntity(em);
         em.persist(materialclassification);
@@ -269,7 +270,7 @@ public class LotResourceIntTest {
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
             .andExpect(jsonPath("$.[*].unitBuyPrice").value(hasItem(DEFAULT_UNIT_BUY_PRICE.doubleValue())));
     }
-
+    
     @Test
     @Transactional
     public void getLot() throws Exception {
@@ -302,10 +303,11 @@ public class LotResourceIntTest {
     public void updateLot() throws Exception {
         // Initialize the database
         lotRepository.saveAndFlush(lot);
+
         int databaseSizeBeforeUpdate = lotRepository.findAll().size();
 
         // Update the lot
-        Lot updatedLot = lotRepository.findOne(lot.getId());
+        Lot updatedLot = lotRepository.findById(lot.getId()).get();
         // Disconnect from session so that the updates on updatedLot are not directly saved in db
         em.detach(updatedLot);
         updatedLot
@@ -342,15 +344,15 @@ public class LotResourceIntTest {
         // Create the Lot
         LotDTO lotDTO = lotMapper.toDto(lot);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restLotMockMvc.perform(put("/api/lots")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(lotDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Lot in the database
         List<Lot> lotList = lotRepository.findAll();
-        assertThat(lotList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(lotList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -358,6 +360,7 @@ public class LotResourceIntTest {
     public void deleteLot() throws Exception {
         // Initialize the database
         lotRepository.saveAndFlush(lot);
+
         int databaseSizeBeforeDelete = lotRepository.findAll().size();
 
         // Get the lot

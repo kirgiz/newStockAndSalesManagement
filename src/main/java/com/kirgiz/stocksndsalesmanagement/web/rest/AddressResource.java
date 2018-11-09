@@ -69,7 +69,7 @@ public class AddressResource {
     public ResponseEntity<AddressDTO> updateAddress(@Valid @RequestBody AddressDTO addressDTO) throws URISyntaxException {
         log.debug("REST request to update Address : {}", addressDTO);
         if (addressDTO.getId() == null) {
-            return createAddress(addressDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         AddressDTO result = addressService.save(addressDTO);
         return ResponseEntity.ok()
@@ -87,7 +87,7 @@ public class AddressResource {
     public List<AddressDTO> getAllAddresses() {
         log.debug("REST request to get all Addresses");
         return addressService.findAll();
-        }
+    }
 
     /**
      * GET  /addresses/:id : get the "id" address.
@@ -99,8 +99,8 @@ public class AddressResource {
     @Timed
     public ResponseEntity<AddressDTO> getAddress(@PathVariable Long id) {
         log.debug("REST request to get Address : {}", id);
-        AddressDTO addressDTO = addressService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(addressDTO));
+        Optional<AddressDTO> addressDTO = addressService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(addressDTO);
     }
 
     /**

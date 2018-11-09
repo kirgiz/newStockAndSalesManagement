@@ -1,48 +1,44 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.materialclassification.home.title">Materialclassifications</span>
-        <button class="btn btn-primary float-right jh-create-entity create-materialclassification-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['materialclassification-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-materialclassification-stock-and-sales-utility" [routerLink]="['/materialclassification-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.materialclassification.home.createLabel">
             Create new Materialclassification
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="materialclassifications">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.code">Code</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="name"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.name">Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.comments">Comments</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.name">Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.materialclassification.comments">Comments</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let materialclassification of materialclassifications ;trackBy: trackId">
-                <td><a [routerLink]="['../materialclassification-stock-and-sales-utility', materialclassification.id ]">{{materialclassification.id}}</a></td>
+                <td><a [routerLink]="['/materialclassification-stock-and-sales-utility', materialclassification.id, 'view' ]">{{materialclassification.id}}</a></td>
                 <td>{{materialclassification.code}}</td>
                 <td>{{materialclassification.name}}</td>
                 <td>{{materialclassification.comments}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../materialclassification-stock-and-sales-utility', materialclassification.id ]"
+                                [routerLink]="['/materialclassification-stock-and-sales-utility', materialclassification.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'materialclassification-stock-and-sales-utility/'+ materialclassification.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/materialclassification-stock-and-sales-utility', materialclassification.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -50,7 +46,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

@@ -1,10 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -67,7 +64,7 @@ public class AddressclassificationDTO implements Serializable {
         }
 
         AddressclassificationDTO addressclassificationDTO = (AddressclassificationDTO) o;
-        if(addressclassificationDTO.getId() == null || getId() == null) {
+        if (addressclassificationDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), addressclassificationDTO.getId());

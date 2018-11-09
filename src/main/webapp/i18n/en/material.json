@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "material" : {
+        "material": {
             "home": {
                 "title": "Materials",
                 "createLabel": "Create a new Material",

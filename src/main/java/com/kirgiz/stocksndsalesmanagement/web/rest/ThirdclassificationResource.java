@@ -74,7 +74,7 @@ public class ThirdclassificationResource {
     public ResponseEntity<ThirdclassificationDTO> updateThirdclassification(@Valid @RequestBody ThirdclassificationDTO thirdclassificationDTO) throws URISyntaxException {
         log.debug("REST request to update Thirdclassification : {}", thirdclassificationDTO);
         if (thirdclassificationDTO.getId() == null) {
-            return createThirdclassification(thirdclassificationDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ThirdclassificationDTO result = thirdclassificationService.save(thirdclassificationDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class ThirdclassificationResource {
         log.debug("REST request to get a page of Thirdclassifications");
         Page<ThirdclassificationDTO> page = thirdclassificationService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/thirdclassifications");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class ThirdclassificationResource {
     @Timed
     public ResponseEntity<ThirdclassificationDTO> getThirdclassification(@PathVariable Long id) {
         log.debug("REST request to get Thirdclassification : {}", id);
-        ThirdclassificationDTO thirdclassificationDTO = thirdclassificationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(thirdclassificationDTO));
+        Optional<ThirdclassificationDTO> thirdclassificationDTO = thirdclassificationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(thirdclassificationDTO);
     }
 
     /**

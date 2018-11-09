@@ -42,20 +42,14 @@ public class Materialclassification implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "materialTypeDef")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Material> materialCategories = new HashSet<>();
-
     @OneToMany(mappedBy = "materialTypeCat")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Material> materialCats = new HashSet<>();
-
     @OneToMany(mappedBy = "materialTypeDefDashboard")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Dashboard> materialCategoryDashboards = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

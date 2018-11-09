@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { AddressclassificationStockAndSalesUtility } from './addressclassification-stock-and-sales-utility.model';
+import { IAddressclassificationStockAndSalesUtility } from 'app/shared/model/addressclassification-stock-and-sales-utility.model';
+import { Principal } from 'app/core';
+
+import { ITEMS_PER_PAGE } from 'app/shared';
 import { AddressclassificationStockAndSalesUtilityService } from './addressclassification-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-addressclassification-stock-and-sales-utility',
     templateUrl: './addressclassification-stock-and-sales-utility.component.html'
 })
 export class AddressclassificationStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-
-    addressclassifications: AddressclassificationStockAndSalesUtility[];
+    addressclassifications: IAddressclassificationStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
@@ -42,14 +43,17 @@ export class AddressclassificationStockAndSalesUtilityComponent implements OnIni
     }
 
     loadAll() {
-        this.addressclassificationService.query({
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse<AddressclassificationStockAndSalesUtility[]>) => this.onSuccess(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.addressclassificationService
+            .query({
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            })
+            .subscribe(
+                (res: HttpResponse<IAddressclassificationStockAndSalesUtility[]>) =>
+                    this.paginateAddressclassifications(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     reset() {
@@ -62,9 +66,10 @@ export class AddressclassificationStockAndSalesUtilityComponent implements OnIni
         this.page = page;
         this.loadAll();
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInAddressclassifications();
@@ -74,11 +79,12 @@ export class AddressclassificationStockAndSalesUtilityComponent implements OnIni
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: AddressclassificationStockAndSalesUtility) {
+    trackId(index: number, item: IAddressclassificationStockAndSalesUtility) {
         return item.id;
     }
+
     registerChangeInAddressclassifications() {
-        this.eventSubscriber = this.eventManager.subscribe('addressclassificationListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('addressclassificationListModification', response => this.reset());
     }
 
     sort() {
@@ -89,15 +95,15 @@ export class AddressclassificationStockAndSalesUtilityComponent implements OnIni
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private paginateAddressclassifications(data: IAddressclassificationStockAndSalesUtility[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
             this.addressclassifications.push(data[i]);
         }
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

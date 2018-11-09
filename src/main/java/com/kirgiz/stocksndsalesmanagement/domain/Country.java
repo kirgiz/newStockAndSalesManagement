@@ -38,10 +38,8 @@ public class Country implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "countryAddress")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Address> addressCountries = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

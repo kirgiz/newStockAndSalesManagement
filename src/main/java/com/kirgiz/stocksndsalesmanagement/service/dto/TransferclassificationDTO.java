@@ -1,10 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -100,7 +97,7 @@ public class TransferclassificationDTO implements Serializable {
         }
 
         TransferclassificationDTO transferclassificationDTO = (TransferclassificationDTO) o;
-        if(transferclassificationDTO.getId() == null || getId() == null) {
+        if (transferclassificationDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), transferclassificationDTO.getId());

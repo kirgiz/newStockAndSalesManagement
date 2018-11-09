@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    AddressclassificationStockAndSalesUtilityService,
-    AddressclassificationStockAndSalesUtilityPopupService,
     AddressclassificationStockAndSalesUtilityComponent,
     AddressclassificationStockAndSalesUtilityDetailComponent,
-    AddressclassificationStockAndSalesUtilityDialogComponent,
-    AddressclassificationStockAndSalesUtilityPopupComponent,
+    AddressclassificationStockAndSalesUtilityUpdateComponent,
     AddressclassificationStockAndSalesUtilityDeletePopupComponent,
     AddressclassificationStockAndSalesUtilityDeleteDialogComponent,
     addressclassificationRoute,
-    addressclassificationPopupRoute,
+    addressclassificationPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...addressclassificationRoute,
-    ...addressclassificationPopupRoute,
-];
+const ENTITY_STATES = [...addressclassificationRoute, ...addressclassificationPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         AddressclassificationStockAndSalesUtilityComponent,
         AddressclassificationStockAndSalesUtilityDetailComponent,
-        AddressclassificationStockAndSalesUtilityDialogComponent,
+        AddressclassificationStockAndSalesUtilityUpdateComponent,
         AddressclassificationStockAndSalesUtilityDeleteDialogComponent,
-        AddressclassificationStockAndSalesUtilityPopupComponent,
-        AddressclassificationStockAndSalesUtilityDeletePopupComponent,
+        AddressclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         AddressclassificationStockAndSalesUtilityComponent,
-        AddressclassificationStockAndSalesUtilityDialogComponent,
-        AddressclassificationStockAndSalesUtilityPopupComponent,
+        AddressclassificationStockAndSalesUtilityUpdateComponent,
         AddressclassificationStockAndSalesUtilityDeleteDialogComponent,
-        AddressclassificationStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        AddressclassificationStockAndSalesUtilityService,
-        AddressclassificationStockAndSalesUtilityPopupService,
+        AddressclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

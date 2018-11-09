@@ -1,55 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
 
-import { UserAuthorizedThird } from './user-authorized-third.model';
-import { UserAuthorizedThirdService } from './user-authorized-third.service';
+import { IUserAuthorizedThird } from 'app/shared/model/user-authorized-third.model';
 
 @Component({
     selector: 'jhi-user-authorized-third-detail',
     templateUrl: './user-authorized-third-detail.component.html'
 })
-export class UserAuthorizedThirdDetailComponent implements OnInit, OnDestroy {
+export class UserAuthorizedThirdDetailComponent implements OnInit {
+    userAuthorizedThird: IUserAuthorizedThird;
 
-    userAuthorizedThird: UserAuthorizedThird;
-    private subscription: Subscription;
-    private eventSubscriber: Subscription;
-
-    constructor(
-        private eventManager: JhiEventManager,
-        private userAuthorizedThirdService: UserAuthorizedThirdService,
-        private route: ActivatedRoute
-    ) {
-    }
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+        this.activatedRoute.data.subscribe(({ userAuthorizedThird }) => {
+            this.userAuthorizedThird = userAuthorizedThird;
         });
-        this.registerChangeInUserAuthorizedThirds();
     }
 
-    load(id) {
-        this.userAuthorizedThirdService.find(id)
-            .subscribe((userAuthorizedThirdResponse: HttpResponse<UserAuthorizedThird>) => {
-                this.userAuthorizedThird = userAuthorizedThirdResponse.body;
-            });
-    }
     previousState() {
         window.history.back();
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    registerChangeInUserAuthorizedThirds() {
-        this.eventSubscriber = this.eventManager.subscribe(
-            'userAuthorizedThirdListModification',
-            (response) => this.load(this.userAuthorizedThird.id)
-        );
     }
 }

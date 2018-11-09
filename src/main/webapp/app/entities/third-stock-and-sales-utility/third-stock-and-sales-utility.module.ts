@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    ThirdStockAndSalesUtilityService,
-    ThirdStockAndSalesUtilityPopupService,
     ThirdStockAndSalesUtilityComponent,
     ThirdStockAndSalesUtilityDetailComponent,
-    ThirdStockAndSalesUtilityDialogComponent,
-    ThirdStockAndSalesUtilityPopupComponent,
+    ThirdStockAndSalesUtilityUpdateComponent,
     ThirdStockAndSalesUtilityDeletePopupComponent,
     ThirdStockAndSalesUtilityDeleteDialogComponent,
     thirdRoute,
-    thirdPopupRoute,
+    thirdPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...thirdRoute,
-    ...thirdPopupRoute,
-];
+const ENTITY_STATES = [...thirdRoute, ...thirdPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         ThirdStockAndSalesUtilityComponent,
         ThirdStockAndSalesUtilityDetailComponent,
-        ThirdStockAndSalesUtilityDialogComponent,
+        ThirdStockAndSalesUtilityUpdateComponent,
         ThirdStockAndSalesUtilityDeleteDialogComponent,
-        ThirdStockAndSalesUtilityPopupComponent,
-        ThirdStockAndSalesUtilityDeletePopupComponent,
+        ThirdStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         ThirdStockAndSalesUtilityComponent,
-        ThirdStockAndSalesUtilityDialogComponent,
-        ThirdStockAndSalesUtilityPopupComponent,
+        ThirdStockAndSalesUtilityUpdateComponent,
         ThirdStockAndSalesUtilityDeleteDialogComponent,
-        ThirdStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        ThirdStockAndSalesUtilityService,
-        ThirdStockAndSalesUtilityPopupService,
+        ThirdStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

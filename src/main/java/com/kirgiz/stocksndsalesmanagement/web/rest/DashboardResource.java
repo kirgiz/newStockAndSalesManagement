@@ -69,7 +69,7 @@ public class DashboardResource {
     public ResponseEntity<DashboardDTO> updateDashboard(@Valid @RequestBody DashboardDTO dashboardDTO) throws URISyntaxException {
         log.debug("REST request to update Dashboard : {}", dashboardDTO);
         if (dashboardDTO.getId() == null) {
-            return createDashboard(dashboardDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         DashboardDTO result = dashboardService.save(dashboardDTO);
         return ResponseEntity.ok()
@@ -87,7 +87,7 @@ public class DashboardResource {
     public List<DashboardDTO> getAllDashboards() {
         log.debug("REST request to get all Dashboards");
         return dashboardService.findAll();
-        }
+    }
 
     /**
      * GET  /dashboards/:id : get the "id" dashboard.
@@ -99,8 +99,8 @@ public class DashboardResource {
     @Timed
     public ResponseEntity<DashboardDTO> getDashboard(@PathVariable Long id) {
         log.debug("REST request to get Dashboard : {}", id);
-        DashboardDTO dashboardDTO = dashboardService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(dashboardDTO));
+        Optional<DashboardDTO> dashboardDTO = dashboardService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(dashboardDTO);
     }
 
     /**

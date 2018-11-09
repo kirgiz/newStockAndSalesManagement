@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
-import { MaterialhistoryStockAndSalesUtilityPopupService } from './materialhistory-stock-and-sales-utility-popup.service';
+import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
 
 @Component({
@@ -13,22 +12,20 @@ import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-st
     templateUrl: './materialhistory-stock-and-sales-utility-delete-dialog.component.html'
 })
 export class MaterialhistoryStockAndSalesUtilityDeleteDialogComponent {
-
-    materialhistory: MaterialhistoryStockAndSalesUtility;
+    materialhistory: IMaterialhistoryStockAndSalesUtility;
 
     constructor(
         private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.materialhistoryService.delete(id).subscribe((response) => {
+        this.materialhistoryService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'materialhistoryListModification',
                 content: 'Deleted an materialhistory'
@@ -43,22 +40,33 @@ export class MaterialhistoryStockAndSalesUtilityDeleteDialogComponent {
     template: ''
 })
 export class MaterialhistoryStockAndSalesUtilityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private materialhistoryPopupService: MaterialhistoryStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.materialhistoryPopupService
-                .open(MaterialhistoryStockAndSalesUtilityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ materialhistory }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(MaterialhistoryStockAndSalesUtilityDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.materialhistory = materialhistory;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

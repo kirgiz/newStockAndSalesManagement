@@ -1,74 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
 
-import { CivilityStockAndSalesUtility } from './civility-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { ICivilityStockAndSalesUtility } from 'app/shared/model/civility-stock-and-sales-utility.model';
 
-export type EntityResponseType = HttpResponse<CivilityStockAndSalesUtility>;
+type EntityResponseType = HttpResponse<ICivilityStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<ICivilityStockAndSalesUtility[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CivilityStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/civilities';
 
-    private resourceUrl =  SERVER_API_URL + 'api/civilities';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) { }
-
-    create(civility: CivilityStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(civility);
-        return this.http.post<CivilityStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(civility: ICivilityStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.post<ICivilityStockAndSalesUtility>(this.resourceUrl, civility, { observe: 'response' });
     }
 
-    update(civility: CivilityStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(civility);
-        return this.http.put<CivilityStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(civility: ICivilityStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.put<ICivilityStockAndSalesUtility>(this.resourceUrl, civility, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<CivilityStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.get<ICivilityStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    query(req?: any): Observable<HttpResponse<CivilityStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<CivilityStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<CivilityStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http.get<ICivilityStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
-    }
-
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: CivilityStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
-    }
-
-    private convertArrayResponse(res: HttpResponse<CivilityStockAndSalesUtility[]>): HttpResponse<CivilityStockAndSalesUtility[]> {
-        const jsonResponse: CivilityStockAndSalesUtility[] = res.body;
-        const body: CivilityStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({body});
-    }
-
-    /**
-     * Convert a returned JSON object to CivilityStockAndSalesUtility.
-     */
-    private convertItemFromServer(civility: CivilityStockAndSalesUtility): CivilityStockAndSalesUtility {
-        const copy: CivilityStockAndSalesUtility = Object.assign({}, civility);
-        return copy;
-    }
-
-    /**
-     * Convert a CivilityStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(civility: CivilityStockAndSalesUtility): CivilityStockAndSalesUtility {
-        const copy: CivilityStockAndSalesUtility = Object.assign({}, civility);
-        return copy;
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 }

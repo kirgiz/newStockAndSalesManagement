@@ -1,5 +1,6 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -30,9 +31,11 @@ public class UserAuthorizedThird implements Serializable {
     private Boolean defaultDestination;
 
     @ManyToOne
+    @JsonIgnoreProperties("")
     private User userAuth;
 
     @ManyToOne
+    @JsonIgnoreProperties("")
     private Third thirdAuth;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

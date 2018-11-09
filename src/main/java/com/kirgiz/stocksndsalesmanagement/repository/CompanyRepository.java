@@ -1,13 +1,12 @@
 package com.kirgiz.stocksndsalesmanagement.repository;
 
 import com.kirgiz.stocksndsalesmanagement.domain.Company;
-import org.springframework.stereotype.Repository;
-
 import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
 
 
 /**
- * Spring Data JPA repository for the Company entity.
+ * Spring Data  repository for the Company entity.
  */
 @SuppressWarnings("unused")
 @Repository

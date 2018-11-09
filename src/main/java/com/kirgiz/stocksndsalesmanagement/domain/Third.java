@@ -1,6 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -45,33 +46,29 @@ public class Third implements Serializable {
     private Boolean defaultWarehouse;
 
     @OneToMany(mappedBy = "warehousefrom")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Materialhistory> materialhistoryfroms = new HashSet<>();
-
     @OneToMany(mappedBy = "warehouseto")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Materialhistory> materialhistorytos = new HashSet<>();
-
     @OneToMany(mappedBy = "warehouseOutg")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Dashboard> warehouseOuts = new HashSet<>();
-
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "third_addressthird",
-               joinColumns = @JoinColumn(name="thirds_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="addressthirds_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "thirds_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "addressthirds_id", referencedColumnName = "id"))
     private Set<Address> addressthirds = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("thirdCategories")
     private Thirdclassification thirdClassif;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("thirdCivilities")
     private Civility civilityClassif;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

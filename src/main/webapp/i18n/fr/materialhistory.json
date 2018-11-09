@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "materialhistory" : {
+        "materialhistory": {
             "home": {
                 "title": "Materialhistories",
                 "createLabel": "Créer un nouveau Materialhistory",

@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -199,7 +200,7 @@ public class AddressclassificationResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getAddressclassification() throws Exception {
@@ -229,10 +230,11 @@ public class AddressclassificationResourceIntTest {
     public void updateAddressclassification() throws Exception {
         // Initialize the database
         addressclassificationRepository.saveAndFlush(addressclassification);
+
         int databaseSizeBeforeUpdate = addressclassificationRepository.findAll().size();
 
         // Update the addressclassification
-        Addressclassification updatedAddressclassification = addressclassificationRepository.findOne(addressclassification.getId());
+        Addressclassification updatedAddressclassification = addressclassificationRepository.findById(addressclassification.getId()).get();
         // Disconnect from session so that the updates on updatedAddressclassification are not directly saved in db
         em.detach(updatedAddressclassification);
         updatedAddressclassification
@@ -263,15 +265,15 @@ public class AddressclassificationResourceIntTest {
         // Create the Addressclassification
         AddressclassificationDTO addressclassificationDTO = addressclassificationMapper.toDto(addressclassification);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAddressclassificationMockMvc.perform(put("/api/addressclassifications")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(addressclassificationDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Addressclassification in the database
         List<Addressclassification> addressclassificationList = addressclassificationRepository.findAll();
-        assertThat(addressclassificationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(addressclassificationList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -279,6 +281,7 @@ public class AddressclassificationResourceIntTest {
     public void deleteAddressclassification() throws Exception {
         // Initialize the database
         addressclassificationRepository.saveAndFlush(addressclassification);
+
         int databaseSizeBeforeDelete = addressclassificationRepository.findAll().size();
 
         // Get the addressclassification

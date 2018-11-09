@@ -1,11 +1,8 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -144,7 +141,7 @@ public class DashboardDTO implements Serializable {
         }
 
         DashboardDTO dashboardDTO = (DashboardDTO) o;
-        if(dashboardDTO.getId() == null || getId() == null) {
+        if (dashboardDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), dashboardDTO.getId());
@@ -162,6 +159,14 @@ public class DashboardDTO implements Serializable {
             ", transferDate='" + getTransferDate() + "'" +
             ", profitAndLoss=" + getProfitAndLoss() +
             ", numberOfItems=" + getNumberOfItems() +
+            ", currencyForDashboard=" + getCurrencyForDashboardId() +
+            ", currencyForDashboard='" + getCurrencyForDashboardName() + "'" +
+            ", transferForDashboard=" + getTransferForDashboardId() +
+            ", transferForDashboard='" + getTransferForDashboardName() + "'" +
+            ", warehouseOutg=" + getWarehouseOutgId() +
+            ", warehouseOutg='" + getWarehouseOutgName() + "'" +
+            ", materialTypeDefDashboard=" + getMaterialTypeDefDashboardId() +
+            ", materialTypeDefDashboard='" + getMaterialTypeDefDashboardCode() + "'" +
             "}";
     }
 }

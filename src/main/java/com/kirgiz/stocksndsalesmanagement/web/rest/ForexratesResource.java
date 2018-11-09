@@ -69,7 +69,7 @@ public class ForexratesResource {
     public ResponseEntity<ForexratesDTO> updateForexrates(@Valid @RequestBody ForexratesDTO forexratesDTO) throws URISyntaxException {
         log.debug("REST request to update Forexrates : {}", forexratesDTO);
         if (forexratesDTO.getId() == null) {
-            return createForexrates(forexratesDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ForexratesDTO result = forexratesService.save(forexratesDTO);
         return ResponseEntity.ok()
@@ -87,7 +87,7 @@ public class ForexratesResource {
     public List<ForexratesDTO> getAllForexrates() {
         log.debug("REST request to get all Forexrates");
         return forexratesService.findAll();
-        }
+    }
 
     /**
      * GET  /forexrates/:id : get the "id" forexrates.
@@ -99,8 +99,8 @@ public class ForexratesResource {
     @Timed
     public ResponseEntity<ForexratesDTO> getForexrates(@PathVariable Long id) {
         log.debug("REST request to get Forexrates : {}", id);
-        ForexratesDTO forexratesDTO = forexratesService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(forexratesDTO));
+        Optional<ForexratesDTO> forexratesDTO = forexratesService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(forexratesDTO);
     }
 
     /**

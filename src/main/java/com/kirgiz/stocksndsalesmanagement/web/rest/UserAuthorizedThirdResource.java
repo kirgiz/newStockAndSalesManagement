@@ -78,7 +78,7 @@ public class UserAuthorizedThirdResource {
     public ResponseEntity<UserAuthorizedThirdDTO> updateUserAuthorizedThird(@RequestBody UserAuthorizedThirdDTO userAuthorizedThirdDTO) throws URISyntaxException {
         log.debug("REST request to update UserAuthorizedThird : {}", userAuthorizedThirdDTO);
         if (userAuthorizedThirdDTO.getId() == null) {
-            return createUserAuthorizedThird(userAuthorizedThirdDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         UserAuthorizedThirdDTO result = userAuthorizedThirdService.save(userAuthorizedThirdDTO);
         return ResponseEntity.ok()
@@ -99,7 +99,20 @@ public class UserAuthorizedThirdResource {
         log.debug("REST request to get UserAuthorizedThirds by criteria: {}", criteria);
         Page<UserAuthorizedThirdDTO> page = userAuthorizedThirdQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/user-authorized-thirds");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /user-authorized-thirds/count : count all the userAuthorizedThirds.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/user-authorized-thirds/count")
+    @Timed
+    public ResponseEntity<Long> countUserAuthorizedThirds(UserAuthorizedThirdCriteria criteria) {
+        log.debug("REST request to count UserAuthorizedThirds by criteria: {}", criteria);
+        return ResponseEntity.ok().body(userAuthorizedThirdQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -112,8 +125,8 @@ public class UserAuthorizedThirdResource {
     @Timed
     public ResponseEntity<UserAuthorizedThirdDTO> getUserAuthorizedThird(@PathVariable Long id) {
         log.debug("REST request to get UserAuthorizedThird : {}", id);
-        UserAuthorizedThirdDTO userAuthorizedThirdDTO = userAuthorizedThirdService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(userAuthorizedThirdDTO));
+        Optional<UserAuthorizedThirdDTO> userAuthorizedThirdDTO = userAuthorizedThirdService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(userAuthorizedThirdDTO);
     }
 
     /**

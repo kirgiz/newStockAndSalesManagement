@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.AddressclassificationDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.AddressclassificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Addressclassification.
@@ -38,6 +40,7 @@ public class AddressclassificationService {
      */
     public AddressclassificationDTO save(AddressclassificationDTO addressclassificationDTO) {
         log.debug("Request to save Addressclassification : {}", addressclassificationDTO);
+
         Addressclassification addressclassification = addressclassificationMapper.toEntity(addressclassificationDTO);
         addressclassification = addressclassificationRepository.save(addressclassification);
         return addressclassificationMapper.toDto(addressclassification);
@@ -56,6 +59,7 @@ public class AddressclassificationService {
             .map(addressclassificationMapper::toDto);
     }
 
+
     /**
      * Get one addressclassification by id.
      *
@@ -63,10 +67,10 @@ public class AddressclassificationService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public AddressclassificationDTO findOne(Long id) {
+    public Optional<AddressclassificationDTO> findOne(Long id) {
         log.debug("Request to get Addressclassification : {}", id);
-        Addressclassification addressclassification = addressclassificationRepository.findOne(id);
-        return addressclassificationMapper.toDto(addressclassification);
+        return addressclassificationRepository.findById(id)
+            .map(addressclassificationMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class AddressclassificationService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Addressclassification : {}", id);
-        addressclassificationRepository.delete(id);
+        addressclassificationRepository.deleteById(id);
     }
 }

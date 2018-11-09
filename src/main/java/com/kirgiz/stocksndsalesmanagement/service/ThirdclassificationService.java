@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.ThirdclassificationDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.ThirdclassificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Thirdclassification.
@@ -38,6 +40,7 @@ public class ThirdclassificationService {
      */
     public ThirdclassificationDTO save(ThirdclassificationDTO thirdclassificationDTO) {
         log.debug("Request to save Thirdclassification : {}", thirdclassificationDTO);
+
         Thirdclassification thirdclassification = thirdclassificationMapper.toEntity(thirdclassificationDTO);
         thirdclassification = thirdclassificationRepository.save(thirdclassification);
         return thirdclassificationMapper.toDto(thirdclassification);
@@ -56,6 +59,7 @@ public class ThirdclassificationService {
             .map(thirdclassificationMapper::toDto);
     }
 
+
     /**
      * Get one thirdclassification by id.
      *
@@ -63,10 +67,10 @@ public class ThirdclassificationService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public ThirdclassificationDTO findOne(Long id) {
+    public Optional<ThirdclassificationDTO> findOne(Long id) {
         log.debug("Request to get Thirdclassification : {}", id);
-        Thirdclassification thirdclassification = thirdclassificationRepository.findOne(id);
-        return thirdclassificationMapper.toDto(thirdclassification);
+        return thirdclassificationRepository.findById(id)
+            .map(thirdclassificationMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class ThirdclassificationService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Thirdclassification : {}", id);
-        thirdclassificationRepository.delete(id);
+        thirdclassificationRepository.deleteById(id);
     }
 }

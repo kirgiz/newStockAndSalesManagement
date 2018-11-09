@@ -74,7 +74,7 @@ public class CurrencyResource {
     public ResponseEntity<CurrencyDTO> updateCurrency(@Valid @RequestBody CurrencyDTO currencyDTO) throws URISyntaxException {
         log.debug("REST request to update Currency : {}", currencyDTO);
         if (currencyDTO.getId() == null) {
-            return createCurrency(currencyDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CurrencyDTO result = currencyService.save(currencyDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class CurrencyResource {
         log.debug("REST request to get a page of Currencies");
         Page<CurrencyDTO> page = currencyService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/currencies");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class CurrencyResource {
     @Timed
     public ResponseEntity<CurrencyDTO> getCurrency(@PathVariable Long id) {
         log.debug("REST request to get Currency : {}", id);
-        CurrencyDTO currencyDTO = currencyService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(currencyDTO));
+        Optional<CurrencyDTO> currencyDTO = currencyService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(currencyDTO);
     }
 
     /**

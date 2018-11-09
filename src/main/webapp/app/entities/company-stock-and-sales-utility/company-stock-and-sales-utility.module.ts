@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    CompanyStockAndSalesUtilityService,
-    CompanyStockAndSalesUtilityPopupService,
     CompanyStockAndSalesUtilityComponent,
     CompanyStockAndSalesUtilityDetailComponent,
-    CompanyStockAndSalesUtilityDialogComponent,
-    CompanyStockAndSalesUtilityPopupComponent,
+    CompanyStockAndSalesUtilityUpdateComponent,
     CompanyStockAndSalesUtilityDeletePopupComponent,
     CompanyStockAndSalesUtilityDeleteDialogComponent,
     companyRoute,
-    companyPopupRoute,
+    companyPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...companyRoute,
-    ...companyPopupRoute,
-];
+const ENTITY_STATES = [...companyRoute, ...companyPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         CompanyStockAndSalesUtilityComponent,
         CompanyStockAndSalesUtilityDetailComponent,
-        CompanyStockAndSalesUtilityDialogComponent,
+        CompanyStockAndSalesUtilityUpdateComponent,
         CompanyStockAndSalesUtilityDeleteDialogComponent,
-        CompanyStockAndSalesUtilityPopupComponent,
-        CompanyStockAndSalesUtilityDeletePopupComponent,
+        CompanyStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         CompanyStockAndSalesUtilityComponent,
-        CompanyStockAndSalesUtilityDialogComponent,
-        CompanyStockAndSalesUtilityPopupComponent,
+        CompanyStockAndSalesUtilityUpdateComponent,
         CompanyStockAndSalesUtilityDeleteDialogComponent,
-        CompanyStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        CompanyStockAndSalesUtilityService,
-        CompanyStockAndSalesUtilityPopupService,
+        CompanyStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

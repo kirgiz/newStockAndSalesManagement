@@ -42,10 +42,8 @@ public class Addressclassification implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "addressClassif")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Address> addressCategories = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

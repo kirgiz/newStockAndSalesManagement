@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "currency" : {
+        "currency": {
             "home": {
                 "title": "Currencies",
                 "createLabel": "Créer un nouveau Currency",

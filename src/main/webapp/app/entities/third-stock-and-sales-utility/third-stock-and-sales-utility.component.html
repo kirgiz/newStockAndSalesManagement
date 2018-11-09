@@ -1,16 +1,14 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.third.home.title">Thirds</span>
-        <button class="btn btn-primary float-right jh-create-entity create-third-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['third-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-third-stock-and-sales-utility" [routerLink]="['/third-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.third.home.createLabel">
             Create new Third
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="thirds">
         <table class="table table-striped">
@@ -29,40 +27,38 @@
             </thead>
             <tbody>
             <tr *ngFor="let third of thirds ;trackBy: trackId">
-                <td><a [routerLink]="['../third-stock-and-sales-utility', third.id ]">{{third.id}}</a></td>
+                <td><a [routerLink]="['/third-stock-and-sales-utility', third.id, 'view' ]">{{third.id}}</a></td>
                 <td>{{third.code}}</td>
                 <td>{{third.name}}</td>
                 <td>{{third.comments}}</td>
                 <td>{{third.defaultWarehouse}}</td>
                 <td>
                     <span *ngFor="let addressthird of third.addressthirds; let last = last">
-                            <a class="form-control-static" [routerLink]="['../address-stock-and-sales-utility', addressthird?.id ]">{{addressthird.id}}</a>{{last ? '' : ', '}}
+                            <a class="form-control-static" [routerLink]="['../address-stock-and-sales-utility', addressthird?.id, 'view' ]">{{addressthird.id}}</a>{{last ? '' : ', '}}
                         </span>
                 </td>
                 <td>
                     <div *ngIf="third.thirdClassifId">
-                        <a [routerLink]="['../thirdclassification-stock-and-sales-utility', third.thirdClassifId  ]" >{{third.thirdClassifName}}</a>
+                        <a [routerLink]="['../thirdclassification-stock-and-sales-utility', third.thirdClassifId , 'view' ]" >{{third.thirdClassifName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="third.civilityClassifId">
-                        <a [routerLink]="['../civility-stock-and-sales-utility', third.civilityClassifId  ]" >{{third.civilityClassifName}}</a>
+                        <a [routerLink]="['../civility-stock-and-sales-utility', third.civilityClassifId , 'view' ]" >{{third.civilityClassifName}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../third-stock-and-sales-utility', third.id ]"
+                                [routerLink]="['/third-stock-and-sales-utility', third.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'third-stock-and-sales-utility/'+ third.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/third-stock-and-sales-utility', third.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -70,7 +66,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

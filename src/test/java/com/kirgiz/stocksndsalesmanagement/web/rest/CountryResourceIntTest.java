@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -193,7 +194,7 @@ public class CountryResourceIntTest {
             .andExpect(jsonPath("$.[*].isoCode").value(hasItem(DEFAULT_ISO_CODE.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getCountry() throws Exception {
@@ -222,10 +223,11 @@ public class CountryResourceIntTest {
     public void updateCountry() throws Exception {
         // Initialize the database
         countryRepository.saveAndFlush(country);
+
         int databaseSizeBeforeUpdate = countryRepository.findAll().size();
 
         // Update the country
-        Country updatedCountry = countryRepository.findOne(country.getId());
+        Country updatedCountry = countryRepository.findById(country.getId()).get();
         // Disconnect from session so that the updates on updatedCountry are not directly saved in db
         em.detach(updatedCountry);
         updatedCountry
@@ -254,15 +256,15 @@ public class CountryResourceIntTest {
         // Create the Country
         CountryDTO countryDTO = countryMapper.toDto(country);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCountryMockMvc.perform(put("/api/countries")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(countryDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Country in the database
         List<Country> countryList = countryRepository.findAll();
-        assertThat(countryList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(countryList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -270,6 +272,7 @@ public class CountryResourceIntTest {
     public void deleteCountry() throws Exception {
         // Initialize the database
         countryRepository.saveAndFlush(country);
+
         int databaseSizeBeforeDelete = countryRepository.findAll().size();
 
         // Get the country

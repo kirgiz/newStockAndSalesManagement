@@ -1,40 +1,41 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="userAuthorizedThird">
+            <h2><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.detail.title">User Authorized Third</span> {{userAuthorizedThird.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultThird">Default Third</span></dt>
+                <dd>
+                    <span>{{userAuthorizedThird.defaultThird}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultDestination">Default Destination</span></dt>
+                <dd>
+                    <span>{{userAuthorizedThird.defaultDestination}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.userAuth">User Auth</span></dt>
+                <dd>
+                    {{userAuthorizedThird.userAuthLogin}}
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.thirdAuth">Third Auth</span></dt>
+                <dd>
+                    <div *ngIf="userAuthorizedThird.thirdAuthId">
+                        <a [routerLink]="['/third-stock-and-sales-utility', userAuthorizedThird.thirdAuthId, 'view']">{{userAuthorizedThird.thirdAuthName}}</a>
+                    </div>
+                </dd>
+            </dl>
 
-<div *ngIf="userAuthorizedThird">
-    <h2><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.detail.title">User Authorized Third</span> {{userAuthorizedThird.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultThird">Default Third</span></dt>
-        <dd>
-            <span>{{userAuthorizedThird.defaultThird}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.defaultDestination">Default Destination</span></dt>
-        <dd>
-            <span>{{userAuthorizedThird.defaultDestination}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.userAuth">User Auth</span></dt>
-        <dd>
-            {{userAuthorizedThird.userAuthLogin}}
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.userAuthorizedThird.thirdAuth">Third Auth</span></dt>
-        <dd>
-            <div *ngIf="userAuthorizedThird.thirdAuthId">
-                <a [routerLink]="['/third-stock-and-sales-utility', userAuthorizedThird.thirdAuthId]">{{userAuthorizedThird.thirdAuthName}}</a>
-            </div>
-        </dd>
-    </dl>
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'user-authorized-third/'+ userAuthorizedThird.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <button type="button"
+                    [routerLink]="['/user-authorized-third', userAuthorizedThird.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
 </div>

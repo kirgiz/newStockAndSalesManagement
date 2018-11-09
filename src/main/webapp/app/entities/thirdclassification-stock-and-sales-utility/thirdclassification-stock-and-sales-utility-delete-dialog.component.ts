@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { ThirdclassificationStockAndSalesUtility } from './thirdclassification-stock-and-sales-utility.model';
-import { ThirdclassificationStockAndSalesUtilityPopupService } from './thirdclassification-stock-and-sales-utility-popup.service';
+import { IThirdclassificationStockAndSalesUtility } from 'app/shared/model/thirdclassification-stock-and-sales-utility.model';
 import { ThirdclassificationStockAndSalesUtilityService } from './thirdclassification-stock-and-sales-utility.service';
 
 @Component({
@@ -13,22 +12,20 @@ import { ThirdclassificationStockAndSalesUtilityService } from './thirdclassific
     templateUrl: './thirdclassification-stock-and-sales-utility-delete-dialog.component.html'
 })
 export class ThirdclassificationStockAndSalesUtilityDeleteDialogComponent {
-
-    thirdclassification: ThirdclassificationStockAndSalesUtility;
+    thirdclassification: IThirdclassificationStockAndSalesUtility;
 
     constructor(
         private thirdclassificationService: ThirdclassificationStockAndSalesUtilityService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.thirdclassificationService.delete(id).subscribe((response) => {
+        this.thirdclassificationService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'thirdclassificationListModification',
                 content: 'Deleted an thirdclassification'
@@ -43,22 +40,33 @@ export class ThirdclassificationStockAndSalesUtilityDeleteDialogComponent {
     template: ''
 })
 export class ThirdclassificationStockAndSalesUtilityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private thirdclassificationPopupService: ThirdclassificationStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.thirdclassificationPopupService
-                .open(ThirdclassificationStockAndSalesUtilityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ thirdclassification }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(ThirdclassificationStockAndSalesUtilityDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.thirdclassification = thirdclassification;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

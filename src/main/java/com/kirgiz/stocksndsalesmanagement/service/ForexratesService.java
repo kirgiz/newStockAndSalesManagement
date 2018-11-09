@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.ForexratesDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.ForexratesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,7 @@ public class ForexratesService {
      */
     public ForexratesDTO save(ForexratesDTO forexratesDTO) {
         log.debug("Request to save Forexrates : {}", forexratesDTO);
+
         Forexrates forexrates = forexratesMapper.toEntity(forexratesDTO);
         forexrates = forexratesRepository.save(forexrates);
         return forexratesMapper.toDto(forexrates);
@@ -57,6 +60,7 @@ public class ForexratesService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get one forexrates by id.
      *
@@ -64,10 +68,10 @@ public class ForexratesService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public ForexratesDTO findOne(Long id) {
+    public Optional<ForexratesDTO> findOne(Long id) {
         log.debug("Request to get Forexrates : {}", id);
-        Forexrates forexrates = forexratesRepository.findOne(id);
-        return forexratesMapper.toDto(forexrates);
+        return forexratesRepository.findById(id)
+            .map(forexratesMapper::toDto);
     }
 
     /**
@@ -77,6 +81,6 @@ public class ForexratesService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Forexrates : {}", id);
-        forexratesRepository.delete(id);
+        forexratesRepository.deleteById(id);
     }
 }

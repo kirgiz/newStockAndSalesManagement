@@ -1,16 +1,14 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.dashboard.home.title">Dashboards</span>
-        <button class="btn btn-primary float-right jh-create-entity create-dashboard-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['dashboard-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-dashboard-stock-and-sales-utility" [routerLink]="['/dashboard-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.dashboard.home.createLabel">
             Create new Dashboard
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="dashboards">
         <table class="table table-striped">
@@ -29,44 +27,42 @@
             </thead>
             <tbody>
             <tr *ngFor="let dashboard of dashboards ;trackBy: trackId">
-                <td><a [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]">{{dashboard.id}}</a></td>
+                <td><a [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'view' ]">{{dashboard.id}}</a></td>
                 <td>{{dashboard.transferDate | date:'mediumDate'}}</td>
                 <td>{{dashboard.profitAndLoss}}</td>
                 <td>{{dashboard.numberOfItems}}</td>
                 <td>
                     <div *ngIf="dashboard.currencyForDashboardId">
-                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId  ]" >{{dashboard.currencyForDashboardName}}</a>
+                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId , 'view' ]" >{{dashboard.currencyForDashboardName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dashboard.transferForDashboardId">
-                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId  ]" >{{dashboard.transferForDashboardName}}</a>
+                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId , 'view' ]" >{{dashboard.transferForDashboardName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dashboard.warehouseOutgId">
-                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId  ]" >{{dashboard.warehouseOutgName}}</a>
+                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId , 'view' ]" >{{dashboard.warehouseOutgName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="dashboard.materialTypeDefDashboardId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId  ]" >{{dashboard.materialTypeDefDashboardCode}}</a>
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId , 'view' ]" >{{dashboard.materialTypeDefDashboardCode}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]"
+                                [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'view' ]"
                                 class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
+                            <fa-icon [icon]="'eye'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'dashboard-stock-and-sales-utility/'+ dashboard.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
+                                [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'edit']"
                                 class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
@@ -74,7 +70,7 @@
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
+                            <fa-icon [icon]="'times'"></fa-icon>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                         </button>
                     </div>

@@ -1,36 +1,37 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="forexrates">
+            <h2><span jhiTranslate="stockAndSalesManagementApp.forexrates.detail.title">Forexrates</span> {{forexrates.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.rateDate">Rate Date</span></dt>
+                <dd>
+                    <span>{{forexrates.rateDate}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.straighRate">Straigh Rate</span></dt>
+                <dd>
+                    <span>{{forexrates.straighRate}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.rateForCurrency">Rate For Currency</span></dt>
+                <dd>
+                    <div *ngIf="forexrates.rateForCurrencyId">
+                        <a [routerLink]="['/currency-stock-and-sales-utility', forexrates.rateForCurrencyId, 'view']">{{forexrates.rateForCurrencyIsoCode}}</a>
+                    </div>
+                </dd>
+            </dl>
 
-<div *ngIf="forexrates">
-    <h2><span jhiTranslate="stockAndSalesManagementApp.forexrates.detail.title">Forexrates</span> {{forexrates.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.rateDate">Rate Date</span></dt>
-        <dd>
-            <span>{{forexrates.rateDate | date:'mediumDate'}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.straighRate">Straigh Rate</span></dt>
-        <dd>
-            <span>{{forexrates.straighRate}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.forexrates.rateForCurrency">Rate For Currency</span></dt>
-        <dd>
-            <div *ngIf="forexrates.rateForCurrencyId">
-                <a [routerLink]="['/currency-stock-and-sales-utility', forexrates.rateForCurrencyId]">{{forexrates.rateForCurrencyIsoCode}}</a>
-            </div>
-        </dd>
-    </dl>
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'forexrates-stock-and-sales-utility/'+ forexrates.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <button type="button"
+                    [routerLink]="['/forexrates-stock-and-sales-utility', forexrates.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
 </div>

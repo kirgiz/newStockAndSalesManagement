@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { ThirdclassificationStockAndSalesUtility } from './thirdclassification-stock-and-sales-utility.model';
+import { IThirdclassificationStockAndSalesUtility } from 'app/shared/model/thirdclassification-stock-and-sales-utility.model';
+import { Principal } from 'app/core';
+
+import { ITEMS_PER_PAGE } from 'app/shared';
 import { ThirdclassificationStockAndSalesUtilityService } from './thirdclassification-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-thirdclassification-stock-and-sales-utility',
     templateUrl: './thirdclassification-stock-and-sales-utility.component.html'
 })
 export class ThirdclassificationStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-
-    thirdclassifications: ThirdclassificationStockAndSalesUtility[];
+    thirdclassifications: IThirdclassificationStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
@@ -42,14 +43,16 @@ export class ThirdclassificationStockAndSalesUtilityComponent implements OnInit,
     }
 
     loadAll() {
-        this.thirdclassificationService.query({
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse<ThirdclassificationStockAndSalesUtility[]>) => this.onSuccess(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.thirdclassificationService
+            .query({
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            })
+            .subscribe(
+                (res: HttpResponse<IThirdclassificationStockAndSalesUtility[]>) => this.paginateThirdclassifications(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     reset() {
@@ -62,9 +65,10 @@ export class ThirdclassificationStockAndSalesUtilityComponent implements OnInit,
         this.page = page;
         this.loadAll();
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInThirdclassifications();
@@ -74,11 +78,12 @@ export class ThirdclassificationStockAndSalesUtilityComponent implements OnInit,
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: ThirdclassificationStockAndSalesUtility) {
+    trackId(index: number, item: IThirdclassificationStockAndSalesUtility) {
         return item.id;
     }
+
     registerChangeInThirdclassifications() {
-        this.eventSubscriber = this.eventManager.subscribe('thirdclassificationListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('thirdclassificationListModification', response => this.reset());
     }
 
     sort() {
@@ -89,15 +94,15 @@ export class ThirdclassificationStockAndSalesUtilityComponent implements OnInit,
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private paginateThirdclassifications(data: IThirdclassificationStockAndSalesUtility[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
             this.thirdclassifications.push(data[i]);
         }
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }
