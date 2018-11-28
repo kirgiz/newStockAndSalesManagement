@@ -75,7 +75,7 @@ public class MaterialResource {
     public ResponseEntity<MaterialDTO> updateMaterial(@Valid @RequestBody MaterialDTO materialDTO) throws URISyntaxException {
         log.debug("REST request to update Material : {}", materialDTO);
         if (materialDTO.getId() == null) {
-            return createMaterial(materialDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         MaterialDTO result = materialService.save(materialDTO);
         return ResponseEntity.ok()
@@ -95,7 +95,7 @@ public class MaterialResource {
         log.debug("REST request to get a page of Materials");
         Page<MaterialDTO> page = materialService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materials");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -124,8 +124,8 @@ public class MaterialResource {
     @Timed
     public ResponseEntity<MaterialDTO> getMaterial(@PathVariable Long id) {
         log.debug("REST request to get Material : {}", id);
-        MaterialDTO materialDTO = materialService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(materialDTO));
+        Optional<MaterialDTO> materialDTO = materialService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(materialDTO);
     }
 
     /**

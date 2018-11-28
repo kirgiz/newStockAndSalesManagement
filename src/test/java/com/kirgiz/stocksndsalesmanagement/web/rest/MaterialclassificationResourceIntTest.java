@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -199,7 +200,7 @@ public class MaterialclassificationResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getMaterialclassification() throws Exception {
@@ -229,10 +230,11 @@ public class MaterialclassificationResourceIntTest {
     public void updateMaterialclassification() throws Exception {
         // Initialize the database
         materialclassificationRepository.saveAndFlush(materialclassification);
+
         int databaseSizeBeforeUpdate = materialclassificationRepository.findAll().size();
 
         // Update the materialclassification
-        Materialclassification updatedMaterialclassification = materialclassificationRepository.findOne(materialclassification.getId());
+        Materialclassification updatedMaterialclassification = materialclassificationRepository.findById(materialclassification.getId()).get();
         // Disconnect from session so that the updates on updatedMaterialclassification are not directly saved in db
         em.detach(updatedMaterialclassification);
         updatedMaterialclassification
@@ -263,15 +265,15 @@ public class MaterialclassificationResourceIntTest {
         // Create the Materialclassification
         MaterialclassificationDTO materialclassificationDTO = materialclassificationMapper.toDto(materialclassification);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restMaterialclassificationMockMvc.perform(put("/api/materialclassifications")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(materialclassificationDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Materialclassification in the database
         List<Materialclassification> materialclassificationList = materialclassificationRepository.findAll();
-        assertThat(materialclassificationList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(materialclassificationList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -279,6 +281,7 @@ public class MaterialclassificationResourceIntTest {
     public void deleteMaterialclassification() throws Exception {
         // Initialize the database
         materialclassificationRepository.saveAndFlush(materialclassification);
+
         int databaseSizeBeforeDelete = materialclassificationRepository.findAll().size();
 
         // Get the materialclassification

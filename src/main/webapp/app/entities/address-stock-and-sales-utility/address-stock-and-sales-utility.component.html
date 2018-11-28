@@ -1,19 +1,17 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.address.home.title">Addresses</span>
-        <button class="btn btn-primary float-right jh-create-entity create-address-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['address-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-address-stock-and-sales-utility" [routerLink]="['/address-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.address.home.createLabel">
             Create new Address
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="addresses">
-        <table class="table table-striped">
+        <table class="table table-dark table-striped  table-sm table-hover">
             <thead>
             <tr>
             <th><span jhiTranslate="global.field.id">ID</span></th>
@@ -34,7 +32,7 @@
             </thead>
             <tbody>
             <tr *ngFor="let address of addresses ;trackBy: trackId">
-                <td><a [routerLink]="['../address-stock-and-sales-utility', address.id ]">{{address.id}}</a></td>
+                <td><a [routerLink]="['/address-stock-and-sales-utility', address.id, 'view' ]">{{address.id}}</a></td>
                 <td>{{address.description}}</td>
                 <td>{{address.line1}}</td>
                 <td>{{address.line2}}</td>
@@ -47,37 +45,35 @@
                 <td>{{address.comments}}</td>
                 <td>
                     <div *ngIf="address.addressClassifId">
-                        <a [routerLink]="['../addressclassification-stock-and-sales-utility', address.addressClassifId  ]" >{{address.addressClassifName}}</a>
+                        <a [routerLink]="['../addressclassification-stock-and-sales-utility', address.addressClassifId , 'view' ]" >{{address.addressClassifName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="address.countryAddressId">
-                        <a [routerLink]="['../country-stock-and-sales-utility', address.countryAddressId  ]" >{{address.countryAddressName}}</a>
+                        <a [routerLink]="['../country-stock-and-sales-utility', address.countryAddressId , 'view' ]" >{{address.countryAddressName}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../address-stock-and-sales-utility', address.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                [routerLink]="['/address-stock-and-sales-utility', address.id, 'view' ]"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'address-stock-and-sales-utility/'+ address.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                [routerLink]="['/address-stock-and-sales-utility', address.id, 'edit']"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'address-stock-and-sales-utility/'+ address.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                             <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
                         </button>
                     </div>
                 </td>

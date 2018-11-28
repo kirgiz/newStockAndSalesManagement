@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialclassificationDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.MaterialclassificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Materialclassification.
@@ -38,6 +40,7 @@ public class MaterialclassificationService {
      */
     public MaterialclassificationDTO save(MaterialclassificationDTO materialclassificationDTO) {
         log.debug("Request to save Materialclassification : {}", materialclassificationDTO);
+
         Materialclassification materialclassification = materialclassificationMapper.toEntity(materialclassificationDTO);
         materialclassification = materialclassificationRepository.save(materialclassification);
         return materialclassificationMapper.toDto(materialclassification);
@@ -56,6 +59,7 @@ public class MaterialclassificationService {
             .map(materialclassificationMapper::toDto);
     }
 
+
     /**
      * Get one materialclassification by id.
      *
@@ -63,10 +67,10 @@ public class MaterialclassificationService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public MaterialclassificationDTO findOne(Long id) {
+    public Optional<MaterialclassificationDTO> findOne(Long id) {
         log.debug("Request to get Materialclassification : {}", id);
-        Materialclassification materialclassification = materialclassificationRepository.findOne(id);
-        return materialclassificationMapper.toDto(materialclassification);
+        return materialclassificationRepository.findById(id)
+            .map(materialclassificationMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class MaterialclassificationService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Materialclassification : {}", id);
-        materialclassificationRepository.delete(id);
+        materialclassificationRepository.deleteById(id);
     }
 }

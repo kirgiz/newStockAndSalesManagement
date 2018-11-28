@@ -100,7 +100,8 @@ public class MaterialhistoryResource {
     public ResponseEntity<MaterialhistoryDTO> updateMaterialhistory(@Valid @RequestBody MaterialhistoryDTO materialhistoryDTO,  @AuthenticationPrincipal UserDetails user) throws URISyntaxException {
         log.debug("REST request to update Materialhistory : {}", materialhistoryDTO);
         if (materialhistoryDTO.getId() == null) {
-            return createMaterialhistory(materialhistoryDTO, user);
+          //  return createMaterialhistory(materialhistoryDTO, user);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         materialhistoryDTO.setUserMod(this.userService.getUserIdFromPrincipal(user));
         MaterialhistoryDTO result = materialhistoryService.save(materialhistoryDTO);
@@ -113,15 +114,21 @@ public class MaterialhistoryResource {
      * GET  /materialhistories : get all the materialhistories.
      *
      * @param pageable the pagination information
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of materialhistories in body
      */
     @GetMapping("/materialhistories")
     @Timed
-    public ResponseEntity<List<MaterialhistoryDTO>> getAllMaterialhistories(Pageable pageable) {
+    public ResponseEntity<List<MaterialhistoryDTO>> getAllMaterialhistories(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Materialhistories");
-        Page<MaterialhistoryDTO> page = materialhistoryService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materialhistories");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        Page<MaterialhistoryDTO> page;
+        if (eagerload) {
+            page = materialhistoryService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = materialhistoryService.findAll(pageable);
+        }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, String.format("/api/materialhistories?eagerload=%b", eagerload));
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -134,8 +141,8 @@ public class MaterialhistoryResource {
     @Timed
     public ResponseEntity<MaterialhistoryDTO> getMaterialhistory(@PathVariable Long id) {
         log.debug("REST request to get Materialhistory : {}", id);
-        MaterialhistoryDTO materialhistoryDTO = materialhistoryService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(materialhistoryDTO));
+        Optional<MaterialhistoryDTO> materialhistoryDTO = materialhistoryService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(materialhistoryDTO);
     }
 
     /**

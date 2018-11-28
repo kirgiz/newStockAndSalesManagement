@@ -1,54 +1,40 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
 import { StockAndSalesManagementTestModule } from '../../../test.module';
-import { MaterialStockAndSalesUtilityDetailComponent } from '../../../../../../main/webapp/app/entities/material-stock-and-sales-utility/material-stock-and-sales-utility-detail.component';
-import { MaterialStockAndSalesUtilityService } from '../../../../../../main/webapp/app/entities/material-stock-and-sales-utility/material-stock-and-sales-utility.service';
-import { MaterialStockAndSalesUtility } from '../../../../../../main/webapp/app/entities/material-stock-and-sales-utility/material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtilityDetailComponent } from 'app/entities/material-stock-and-sales-utility/material-stock-and-sales-utility-detail.component';
+import { MaterialStockAndSalesUtility } from 'app/shared/model/material-stock-and-sales-utility.model';
 
 describe('Component Tests', () => {
-
     describe('MaterialStockAndSalesUtility Management Detail Component', () => {
         let comp: MaterialStockAndSalesUtilityDetailComponent;
         let fixture: ComponentFixture<MaterialStockAndSalesUtilityDetailComponent>;
-        let service: MaterialStockAndSalesUtilityService;
+        const route = ({ data: of({ material: new MaterialStockAndSalesUtility(123) }) } as any) as ActivatedRoute;
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 imports: [StockAndSalesManagementTestModule],
                 declarations: [MaterialStockAndSalesUtilityDetailComponent],
-                providers: [
-                    MaterialStockAndSalesUtilityService
-                ]
+                providers: [{ provide: ActivatedRoute, useValue: route }]
             })
-            .overrideTemplate(MaterialStockAndSalesUtilityDetailComponent, '')
-            .compileComponents();
-        }));
-
-        beforeEach(() => {
+                .overrideTemplate(MaterialStockAndSalesUtilityDetailComponent, '')
+                .compileComponents();
             fixture = TestBed.createComponent(MaterialStockAndSalesUtilityDetailComponent);
             comp = fixture.componentInstance;
-            service = fixture.debugElement.injector.get(MaterialStockAndSalesUtilityService);
         });
 
         describe('OnInit', () => {
             it('Should call load all on init', () => {
                 // GIVEN
 
-                spyOn(service, 'find').and.returnValue(Observable.of(new HttpResponse({
-                    body: new MaterialStockAndSalesUtility(123)
-                })));
-
                 // WHEN
                 comp.ngOnInit();
 
                 // THEN
-                expect(service.find).toHaveBeenCalledWith(123);
-                expect(comp.material).toEqual(jasmine.objectContaining({id: 123}));
+                expect(comp.material).toEqual(jasmine.objectContaining({ id: 123 }));
             });
         });
     });
-
 });

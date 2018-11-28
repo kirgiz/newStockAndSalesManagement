@@ -1,10 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -56,7 +53,7 @@ public class CountryDTO implements Serializable {
         }
 
         CountryDTO countryDTO = (CountryDTO) o;
-        if(countryDTO.getId() == null || getId() == null) {
+        if (countryDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), countryDTO.getId());

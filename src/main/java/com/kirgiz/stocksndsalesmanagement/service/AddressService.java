@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.AddressDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.AddressMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,7 @@ public class AddressService {
      */
     public AddressDTO save(AddressDTO addressDTO) {
         log.debug("Request to save Address : {}", addressDTO);
+
         Address address = addressMapper.toEntity(addressDTO);
         address = addressRepository.save(address);
         return addressMapper.toDto(address);
@@ -57,6 +60,7 @@ public class AddressService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get one address by id.
      *
@@ -64,10 +68,10 @@ public class AddressService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public AddressDTO findOne(Long id) {
+    public Optional<AddressDTO> findOne(Long id) {
         log.debug("Request to get Address : {}", id);
-        Address address = addressRepository.findOne(id);
-        return addressMapper.toDto(address);
+        return addressRepository.findById(id)
+            .map(addressMapper::toDto);
     }
 
     /**
@@ -77,6 +81,6 @@ public class AddressService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Address : {}", id);
-        addressRepository.delete(id);
+        addressRepository.deleteById(id);
     }
 }

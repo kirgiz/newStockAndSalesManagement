@@ -74,7 +74,7 @@ public class TransferclassificationResource {
     public ResponseEntity<TransferclassificationDTO> updateTransferclassification(@Valid @RequestBody TransferclassificationDTO transferclassificationDTO) throws URISyntaxException {
         log.debug("REST request to update Transferclassification : {}", transferclassificationDTO);
         if (transferclassificationDTO.getId() == null) {
-            return createTransferclassification(transferclassificationDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         TransferclassificationDTO result = transferclassificationService.save(transferclassificationDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class TransferclassificationResource {
         log.debug("REST request to get a page of Transferclassifications");
         Page<TransferclassificationDTO> page = transferclassificationService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/transferclassifications");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class TransferclassificationResource {
     @Timed
     public ResponseEntity<TransferclassificationDTO> getTransferclassification(@PathVariable Long id) {
         log.debug("REST request to get Transferclassification : {}", id);
-        TransferclassificationDTO transferclassificationDTO = transferclassificationService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(transferclassificationDTO));
+        Optional<TransferclassificationDTO> transferclassificationDTO = transferclassificationService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(transferclassificationDTO);
     }
 
     /**

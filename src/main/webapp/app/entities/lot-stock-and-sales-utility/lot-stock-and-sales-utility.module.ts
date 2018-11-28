@@ -1,50 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    LotStockAndSalesUtilityService,
-    LotStockAndSalesUtilityPopupService,
     LotStockAndSalesUtilityComponent,
     LotStockAndSalesUtilityDetailComponent,
-    LotStockAndSalesUtilityDialogComponent,
-    LotStockAndSalesUtilityPopupComponent,
+    LotStockAndSalesUtilityUpdateComponent,
     LotStockAndSalesUtilityDeletePopupComponent,
     LotStockAndSalesUtilityDeleteDialogComponent,
     lotRoute,
-    lotPopupRoute,
-    LotStockAndSalesUtilityResolvePagingParams,
+    lotPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...lotRoute,
-    ...lotPopupRoute,
-];
+const ENTITY_STATES = [...lotRoute, ...lotPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         LotStockAndSalesUtilityComponent,
         LotStockAndSalesUtilityDetailComponent,
-        LotStockAndSalesUtilityDialogComponent,
+        LotStockAndSalesUtilityUpdateComponent,
         LotStockAndSalesUtilityDeleteDialogComponent,
-        LotStockAndSalesUtilityPopupComponent,
-        LotStockAndSalesUtilityDeletePopupComponent,
+        LotStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         LotStockAndSalesUtilityComponent,
-        LotStockAndSalesUtilityDialogComponent,
-        LotStockAndSalesUtilityPopupComponent,
+        LotStockAndSalesUtilityUpdateComponent,
         LotStockAndSalesUtilityDeleteDialogComponent,
-        LotStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        LotStockAndSalesUtilityService,
-        LotStockAndSalesUtilityPopupService,
-        LotStockAndSalesUtilityResolvePagingParams,
+        LotStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

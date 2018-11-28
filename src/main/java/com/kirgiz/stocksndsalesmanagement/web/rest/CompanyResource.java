@@ -74,7 +74,7 @@ public class CompanyResource {
     public ResponseEntity<CompanyDTO> updateCompany(@Valid @RequestBody CompanyDTO companyDTO) throws URISyntaxException {
         log.debug("REST request to update Company : {}", companyDTO);
         if (companyDTO.getId() == null) {
-            return createCompany(companyDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CompanyDTO result = companyService.save(companyDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class CompanyResource {
         log.debug("REST request to get a page of Companies");
         Page<CompanyDTO> page = companyService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/companies");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class CompanyResource {
     @Timed
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id) {
         log.debug("REST request to get Company : {}", id);
-        CompanyDTO companyDTO = companyService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(companyDTO));
+        Optional<CompanyDTO> companyDTO = companyService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(companyDTO);
     }
 
     /**

@@ -14,9 +14,12 @@ import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -26,11 +29,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
+
 
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -58,8 +64,14 @@ public class ThirdResourceIntTest {
     @Autowired
     private ThirdRepository thirdRepository;
 
+    @Mock
+    private ThirdRepository thirdRepositoryMock;
+
     @Autowired
     private ThirdMapper thirdMapper;
+
+    @Mock
+    private ThirdService thirdServiceMock;
 
     @Autowired
     private ThirdService thirdService;
@@ -104,15 +116,15 @@ public class ThirdResourceIntTest {
             .comments(DEFAULT_COMMENTS)
             .defaultWarehouse(DEFAULT_DEFAULT_WAREHOUSE);
         // Add required entity
-        Thirdclassification thirdClassif = ThirdclassificationResourceIntTest.createEntity(em);
-        em.persist(thirdClassif);
+        Thirdclassification thirdclassification = ThirdclassificationResourceIntTest.createEntity(em);
+        em.persist(thirdclassification);
         em.flush();
-        third.setThirdClassif(thirdClassif);
+        third.setThirdClassif(thirdclassification);
         // Add required entity
-        Civility civilityClassif = CivilityResourceIntTest.createEntity(em);
-        em.persist(civilityClassif);
+        Civility civility = CivilityResourceIntTest.createEntity(em);
+        em.persist(civility);
         em.flush();
-        third.setCivilityClassif(civilityClassif);
+        third.setCivilityClassif(civility);
         return third;
     }
 
@@ -217,6 +229,39 @@ public class ThirdResourceIntTest {
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
             .andExpect(jsonPath("$.[*].defaultWarehouse").value(hasItem(DEFAULT_DEFAULT_WAREHOUSE.booleanValue())));
     }
+    
+    @SuppressWarnings({"unchecked"})
+    public void getAllThirdsWithEagerRelationshipsIsEnabled() throws Exception {
+        ThirdResource thirdResource = new ThirdResource(thirdServiceMock);
+        when(thirdServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restThirdMockMvc = MockMvcBuilders.standaloneSetup(thirdResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restThirdMockMvc.perform(get("/api/thirds?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(thirdServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllThirdsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        ThirdResource thirdResource = new ThirdResource(thirdServiceMock);
+            when(thirdServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restThirdMockMvc = MockMvcBuilders.standaloneSetup(thirdResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restThirdMockMvc.perform(get("/api/thirds?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(thirdServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
 
     @Test
     @Transactional
@@ -248,10 +293,11 @@ public class ThirdResourceIntTest {
     public void updateThird() throws Exception {
         // Initialize the database
         thirdRepository.saveAndFlush(third);
+
         int databaseSizeBeforeUpdate = thirdRepository.findAll().size();
 
         // Update the third
-        Third updatedThird = thirdRepository.findOne(third.getId());
+        Third updatedThird = thirdRepository.findById(third.getId()).get();
         // Disconnect from session so that the updates on updatedThird are not directly saved in db
         em.detach(updatedThird);
         updatedThird
@@ -284,15 +330,15 @@ public class ThirdResourceIntTest {
         // Create the Third
         ThirdDTO thirdDTO = thirdMapper.toDto(third);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restThirdMockMvc.perform(put("/api/thirds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(thirdDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Third in the database
         List<Third> thirdList = thirdRepository.findAll();
-        assertThat(thirdList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(thirdList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -300,6 +346,7 @@ public class ThirdResourceIntTest {
     public void deleteThird() throws Exception {
         // Initialize the database
         thirdRepository.saveAndFlush(third);
+
         int databaseSizeBeforeDelete = thirdRepository.findAll().size();
 
         // Get the third

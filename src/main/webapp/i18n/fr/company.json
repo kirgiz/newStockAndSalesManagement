@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "company" : {
+        "company": {
             "home": {
                 "title": "Companies",
                 "createLabel": "Créer un nouveau Company",

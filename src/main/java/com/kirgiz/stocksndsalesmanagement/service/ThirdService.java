@@ -6,11 +6,15 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.ThirdDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.ThirdMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +43,7 @@ public class ThirdService {
      */
     public ThirdDTO save(ThirdDTO thirdDTO) {
         log.debug("Request to save Third : {}", thirdDTO);
+
         Third third = thirdMapper.toEntity(thirdDTO);
         third = thirdRepository.save(third);
         return thirdMapper.toDto(third);
@@ -58,16 +63,26 @@ public class ThirdService {
     }
 
     /**
+     * Get all the Third with eager load of many-to-many relationships.
+     *
+     * @return the list of entities
+     */
+    public Page<ThirdDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return thirdRepository.findAllWithEagerRelationships(pageable).map(thirdMapper::toDto);
+    }
+    
+
+    /**
      * Get one third by id.
      *
      * @param id the id of the entity
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public ThirdDTO findOne(Long id) {
+    public Optional<ThirdDTO> findOne(Long id) {
         log.debug("Request to get Third : {}", id);
-        Third third = thirdRepository.findOneWithEagerRelationships(id);
-        return thirdMapper.toDto(third);
+        return thirdRepository.findOneWithEagerRelationships(id)
+            .map(thirdMapper::toDto);
     }
 
     /**
@@ -77,6 +92,6 @@ public class ThirdService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Third : {}", id);
-        thirdRepository.delete(id);
+        thirdRepository.deleteById(id);
     }
 }

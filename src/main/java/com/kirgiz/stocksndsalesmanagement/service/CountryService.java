@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.CountryDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.CountryMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Country.
@@ -38,6 +40,7 @@ public class CountryService {
      */
     public CountryDTO save(CountryDTO countryDTO) {
         log.debug("Request to save Country : {}", countryDTO);
+
         Country country = countryMapper.toEntity(countryDTO);
         country = countryRepository.save(country);
         return countryMapper.toDto(country);
@@ -56,6 +59,7 @@ public class CountryService {
             .map(countryMapper::toDto);
     }
 
+
     /**
      * Get one country by id.
      *
@@ -63,10 +67,10 @@ public class CountryService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public CountryDTO findOne(Long id) {
+    public Optional<CountryDTO> findOne(Long id) {
         log.debug("Request to get Country : {}", id);
-        Country country = countryRepository.findOne(id);
-        return countryMapper.toDto(country);
+        return countryRepository.findById(id)
+            .map(countryMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class CountryService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Country : {}", id);
-        countryRepository.delete(id);
+        countryRepository.deleteById(id);
     }
 }

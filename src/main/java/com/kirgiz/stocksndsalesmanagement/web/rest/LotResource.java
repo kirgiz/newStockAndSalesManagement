@@ -74,7 +74,7 @@ public class LotResource {
     public ResponseEntity<LotDTO> updateLot(@Valid @RequestBody LotDTO lotDTO) throws URISyntaxException {
         log.debug("REST request to update Lot : {}", lotDTO);
         if (lotDTO.getId() == null) {
-            return createLot(lotDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         LotDTO result = lotService.save(lotDTO);
         return ResponseEntity.ok()
@@ -94,7 +94,7 @@ public class LotResource {
         log.debug("REST request to get a page of Lots");
         Page<LotDTO> page = lotService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/lots");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -107,8 +107,8 @@ public class LotResource {
     @Timed
     public ResponseEntity<LotDTO> getLot(@PathVariable Long id) {
         log.debug("REST request to get Lot : {}", id);
-        LotDTO lotDTO = lotService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(lotDTO));
+        Optional<LotDTO> lotDTO = lotService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(lotDTO);
     }
 
     /**

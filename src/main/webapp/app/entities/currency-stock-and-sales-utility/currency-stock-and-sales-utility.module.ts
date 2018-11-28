@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    CurrencyStockAndSalesUtilityService,
-    CurrencyStockAndSalesUtilityPopupService,
     CurrencyStockAndSalesUtilityComponent,
     CurrencyStockAndSalesUtilityDetailComponent,
-    CurrencyStockAndSalesUtilityDialogComponent,
-    CurrencyStockAndSalesUtilityPopupComponent,
+    CurrencyStockAndSalesUtilityUpdateComponent,
     CurrencyStockAndSalesUtilityDeletePopupComponent,
     CurrencyStockAndSalesUtilityDeleteDialogComponent,
     currencyRoute,
-    currencyPopupRoute,
+    currencyPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...currencyRoute,
-    ...currencyPopupRoute,
-];
+const ENTITY_STATES = [...currencyRoute, ...currencyPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         CurrencyStockAndSalesUtilityComponent,
         CurrencyStockAndSalesUtilityDetailComponent,
-        CurrencyStockAndSalesUtilityDialogComponent,
+        CurrencyStockAndSalesUtilityUpdateComponent,
         CurrencyStockAndSalesUtilityDeleteDialogComponent,
-        CurrencyStockAndSalesUtilityPopupComponent,
-        CurrencyStockAndSalesUtilityDeletePopupComponent,
+        CurrencyStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         CurrencyStockAndSalesUtilityComponent,
-        CurrencyStockAndSalesUtilityDialogComponent,
-        CurrencyStockAndSalesUtilityPopupComponent,
+        CurrencyStockAndSalesUtilityUpdateComponent,
         CurrencyStockAndSalesUtilityDeleteDialogComponent,
-        CurrencyStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        CurrencyStockAndSalesUtilityService,
-        CurrencyStockAndSalesUtilityPopupService,
+        CurrencyStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

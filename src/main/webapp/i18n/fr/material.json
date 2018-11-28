@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "material" : {
+        "material": {
             "home": {
                 "title": "Articles",
                 "createLabel": "Créer un nouvel article",

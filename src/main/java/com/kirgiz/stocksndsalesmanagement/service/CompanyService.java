@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.CompanyDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.CompanyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Company.
@@ -38,6 +40,7 @@ public class CompanyService {
      */
     public CompanyDTO save(CompanyDTO companyDTO) {
         log.debug("Request to save Company : {}", companyDTO);
+
         Company company = companyMapper.toEntity(companyDTO);
         company = companyRepository.save(company);
         return companyMapper.toDto(company);
@@ -56,6 +59,7 @@ public class CompanyService {
             .map(companyMapper::toDto);
     }
 
+
     /**
      * Get one company by id.
      *
@@ -63,10 +67,10 @@ public class CompanyService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public CompanyDTO findOne(Long id) {
+    public Optional<CompanyDTO> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        Company company = companyRepository.findOne(id);
-        return companyMapper.toDto(company);
+        return companyRepository.findById(id)
+            .map(companyMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class CompanyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);
-        companyRepository.delete(id);
+        companyRepository.deleteById(id);
     }
 }

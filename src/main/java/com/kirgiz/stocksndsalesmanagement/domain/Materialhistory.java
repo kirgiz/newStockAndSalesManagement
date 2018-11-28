@@ -1,5 +1,6 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -47,24 +48,28 @@ public class Materialhistory implements Serializable {
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "materialhistory_item_transfered",
-               joinColumns = @JoinColumn(name="materialhistories_id", referencedColumnName="id"),
-               inverseJoinColumns = @JoinColumn(name="item_transfereds_id", referencedColumnName="id"))
+               joinColumns = @JoinColumn(name = "materialhistories_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "item_transfereds_id", referencedColumnName = "id"))
     private Set<Material> itemTransfereds = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialhistoryCategories")
     private Transferclassification transferClassif;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialhistoryfroms")
     private Third warehousefrom;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialhistorytos")
     private Third warehouseto;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("")
     private Materialclassification materialclassification;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

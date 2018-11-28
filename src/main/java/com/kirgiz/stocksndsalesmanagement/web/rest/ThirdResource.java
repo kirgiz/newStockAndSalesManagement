@@ -69,7 +69,7 @@ public class ThirdResource {
     public ResponseEntity<ThirdDTO> updateThird(@Valid @RequestBody ThirdDTO thirdDTO) throws URISyntaxException {
         log.debug("REST request to update Third : {}", thirdDTO);
         if (thirdDTO.getId() == null) {
-            return createThird(thirdDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         ThirdDTO result = thirdService.save(thirdDTO);
         return ResponseEntity.ok()
@@ -80,14 +80,15 @@ public class ThirdResource {
     /**
      * GET  /thirds : get all the thirds.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many)
      * @return the ResponseEntity with status 200 (OK) and the list of thirds in body
      */
     @GetMapping("/thirds")
     @Timed
-    public List<ThirdDTO> getAllThirds() {
+    public List<ThirdDTO> getAllThirds(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Thirds");
         return thirdService.findAll();
-        }
+    }
 
     /**
      * GET  /thirds/:id : get the "id" third.
@@ -99,8 +100,8 @@ public class ThirdResource {
     @Timed
     public ResponseEntity<ThirdDTO> getThird(@PathVariable Long id) {
         log.debug("REST request to get Third : {}", id);
-        ThirdDTO thirdDTO = thirdService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(thirdDTO));
+        Optional<ThirdDTO> thirdDTO = thirdService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(thirdDTO);
     }
 
     /**

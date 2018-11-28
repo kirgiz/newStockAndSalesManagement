@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { ThirdStockAndSalesUtility } from './third-stock-and-sales-utility.model';
+import { IThirdStockAndSalesUtility } from 'app/shared/model/third-stock-and-sales-utility.model';
+import { Principal } from 'app/core';
 import { ThirdStockAndSalesUtilityService } from './third-stock-and-sales-utility.service';
-import { Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-third-stock-and-sales-utility',
     templateUrl: './third-stock-and-sales-utility.component.html'
 })
 export class ThirdStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-thirds: ThirdStockAndSalesUtility[];
+    thirds: IThirdStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
 
@@ -21,20 +21,20 @@ thirds: ThirdStockAndSalesUtility[];
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private principal: Principal
-    ) {
-    }
+    ) {}
 
     loadAll() {
         this.thirdService.query().subscribe(
-            (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
+            (res: HttpResponse<IThirdStockAndSalesUtility[]>) => {
                 this.thirds = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInThirds();
@@ -44,14 +44,15 @@ thirds: ThirdStockAndSalesUtility[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: ThirdStockAndSalesUtility) {
+    trackId(index: number, item: IThirdStockAndSalesUtility) {
         return item.id;
     }
+
     registerChangeInThirds() {
-        this.eventSubscriber = this.eventManager.subscribe('thirdListModification', (response) => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('thirdListModification', response => this.loadAll());
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

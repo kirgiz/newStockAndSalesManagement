@@ -69,7 +69,7 @@ public class CivilityResource {
     public ResponseEntity<CivilityDTO> updateCivility(@Valid @RequestBody CivilityDTO civilityDTO) throws URISyntaxException {
         log.debug("REST request to update Civility : {}", civilityDTO);
         if (civilityDTO.getId() == null) {
-            return createCivility(civilityDTO);
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         CivilityDTO result = civilityService.save(civilityDTO);
         return ResponseEntity.ok()
@@ -87,7 +87,7 @@ public class CivilityResource {
     public List<CivilityDTO> getAllCivilities() {
         log.debug("REST request to get all Civilities");
         return civilityService.findAll();
-        }
+    }
 
     /**
      * GET  /civilities/:id : get the "id" civility.
@@ -99,8 +99,8 @@ public class CivilityResource {
     @Timed
     public ResponseEntity<CivilityDTO> getCivility(@PathVariable Long id) {
         log.debug("REST request to get Civility : {}", id);
-        CivilityDTO civilityDTO = civilityService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(civilityDTO));
+        Optional<CivilityDTO> civilityDTO = civilityService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(civilityDTO);
     }
 
     /**

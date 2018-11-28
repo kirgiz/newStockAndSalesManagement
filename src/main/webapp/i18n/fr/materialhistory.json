@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "materialhistory" : {
+        "materialhistory": {
             "home": {
                 "title": "Transfers/Ventes/Achats",
                 "createLabel": "Nouveau Transfert",
@@ -25,7 +24,7 @@
             "warehousefrom": "Source",
             "warehouseto": "Destination",
             "transferDate": "Date du Transfert",
-            "userMod":"Utilisateur",
+            "userMod": "Utilisateur",
             "materialclassification": "Type d Article"
         }
     }

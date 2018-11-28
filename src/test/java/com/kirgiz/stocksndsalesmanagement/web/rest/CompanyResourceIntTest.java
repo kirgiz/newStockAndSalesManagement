@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -99,10 +100,10 @@ public class CompanyResourceIntTest {
             .name(DEFAULT_NAME)
             .comments(DEFAULT_COMMENTS);
         // Add required entity
-        Currency baseCurrency = CurrencyResourceIntTest.createEntity(em);
-        em.persist(baseCurrency);
+        Currency currency = CurrencyResourceIntTest.createEntity(em);
+        em.persist(currency);
         em.flush();
-        company.setBaseCurrency(baseCurrency);
+        company.setBaseCurrency(currency);
         return company;
     }
 
@@ -205,7 +206,7 @@ public class CompanyResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getCompany() throws Exception {
@@ -235,10 +236,11 @@ public class CompanyResourceIntTest {
     public void updateCompany() throws Exception {
         // Initialize the database
         companyRepository.saveAndFlush(company);
+
         int databaseSizeBeforeUpdate = companyRepository.findAll().size();
 
         // Update the company
-        Company updatedCompany = companyRepository.findOne(company.getId());
+        Company updatedCompany = companyRepository.findById(company.getId()).get();
         // Disconnect from session so that the updates on updatedCompany are not directly saved in db
         em.detach(updatedCompany);
         updatedCompany
@@ -269,15 +271,15 @@ public class CompanyResourceIntTest {
         // Create the Company
         CompanyDTO companyDTO = companyMapper.toDto(company);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCompanyMockMvc.perform(put("/api/companies")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(companyDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Company in the database
         List<Company> companyList = companyRepository.findAll();
-        assertThat(companyList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(companyList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -285,6 +287,7 @@ public class CompanyResourceIntTest {
     public void deleteCompany() throws Exception {
         // Initialize the database
         companyRepository.saveAndFlush(company);
+
         int databaseSizeBeforeDelete = companyRepository.findAll().size();
 
         // Get the company

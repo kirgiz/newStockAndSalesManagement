@@ -1,5 +1,6 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -48,14 +49,17 @@ public class Material implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialCategories")
     private Materialclassification materialTypeDef;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialLots")
     private Lot lotIdentifier;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialCats")
     private Materialclassification materialTypeCat;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

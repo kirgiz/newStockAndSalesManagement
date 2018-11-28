@@ -1,11 +1,8 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
-
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -182,7 +179,7 @@ public class AddressDTO implements Serializable {
         }
 
         AddressDTO addressDTO = (AddressDTO) o;
-        if(addressDTO.getId() == null || getId() == null) {
+        if (addressDTO.getId() == null || getId() == null) {
             return false;
         }
         return Objects.equals(getId(), addressDTO.getId());
@@ -207,6 +204,10 @@ public class AddressDTO implements Serializable {
             ", validFrom='" + getValidFrom() + "'" +
             ", validTo='" + getValidTo() + "'" +
             ", comments='" + getComments() + "'" +
+            ", addressClassif=" + getAddressClassifId() +
+            ", addressClassif='" + getAddressClassifName() + "'" +
+            ", countryAddress=" + getCountryAddressId() +
+            ", countryAddress='" + getCountryAddressName() + "'" +
             "}";
     }
 }

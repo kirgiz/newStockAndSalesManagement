@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    MaterialclassificationStockAndSalesUtilityService,
-    MaterialclassificationStockAndSalesUtilityPopupService,
     MaterialclassificationStockAndSalesUtilityComponent,
     MaterialclassificationStockAndSalesUtilityDetailComponent,
-    MaterialclassificationStockAndSalesUtilityDialogComponent,
-    MaterialclassificationStockAndSalesUtilityPopupComponent,
+    MaterialclassificationStockAndSalesUtilityUpdateComponent,
     MaterialclassificationStockAndSalesUtilityDeletePopupComponent,
     MaterialclassificationStockAndSalesUtilityDeleteDialogComponent,
     materialclassificationRoute,
-    materialclassificationPopupRoute,
+    materialclassificationPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...materialclassificationRoute,
-    ...materialclassificationPopupRoute,
-];
+const ENTITY_STATES = [...materialclassificationRoute, ...materialclassificationPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         MaterialclassificationStockAndSalesUtilityComponent,
         MaterialclassificationStockAndSalesUtilityDetailComponent,
-        MaterialclassificationStockAndSalesUtilityDialogComponent,
+        MaterialclassificationStockAndSalesUtilityUpdateComponent,
         MaterialclassificationStockAndSalesUtilityDeleteDialogComponent,
-        MaterialclassificationStockAndSalesUtilityPopupComponent,
-        MaterialclassificationStockAndSalesUtilityDeletePopupComponent,
+        MaterialclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         MaterialclassificationStockAndSalesUtilityComponent,
-        MaterialclassificationStockAndSalesUtilityDialogComponent,
-        MaterialclassificationStockAndSalesUtilityPopupComponent,
+        MaterialclassificationStockAndSalesUtilityUpdateComponent,
         MaterialclassificationStockAndSalesUtilityDeleteDialogComponent,
-        MaterialclassificationStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        MaterialclassificationStockAndSalesUtilityService,
-        MaterialclassificationStockAndSalesUtilityPopupService,
+        MaterialclassificationStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "forexrates" : {
+        "forexrates": {
             "home": {
                 "title": "Forexrates",
                 "createLabel": "Create a new Forexrates",

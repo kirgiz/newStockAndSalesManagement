@@ -4,7 +4,7 @@
       "packageName": "com.kirgiz.stocksndsalesmanagement",
       "nativeLanguage": "fr"
     },
-    "jhipsterVersion": "4.14.0",
+    "jhipsterVersion": "5.6.1",
     "baseName": "stockAndSalesManagement",
     "packageName": "com.kirgiz.stocksndsalesmanagement",
     "packageFolder": "com/kirgiz/stocksndsalesmanagement",
@@ -22,7 +22,7 @@
     "buildTool": "maven",
     "enableSocialSignIn": false,
     "enableSwaggerCodegen": false,
-    "jwtSecretKey": "acf9b7ec03808656b13d83e88b5bec4b4cadc558",
+    "jwtSecretKey": "YXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym5hemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiFhemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiFhemVydHl1aW9wcXNkZmdoamtsbXd4Y3ZibmF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuLDs6IWF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuLDs6IWF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym4sOzohYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym4sOzohYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym5hemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiFhemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiFhemVydHl1aW9wcXNkZmdoamtsbXd4Y3ZibmF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuLDs6IWF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuLDs6IWF6ZXJ0eXVpb3Bxc2RmZ2hqa2xtd3hjdmJuYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym4sOzohYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym4sOzohYXplcnR5dWlvcHFzZGZnaGprbG13eGN2Ym5hemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiFhemVydHl1aW9wcXNkZmdoamtsbXd4Y3Zibiw7OiE=",
     "clientFramework": "angularX",
     "useSass": true,
     "clientPackageManager": "yarn",

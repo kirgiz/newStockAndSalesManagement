@@ -32,6 +32,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -104,25 +105,25 @@ public class DashboardResourceIntTest {
             .profitAndLoss(DEFAULT_PROFIT_AND_LOSS)
             .numberOfItems(DEFAULT_NUMBER_OF_ITEMS);
         // Add required entity
-        Currency currencyForDashboard = CurrencyResourceIntTest.createEntity(em);
-        em.persist(currencyForDashboard);
+        Currency currency = CurrencyResourceIntTest.createEntity(em);
+        em.persist(currency);
         em.flush();
-        dashboard.setCurrencyForDashboard(currencyForDashboard);
+        dashboard.setCurrencyForDashboard(currency);
         // Add required entity
-        Transferclassification transferForDashboard = TransferclassificationResourceIntTest.createEntity(em);
-        em.persist(transferForDashboard);
+        Transferclassification transferclassification = TransferclassificationResourceIntTest.createEntity(em);
+        em.persist(transferclassification);
         em.flush();
-        dashboard.setTransferForDashboard(transferForDashboard);
+        dashboard.setTransferForDashboard(transferclassification);
         // Add required entity
-        Third warehouseOutg = ThirdResourceIntTest.createEntity(em);
-        em.persist(warehouseOutg);
+        Third third = ThirdResourceIntTest.createEntity(em);
+        em.persist(third);
         em.flush();
-        dashboard.setWarehouseOutg(warehouseOutg);
+        dashboard.setWarehouseOutg(third);
         // Add required entity
-        Materialclassification materialTypeDefDashboard = MaterialclassificationResourceIntTest.createEntity(em);
-        em.persist(materialTypeDefDashboard);
+        Materialclassification materialclassification = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialclassification);
         em.flush();
-        dashboard.setMaterialTypeDefDashboard(materialTypeDefDashboard);
+        dashboard.setMaterialTypeDefDashboard(materialclassification);
         return dashboard;
     }
 
@@ -206,7 +207,7 @@ public class DashboardResourceIntTest {
             .andExpect(jsonPath("$.[*].profitAndLoss").value(hasItem(DEFAULT_PROFIT_AND_LOSS.doubleValue())))
             .andExpect(jsonPath("$.[*].numberOfItems").value(hasItem(DEFAULT_NUMBER_OF_ITEMS.intValue())));
     }
-
+    
     @Test
     @Transactional
     public void getDashboard() throws Exception {
@@ -236,10 +237,11 @@ public class DashboardResourceIntTest {
     public void updateDashboard() throws Exception {
         // Initialize the database
         dashboardRepository.saveAndFlush(dashboard);
+
         int databaseSizeBeforeUpdate = dashboardRepository.findAll().size();
 
         // Update the dashboard
-        Dashboard updatedDashboard = dashboardRepository.findOne(dashboard.getId());
+        Dashboard updatedDashboard = dashboardRepository.findById(dashboard.getId()).get();
         // Disconnect from session so that the updates on updatedDashboard are not directly saved in db
         em.detach(updatedDashboard);
         updatedDashboard
@@ -270,15 +272,15 @@ public class DashboardResourceIntTest {
         // Create the Dashboard
         DashboardDTO dashboardDTO = dashboardMapper.toDto(dashboard);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restDashboardMockMvc.perform(put("/api/dashboards")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(dashboardDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Dashboard in the database
         List<Dashboard> dashboardList = dashboardRepository.findAll();
-        assertThat(dashboardList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(dashboardList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -286,6 +288,7 @@ public class DashboardResourceIntTest {
     public void deleteDashboard() throws Exception {
         // Initialize the database
         dashboardRepository.saveAndFlush(dashboard);
+
         int databaseSizeBeforeDelete = dashboardRepository.findAll().size();
 
         // Get the dashboard

@@ -1,5 +1,6 @@
 package com.kirgiz.stocksndsalesmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -37,18 +38,22 @@ public class Dashboard implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("currencyDashboards")
     private Currency currencyForDashboard;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("transferDashboards")
     private Transferclassification transferForDashboard;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("warehouseOuts")
     private Third warehouseOutg;
 
     @ManyToOne(optional = false)
     @NotNull
+    @JsonIgnoreProperties("materialCategoryDashboards")
     private Materialclassification materialTypeDefDashboard;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

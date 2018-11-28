@@ -1,50 +1,34 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
-import { StockAndSalesManagementAdminModule } from '../../admin/admin.module';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
+import { StockAndSalesManagementAdminModule } from 'app/admin/admin.module';
 import {
-    UserAuthorizedThirdService,
-    UserAuthorizedThirdPopupService,
     UserAuthorizedThirdComponent,
     UserAuthorizedThirdDetailComponent,
-    UserAuthorizedThirdDialogComponent,
-    UserAuthorizedThirdPopupComponent,
+    UserAuthorizedThirdUpdateComponent,
     UserAuthorizedThirdDeletePopupComponent,
     UserAuthorizedThirdDeleteDialogComponent,
     userAuthorizedThirdRoute,
-    userAuthorizedThirdPopupRoute,
+    userAuthorizedThirdPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...userAuthorizedThirdRoute,
-    ...userAuthorizedThirdPopupRoute,
-];
+const ENTITY_STATES = [...userAuthorizedThirdRoute, ...userAuthorizedThirdPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        StockAndSalesManagementAdminModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, StockAndSalesManagementAdminModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         UserAuthorizedThirdComponent,
         UserAuthorizedThirdDetailComponent,
-        UserAuthorizedThirdDialogComponent,
+        UserAuthorizedThirdUpdateComponent,
         UserAuthorizedThirdDeleteDialogComponent,
-        UserAuthorizedThirdPopupComponent,
-        UserAuthorizedThirdDeletePopupComponent,
+        UserAuthorizedThirdDeletePopupComponent
     ],
     entryComponents: [
         UserAuthorizedThirdComponent,
-        UserAuthorizedThirdDialogComponent,
-        UserAuthorizedThirdPopupComponent,
+        UserAuthorizedThirdUpdateComponent,
         UserAuthorizedThirdDeleteDialogComponent,
-        UserAuthorizedThirdDeletePopupComponent,
-    ],
-    providers: [
-        UserAuthorizedThirdService,
-        UserAuthorizedThirdPopupService,
+        UserAuthorizedThirdDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -54,15 +54,11 @@ public class Transferclassification implements Serializable {
     private String comments;
 
     @OneToMany(mappedBy = "transferClassif")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Materialhistory> materialhistoryCategories = new HashSet<>();
-
     @OneToMany(mappedBy = "transferForDashboard")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Dashboard> transferDashboards = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

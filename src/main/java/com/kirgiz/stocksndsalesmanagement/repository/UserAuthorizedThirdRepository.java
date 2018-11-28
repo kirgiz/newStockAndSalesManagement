@@ -1,13 +1,13 @@
 package com.kirgiz.stocksndsalesmanagement.repository;
 
 import com.kirgiz.stocksndsalesmanagement.domain.UserAuthorizedThird;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
-import org.springframework.data.jpa.repository.*;
 import java.util.List;
 
 /**
- * Spring Data JPA repository for the UserAuthorizedThird entity.
+ * Spring Data  repository for the UserAuthorizedThird entity.
  */
 @SuppressWarnings("unused")
 @Repository

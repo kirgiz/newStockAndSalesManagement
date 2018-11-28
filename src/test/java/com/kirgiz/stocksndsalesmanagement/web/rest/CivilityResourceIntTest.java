@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -199,7 +200,7 @@ public class CivilityResourceIntTest {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getCivility() throws Exception {
@@ -229,10 +230,11 @@ public class CivilityResourceIntTest {
     public void updateCivility() throws Exception {
         // Initialize the database
         civilityRepository.saveAndFlush(civility);
+
         int databaseSizeBeforeUpdate = civilityRepository.findAll().size();
 
         // Update the civility
-        Civility updatedCivility = civilityRepository.findOne(civility.getId());
+        Civility updatedCivility = civilityRepository.findById(civility.getId()).get();
         // Disconnect from session so that the updates on updatedCivility are not directly saved in db
         em.detach(updatedCivility);
         updatedCivility
@@ -263,15 +265,15 @@ public class CivilityResourceIntTest {
         // Create the Civility
         CivilityDTO civilityDTO = civilityMapper.toDto(civility);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restCivilityMockMvc.perform(put("/api/civilities")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(civilityDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Civility in the database
         List<Civility> civilityList = civilityRepository.findAll();
-        assertThat(civilityList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(civilityList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -279,6 +281,7 @@ public class CivilityResourceIntTest {
     public void deleteCivility() throws Exception {
         // Initialize the database
         civilityRepository.saveAndFlush(civility);
+
         int databaseSizeBeforeDelete = civilityRepository.findAll().size();
 
         // Get the civility

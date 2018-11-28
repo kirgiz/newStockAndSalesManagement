@@ -1,89 +1,92 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+import { DATE_FORMAT } from 'app/shared/constants/input.constants';
+import { map } from 'rxjs/operators';
 
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IMaterialStockAndSalesUtility, MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 import { JhiDateUtils } from 'ng-jhipster';
 
-import { MaterialStockAndSalesUtility } from './material-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+type EntityResponseType = HttpResponse<IMaterialStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<IMaterialStockAndSalesUtility[]>;
 
-export type EntityResponseType = HttpResponse<MaterialStockAndSalesUtility>;
-
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MaterialStockAndSalesUtilityService {
+    private resourceUrl = SERVER_API_URL + 'api/materials';
+    private resourceUrlall = SERVER_API_URL + 'api/allmaterials';
 
-    private resourceUrl =  SERVER_API_URL + 'api/materials';
-    private resourceUrlall =  SERVER_API_URL + 'api/allmaterials';
-    
-
-    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) { }
+    constructor(private http: HttpClient, private dateUtils: JhiDateUtils) {}
 
     create(material: MaterialStockAndSalesUtility): Observable<EntityResponseType> {
         console.log(material.creationDate);
-        const copy = this.convert(material);
-        return this.http.post<MaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        const copy = this.convertDateFromClient(material);
+        return this.http
+            .post<MaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(material: MaterialStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(material);
-        return this.http.put<MaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    /* create(material: IMaterialStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(material);
+        return this.http
+            .post<IMaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+    }*/
+
+    update(material: IMaterialStockAndSalesUtility): Observable<EntityResponseType> {
+        const copy = this.convertDateFromClient(material);
+        return this.http
+            .put<IMaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<MaterialStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http
+            .get<IMaterialStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<MaterialStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<MaterialStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<MaterialStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<IMaterialStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     queryAll(req?: any): Observable<HttpResponse<MaterialStockAndSalesUtility[]>> {
         const options = createRequestOption(req);
-        return this.http.get<MaterialStockAndSalesUtility[]>(this.resourceUrlall, { params: options, observe: 'response' })
-            .map((res: HttpResponse<MaterialStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http
+            .get<MaterialStockAndSalesUtility[]>(this.resourceUrlall, { params: options, observe: 'response' })
+            .pipe(map((res: HttpResponse<MaterialStockAndSalesUtility[]>) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: MaterialStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
+    protected convertDateFromClient(material: IMaterialStockAndSalesUtility): IMaterialStockAndSalesUtility {
+        const copy: IMaterialStockAndSalesUtility = Object.assign({}, material, {
+            creationDate:
+                material.creationDate != null && material.creationDate.isValid() ? material.creationDate.format(DATE_FORMAT) : null
+        });
+        return copy;
     }
 
-    private convertArrayResponse(res: HttpResponse<MaterialStockAndSalesUtility[]>): HttpResponse<MaterialStockAndSalesUtility[]> {
-        const jsonResponse: MaterialStockAndSalesUtility[] = res.body;
-        const body: MaterialStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
+    protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+        if (res.body) {
+            res.body.creationDate = res.body.creationDate != null ? moment(res.body.creationDate) : null;
         }
-        return res.clone({body});
+        return res;
     }
 
-    /**
-     * Convert a returned JSON object to MaterialStockAndSalesUtility.
-     */
-    private convertItemFromServer(material: MaterialStockAndSalesUtility): MaterialStockAndSalesUtility {
-        const copy: MaterialStockAndSalesUtility = Object.assign({}, material);
-        copy.creationDate = this.dateUtils
-            .convertLocalDateFromServer(material.creationDate);
-        return copy;
-    }
-
-    /**
-     * Convert a MaterialStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(material: MaterialStockAndSalesUtility): MaterialStockAndSalesUtility {
-        const copy: MaterialStockAndSalesUtility = Object.assign({}, material);
-        copy.creationDate = this.dateUtils
-            .convertLocalDateToServer(material.creationDate);
-        return copy;
+    protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+        if (res.body) {
+            res.body.forEach((material: IMaterialStockAndSalesUtility) => {
+                material.creationDate = material.creationDate != null ? moment(material.creationDate) : null;
+            });
+        }
+        return res;
     }
 }

@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "third" : {
+        "third": {
             "home": {
                 "title": "Thirds",
                 "createLabel": "Create a new Third",

@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -162,7 +163,7 @@ public class UserAuthorizedThirdResourceIntTest {
             .andExpect(jsonPath("$.[*].defaultThird").value(hasItem(DEFAULT_DEFAULT_THIRD.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultDestination").value(hasItem(DEFAULT_DEFAULT_DESTINATION.booleanValue())));
     }
-
+    
     @Test
     @Transactional
     public void getUserAuthorizedThird() throws Exception {
@@ -303,6 +304,12 @@ public class UserAuthorizedThirdResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userAuthorizedThird.getId().intValue())))
             .andExpect(jsonPath("$.[*].defaultThird").value(hasItem(DEFAULT_DEFAULT_THIRD.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultDestination").value(hasItem(DEFAULT_DEFAULT_DESTINATION.booleanValue())));
+
+        // Check, that the count call also returns 1
+        restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
     }
 
     /**
@@ -314,6 +321,12 @@ public class UserAuthorizedThirdResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restUserAuthorizedThirdMockMvc.perform(get("/api/user-authorized-thirds/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
     }
 
 
@@ -330,10 +343,11 @@ public class UserAuthorizedThirdResourceIntTest {
     public void updateUserAuthorizedThird() throws Exception {
         // Initialize the database
         userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
         int databaseSizeBeforeUpdate = userAuthorizedThirdRepository.findAll().size();
 
         // Update the userAuthorizedThird
-        UserAuthorizedThird updatedUserAuthorizedThird = userAuthorizedThirdRepository.findOne(userAuthorizedThird.getId());
+        UserAuthorizedThird updatedUserAuthorizedThird = userAuthorizedThirdRepository.findById(userAuthorizedThird.getId()).get();
         // Disconnect from session so that the updates on updatedUserAuthorizedThird are not directly saved in db
         em.detach(updatedUserAuthorizedThird);
         updatedUserAuthorizedThird
@@ -362,15 +376,15 @@ public class UserAuthorizedThirdResourceIntTest {
         // Create the UserAuthorizedThird
         UserAuthorizedThirdDTO userAuthorizedThirdDTO = userAuthorizedThirdMapper.toDto(userAuthorizedThird);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restUserAuthorizedThirdMockMvc.perform(put("/api/user-authorized-thirds")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(userAuthorizedThirdDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the UserAuthorizedThird in the database
         List<UserAuthorizedThird> userAuthorizedThirdList = userAuthorizedThirdRepository.findAll();
-        assertThat(userAuthorizedThirdList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(userAuthorizedThirdList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -378,6 +392,7 @@ public class UserAuthorizedThirdResourceIntTest {
     public void deleteUserAuthorizedThird() throws Exception {
         // Initialize the database
         userAuthorizedThirdRepository.saveAndFlush(userAuthorizedThird);
+
         int databaseSizeBeforeDelete = userAuthorizedThirdRepository.findAll().size();
 
         // Get the userAuthorizedThird

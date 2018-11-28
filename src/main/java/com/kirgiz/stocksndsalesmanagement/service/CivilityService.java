@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.CivilityDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.CivilityMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,7 @@ public class CivilityService {
      */
     public CivilityDTO save(CivilityDTO civilityDTO) {
         log.debug("Request to save Civility : {}", civilityDTO);
+
         Civility civility = civilityMapper.toEntity(civilityDTO);
         civility = civilityRepository.save(civility);
         return civilityMapper.toDto(civility);
@@ -57,6 +60,7 @@ public class CivilityService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get one civility by id.
      *
@@ -64,10 +68,10 @@ public class CivilityService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public CivilityDTO findOne(Long id) {
+    public Optional<CivilityDTO> findOne(Long id) {
         log.debug("Request to get Civility : {}", id);
-        Civility civility = civilityRepository.findOne(id);
-        return civilityMapper.toDto(civility);
+        return civilityRepository.findById(id)
+            .map(civilityMapper::toDto);
     }
 
     /**
@@ -77,6 +81,6 @@ public class CivilityService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Civility : {}", id);
-        civilityRepository.delete(id);
+        civilityRepository.deleteById(id);
     }
 }

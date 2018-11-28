@@ -1,76 +1,42 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
+import { Observable } from 'rxjs';
 
-import { MaterialclassificationStockAndSalesUtility } from './materialclassification-stock-and-sales-utility.model';
-import { createRequestOption } from '../../shared';
+import { SERVER_API_URL } from 'app/app.constants';
+import { createRequestOption } from 'app/shared';
+import { IMaterialclassificationStockAndSalesUtility } from 'app/shared/model/materialclassification-stock-and-sales-utility.model';
 
-export type EntityResponseType = HttpResponse<MaterialclassificationStockAndSalesUtility>;
+type EntityResponseType = HttpResponse<IMaterialclassificationStockAndSalesUtility>;
+type EntityArrayResponseType = HttpResponse<IMaterialclassificationStockAndSalesUtility[]>;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MaterialclassificationStockAndSalesUtilityService {
+    public resourceUrl = SERVER_API_URL + 'api/materialclassifications';
 
-    private resourceUrl =  SERVER_API_URL + 'api/materialclassifications';
+    constructor(private http: HttpClient) {}
 
-    constructor(private http: HttpClient) { }
-
-    create(materialclassification: MaterialclassificationStockAndSalesUtility):
-        Observable<EntityResponseType> {
-        const copy = this.convert(materialclassification);
-        return this.http.post<MaterialclassificationStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    create(materialclassification: IMaterialclassificationStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.post<IMaterialclassificationStockAndSalesUtility>(this.resourceUrl, materialclassification, {
+            observe: 'response'
+        });
     }
 
-    update(materialclassification: MaterialclassificationStockAndSalesUtility):
-        Observable<EntityResponseType> {
-        const copy = this.convert(materialclassification);
-        return this.http.put<MaterialclassificationStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .map((res: EntityResponseType) => this.convertResponse(res));
+    update(materialclassification: IMaterialclassificationStockAndSalesUtility): Observable<EntityResponseType> {
+        return this.http.put<IMaterialclassificationStockAndSalesUtility>(this.resourceUrl, materialclassification, {
+            observe: 'response'
+        });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<MaterialclassificationStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response'})
-            .map((res: EntityResponseType) => this.convertResponse(res));
+        return this.http.get<IMaterialclassificationStockAndSalesUtility>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    query(req?: any): Observable<HttpResponse<MaterialclassificationStockAndSalesUtility[]>> {
+    query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<MaterialclassificationStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .map((res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => this.convertArrayResponse(res));
+        return this.http.get<IMaterialclassificationStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response'});
-    }
-
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: MaterialclassificationStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({body});
-    }
-
-    private convertArrayResponse(res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>): HttpResponse<MaterialclassificationStockAndSalesUtility[]> {
-        const jsonResponse: MaterialclassificationStockAndSalesUtility[] = res.body;
-        const body: MaterialclassificationStockAndSalesUtility[] = [];
-        for (let i = 0; i < jsonResponse.length; i++) {
-            body.push(this.convertItemFromServer(jsonResponse[i]));
-        }
-        return res.clone({body});
-    }
-
-    /**
-     * Convert a returned JSON object to MaterialclassificationStockAndSalesUtility.
-     */
-    private convertItemFromServer(materialclassification: MaterialclassificationStockAndSalesUtility): MaterialclassificationStockAndSalesUtility {
-        const copy: MaterialclassificationStockAndSalesUtility = Object.assign({}, materialclassification);
-        return copy;
-    }
-
-    /**
-     * Convert a MaterialclassificationStockAndSalesUtility to a JSON which can be sent to the server.
-     */
-    private convert(materialclassification: MaterialclassificationStockAndSalesUtility): MaterialclassificationStockAndSalesUtility {
-        const copy: MaterialclassificationStockAndSalesUtility = Object.assign({}, materialclassification);
-        return copy;
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 }

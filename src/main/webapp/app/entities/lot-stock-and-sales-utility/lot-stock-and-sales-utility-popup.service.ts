@@ -2,19 +2,15 @@ import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
-import { LotStockAndSalesUtility } from './lot-stock-and-sales-utility.model';
+import { LotStockAndSalesUtility } from '../../shared/model/lot-stock-and-sales-utility.model';
 import { LotStockAndSalesUtilityService } from './lot-stock-and-sales-utility.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class LotStockAndSalesUtilityPopupService {
     private ngbModalRef: NgbModalRef;
 
-    constructor(
-        private modalService: NgbModal,
-        private router: Router,
-        private lotService: LotStockAndSalesUtilityService
-
-    ) {
+    constructor(private modalService: NgbModal, private router: Router, private lotService: LotStockAndSalesUtilityService) {
         this.ngbModalRef = null;
     }
 
@@ -26,19 +22,18 @@ export class LotStockAndSalesUtilityPopupService {
             }
 
             if (id) {
-                this.lotService.find(id)
-                    .subscribe((lotResponse: HttpResponse<LotStockAndSalesUtility>) => {
-                        const lot: LotStockAndSalesUtility = lotResponse.body;
-                        if (lot.creationDate) {
-                            lot.creationDate = {
+                this.lotService.find(id).subscribe((lotResponse: HttpResponse<LotStockAndSalesUtility>) => {
+                    const lot: LotStockAndSalesUtility = lotResponse.body;
+                    if (lot.creationDate) {
+                        lot.creationDate = moment(); /* {
                                 year: lot.creationDate.getFullYear(),
                                 month: lot.creationDate.getMonth() + 1,
                                 day: lot.creationDate.getDate()
-                            };
-                        }
-                        this.ngbModalRef = this.lotModalRef(component, lot);
-                        resolve(this.ngbModalRef);
-                    });
+                            };*/
+                    }
+                    this.ngbModalRef = this.lotModalRef(component, lot);
+                    resolve(this.ngbModalRef);
+                });
             } else {
                 // setTimeout used as a workaround for getting ExpressionChangedAfterItHasBeenCheckedError
                 setTimeout(() => {
@@ -50,15 +45,18 @@ export class LotStockAndSalesUtilityPopupService {
     }
 
     lotModalRef(component: Component, lot: LotStockAndSalesUtility): NgbModalRef {
-        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.lot = lot;
-        modalRef.result.then((result) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-        }, (reason) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-        });
+        modalRef.result.then(
+            result => {
+                this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                this.ngbModalRef = null;
+            },
+            reason => {
+                this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                this.ngbModalRef = null;
+            }
+        );
         return modalRef;
     }
 }

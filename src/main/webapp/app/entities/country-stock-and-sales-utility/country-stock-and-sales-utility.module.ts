@@ -1,48 +1,33 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    CountryStockAndSalesUtilityService,
-    CountryStockAndSalesUtilityPopupService,
     CountryStockAndSalesUtilityComponent,
     CountryStockAndSalesUtilityDetailComponent,
-    CountryStockAndSalesUtilityDialogComponent,
-    CountryStockAndSalesUtilityPopupComponent,
+    CountryStockAndSalesUtilityUpdateComponent,
     CountryStockAndSalesUtilityDeletePopupComponent,
     CountryStockAndSalesUtilityDeleteDialogComponent,
     countryRoute,
-    countryPopupRoute,
+    countryPopupRoute
 } from './';
 
-const ENTITY_STATES = [
-    ...countryRoute,
-    ...countryPopupRoute,
-];
+const ENTITY_STATES = [...countryRoute, ...countryPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         CountryStockAndSalesUtilityComponent,
         CountryStockAndSalesUtilityDetailComponent,
-        CountryStockAndSalesUtilityDialogComponent,
+        CountryStockAndSalesUtilityUpdateComponent,
         CountryStockAndSalesUtilityDeleteDialogComponent,
-        CountryStockAndSalesUtilityPopupComponent,
-        CountryStockAndSalesUtilityDeletePopupComponent,
+        CountryStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         CountryStockAndSalesUtilityComponent,
-        CountryStockAndSalesUtilityDialogComponent,
-        CountryStockAndSalesUtilityPopupComponent,
+        CountryStockAndSalesUtilityUpdateComponent,
         CountryStockAndSalesUtilityDeleteDialogComponent,
-        CountryStockAndSalesUtilityDeletePopupComponent,
-    ],
-    providers: [
-        CountryStockAndSalesUtilityService,
-        CountryStockAndSalesUtilityPopupService,
+        CountryStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

@@ -1,19 +1,17 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.material.home.title">Materials</span>
-        <button class="btn btn-primary float-right jh-create-entity create-material-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['material-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-material-stock-and-sales-utility" [routerLink]="['/material-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.material.home.createLabel">
             Create new Material
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="materials">
-        <table class="table table-striped">
+        <table class="table table-dark table-striped  table-sm table-hover">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
@@ -24,54 +22,51 @@
             <th jhiSortBy="materialTypeDefName"><span jhiTranslate="stockAndSalesManagementApp.material.materialTypeDef">Material Type Def</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="lotIdentifierCode"><span jhiTranslate="stockAndSalesManagementApp.material.lotIdentifier">Lot Identifier</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="materialTypeCatName"><span jhiTranslate="stockAndSalesManagementApp.material.materialTypeCat">Material Type Cat</span> <span class="fa fa-sort"></span></th>
-            <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let material of materials ;trackBy: trackId">
-                <td><a [routerLink]="['../material-stock-and-sales-utility', material.id ]">{{material.id}}</a></td>
+                <td><a [routerLink]="['/material-stock-and-sales-utility', material.id, 'view' ]">{{material.id}}</a></td>
                 <td>{{material.code}}</td>
                 <td>{{material.description}}</td>
                 <td>{{material.creationDate | date:'mediumDate'}}</td>
                 <td>{{material.comments}}</td>
                 <td>
                     <div *ngIf="material.materialTypeDefId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', material.materialTypeDefId  ]" >{{material.materialTypeDefName}}</a>
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', material.materialTypeDefId , 'view' ]" >{{material.materialTypeDefName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="material.lotIdentifierId">
-                        <a [routerLink]="['../lot-stock-and-sales-utility', material.lotIdentifierId  ]" >{{material.lotIdentifierCode}}</a>
+                        <a [routerLink]="['../lot-stock-and-sales-utility', material.lotIdentifierId , 'view' ]" >{{material.lotIdentifierCode}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="material.materialTypeCatId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', material.materialTypeCatId  ]" >{{material.materialTypeCatName}}</a>
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', material.materialTypeCatId , 'view' ]" >{{material.materialTypeCatName}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../material-stock-and-sales-utility', material.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                [routerLink]="['/material-stock-and-sales-utility', material.id, 'view' ]"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'material-stock-and-sales-utility/'+ material.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                [routerLink]="['/material-stock-and-sales-utility', material.id, 'edit']"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'material-stock-and-sales-utility/'+ material.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                             <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
                         </button>
                     </div>
                 </td>

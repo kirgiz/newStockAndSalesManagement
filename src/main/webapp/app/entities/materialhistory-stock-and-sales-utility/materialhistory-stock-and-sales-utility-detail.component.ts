@@ -1,55 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager } from 'ng-jhipster';
 
-import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
-import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
+import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-detail',
     templateUrl: './materialhistory-stock-and-sales-utility-detail.component.html'
 })
-export class MaterialhistoryStockAndSalesUtilityDetailComponent implements OnInit, OnDestroy {
+export class MaterialhistoryStockAndSalesUtilityDetailComponent implements OnInit {
+    materialhistory: IMaterialhistoryStockAndSalesUtility;
 
-    materialhistory: MaterialhistoryStockAndSalesUtility;
-    private subscription: Subscription;
-    private eventSubscriber: Subscription;
-
-    constructor(
-        private eventManager: JhiEventManager,
-        private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
-        private route: ActivatedRoute
-    ) {
-    }
+    constructor(private activatedRoute: ActivatedRoute) {}
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
+        this.activatedRoute.data.subscribe(({ materialhistory }) => {
+            this.materialhistory = materialhistory;
         });
-        this.registerChangeInMaterialhistories();
     }
 
-    load(id) {
-        this.materialhistoryService.find(id)
-            .subscribe((materialhistoryResponse: HttpResponse<MaterialhistoryStockAndSalesUtility>) => {
-                this.materialhistory = materialhistoryResponse.body;
-            });
-    }
     previousState() {
         window.history.back();
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    registerChangeInMaterialhistories() {
-        this.eventSubscriber = this.eventManager.subscribe(
-            'materialhistoryListModification',
-            (response) => this.load(this.materialhistory.id)
-        );
     }
 }

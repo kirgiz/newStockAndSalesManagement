@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "addressclassification" : {
+        "addressclassification": {
             "home": {
                 "title": "Addressclassifications",
                 "createLabel": "Créer un nouveau Addressclassification",

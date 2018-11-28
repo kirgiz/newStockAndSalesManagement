@@ -1,0 +1,102 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-dashboard-stock-and-sales-utility-heading" jhiTranslate="stockAndSalesManagementApp.dashboard.home.createOrEditLabel">Create or edit a Dashboard</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!dashboard.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="dashboard.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.transferDate" for="field_transferDate">Transfer Date</label>
+                    <div class="input-group">
+                        <input id="field_transferDate" type="text" class="form-control" name="transferDate" ngbDatepicker  #transferDateDp="ngbDatepicker" [(ngModel)]="dashboard.transferDate"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-outline-dark" (click)="transferDateDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.transferDate?.dirty && editForm.controls.transferDate?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.transferDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss" for="field_profitAndLoss">Profit And Loss</label>
+                    <input type="number" class="form-control" name="profitAndLoss" id="field_profitAndLoss"
+                        [(ngModel)]="dashboard.profitAndLoss" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems" for="field_numberOfItems">Number Of Items</label>
+                    <input type="number" class="form-control" name="numberOfItems" id="field_numberOfItems"
+                        [(ngModel)]="dashboard.numberOfItems" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard" for="field_currencyForDashboard">Currency For Dashboard</label>
+                    <select class="form-control" id="field_currencyForDashboard" name="currencyForDashboard" [(ngModel)]="dashboard.currencyForDashboardId"  required>
+                        <option *ngIf="!editForm.value.currencyForDashboard" [ngValue]="null" selected></option>
+                        <option [ngValue]="currencyOption.id" *ngFor="let currencyOption of currencies; trackBy: trackCurrencyById">{{currencyOption.name}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.currencyForDashboard?.dirty && editForm.controls.currencyForDashboard?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.currencyForDashboard?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.transferForDashboard" for="field_transferForDashboard">Transfer For Dashboard</label>
+                    <select class="form-control" id="field_transferForDashboard" name="transferForDashboard" [(ngModel)]="dashboard.transferForDashboardId"  required>
+                        <option *ngIf="!editForm.value.transferForDashboard" [ngValue]="null" selected></option>
+                        <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.transferForDashboard?.dirty && editForm.controls.transferForDashboard?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.transferForDashboard?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.warehouseOutg" for="field_warehouseOutg">Warehouse Outg</label>
+                    <select class="form-control" id="field_warehouseOutg" name="warehouseOutg" [(ngModel)]="dashboard.warehouseOutgId"  required>
+                        <option *ngIf="!editForm.value.warehouseOutg" [ngValue]="null" selected></option>
+                        <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirds; trackBy: trackThirdById">{{thirdOption.name}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.warehouseOutg?.dirty && editForm.controls.warehouseOutg?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.warehouseOutg?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.dashboard.materialTypeDefDashboard" for="field_materialTypeDefDashboard">Material Type Def Dashboard</label>
+                    <select class="form-control" id="field_materialTypeDefDashboard" name="materialTypeDefDashboard" [(ngModel)]="dashboard.materialTypeDefDashboardId"  required>
+                        <option *ngIf="!editForm.value.materialTypeDefDashboard" [ngValue]="null" selected></option>
+                        <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialclassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.code}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.materialTypeDefDashboard?.dirty && editForm.controls.materialTypeDefDashboard?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.materialTypeDefDashboard?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-outline-dark"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

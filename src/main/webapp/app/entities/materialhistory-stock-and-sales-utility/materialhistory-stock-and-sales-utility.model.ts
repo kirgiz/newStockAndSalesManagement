@@ -1,4 +1,4 @@
-import { BaseEntity } from './../../shared';
+import { BaseEntity } from '../../shared/model/base-entity.model';
 
 export class MaterialhistoryStockAndSalesUtility implements BaseEntity {
     constructor(
@@ -12,7 +12,6 @@ export class MaterialhistoryStockAndSalesUtility implements BaseEntity {
         public transferClassifId?: number,
         public warehousefromId?: number,
         public warehousetoId?: number,
-        public materialclassificationId?: number,
-    ) {
-    }
+        public materialclassificationId?: number
+    ) {}
 }

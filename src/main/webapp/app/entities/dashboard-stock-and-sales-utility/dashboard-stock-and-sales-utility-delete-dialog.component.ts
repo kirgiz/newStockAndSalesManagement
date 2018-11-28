@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
-import { DashboardStockAndSalesUtilityPopupService } from './dashboard-stock-and-sales-utility-popup.service';
+import { IDashboardStockAndSalesUtility } from 'app/shared/model/dashboard-stock-and-sales-utility.model';
 import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
 
 @Component({
@@ -13,22 +12,20 @@ import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sale
     templateUrl: './dashboard-stock-and-sales-utility-delete-dialog.component.html'
 })
 export class DashboardStockAndSalesUtilityDeleteDialogComponent {
-
-    dashboard: DashboardStockAndSalesUtility;
+    dashboard: IDashboardStockAndSalesUtility;
 
     constructor(
         private dashboardService: DashboardStockAndSalesUtilityService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.dashboardService.delete(id).subscribe((response) => {
+        this.dashboardService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'dashboardListModification',
                 content: 'Deleted an dashboard'
@@ -43,22 +40,33 @@ export class DashboardStockAndSalesUtilityDeleteDialogComponent {
     template: ''
 })
 export class DashboardStockAndSalesUtilityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private dashboardPopupService: DashboardStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.dashboardPopupService
-                .open(DashboardStockAndSalesUtilityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ dashboard }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(DashboardStockAndSalesUtilityDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.dashboard = dashboard;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

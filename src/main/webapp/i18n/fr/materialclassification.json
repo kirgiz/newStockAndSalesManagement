@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "materialclassification" : {
+        "materialclassification": {
             "home": {
                 "title": "Type d'Article",
                 "createLabel": "Créer un nouveau Materialclassification",

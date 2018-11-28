@@ -1,6 +1,7 @@
 package com.kirgiz.stocksndsalesmanagement.service.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -8,11 +9,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-
-
-
-
-
 
 /**
  * Criteria class for the UserAuthorizedThird entity. This class is used in UserAuthorizedThirdResource to
@@ -23,8 +19,8 @@ import io.github.jhipster.service.filter.StringFilter;
  * fix type specific filters.
  */
 public class UserAuthorizedThirdCriteria implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
@@ -77,6 +73,35 @@ public class UserAuthorizedThirdCriteria implements Serializable {
 
     public void setThirdAuthId(LongFilter thirdAuthId) {
         this.thirdAuthId = thirdAuthId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final UserAuthorizedThirdCriteria that = (UserAuthorizedThirdCriteria) o;
+        return
+            Objects.equals(id, that.id) &&
+            Objects.equals(defaultThird, that.defaultThird) &&
+            Objects.equals(defaultDestination, that.defaultDestination) &&
+            Objects.equals(userAuthId, that.userAuthId) &&
+            Objects.equals(thirdAuthId, that.thirdAuthId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+        id,
+        defaultThird,
+        defaultDestination,
+        userAuthId,
+        thirdAuthId
+        );
     }
 
     @Override

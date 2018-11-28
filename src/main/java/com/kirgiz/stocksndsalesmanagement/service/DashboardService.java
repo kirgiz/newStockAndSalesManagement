@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.DashboardDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.DashboardMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,6 +41,7 @@ public class DashboardService {
      */
     public DashboardDTO save(DashboardDTO dashboardDTO) {
         log.debug("Request to save Dashboard : {}", dashboardDTO);
+
         Dashboard dashboard = dashboardMapper.toEntity(dashboardDTO);
         dashboard = dashboardRepository.save(dashboard);
         return dashboardMapper.toDto(dashboard);
@@ -57,6 +60,7 @@ public class DashboardService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+
     /**
      * Get one dashboard by id.
      *
@@ -64,10 +68,10 @@ public class DashboardService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public DashboardDTO findOne(Long id) {
+    public Optional<DashboardDTO> findOne(Long id) {
         log.debug("Request to get Dashboard : {}", id);
-        Dashboard dashboard = dashboardRepository.findOne(id);
-        return dashboardMapper.toDto(dashboard);
+        return dashboardRepository.findById(id)
+            .map(dashboardMapper::toDto);
     }
 
     /**
@@ -77,6 +81,6 @@ public class DashboardService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Dashboard : {}", id);
-        dashboardRepository.delete(id);
+        dashboardRepository.deleteById(id);
     }
 }

@@ -1,67 +1,38 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  EventEmitter,
-  Output
-} from '@angular/core';
-import {
-    ActivatedRoute
-} from '@angular/router';
-import {
-    HttpResponse,
-    HttpErrorResponse
-} from '@angular/common/http';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import {
-    Observable
-} from 'rxjs/Observable';
-import {
-    NgbActiveModal
-} from '@ng-bootstrap/ng-bootstrap';
-import {
-    JhiEventManager,
-    JhiAlertService,
-    JhiParseLinks
-} from 'ng-jhipster';
+import { Observable } from 'rxjs';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiEventManager, JhiAlertService, JhiParseLinks } from 'ng-jhipster';
 
-import {
-    MaterialhistoryStockAndSalesUtility
-} from './materialhistory-stock-and-sales-utility.model';
-import {
-    MaterialSearchStockAndSalesUtilityPopupService
-} from './material-search-stock-and-sales-utility-popup.service';
-import {
-    MaterialhistoryStockAndSalesUtilityService
-} from './materialhistory-stock-and-sales-utility.service';
-import {
-    MaterialStockAndSalesUtility,
-    MaterialStockAndSalesUtilityService
-} from '../material-stock-and-sales-utility';
-import {
-    TransferclassificationStockAndSalesUtility,
-    TransferclassificationStockAndSalesUtilityService
-} from '../transferclassification-stock-and-sales-utility';
-import {
-    ThirdStockAndSalesUtility,
-    ThirdStockAndSalesUtilityService
-} from '../third-stock-and-sales-utility';
-import {
-    Router
-} from '@angular/router';
-import {
-    ITEMS_PER_PAGE,
-    Principal
-} from '../../shared';
+import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
+import { MaterialSearchStockAndSalesUtilityPopupService } from './material-search-stock-and-sales-utility-popup.service';
+import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
+import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 
-import 'rxjs/add/observable/forkJoin';
+import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+
+import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
+
+import { TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility';
+
+import { ThirdStockAndSalesUtility } from '../../shared/model/third-stock-and-sales-utility.model';
+
+import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
+import { Router } from '@angular/router';
+import { ITEMS_PER_PAGE } from '../../shared//constants/pagination.constants';
+
+import { Principal } from '../../core/auth/principal.service';
+
+// import 'rxjs/add/observable/forkJoin';
 import { logsRoute } from '../../admin/logs/logs.route';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
-import { UserService } from '../../shared/user/user.service';
+import { UserService } from '../../core/user/user.service';
 import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
-import { User } from '../../shared/user/user.model';
-import { UserAuthorizedThird } from '../user-authorized-third/user-authorized-third.model';
+import { User } from '../../core/user/user.model';
+import { UserAuthorizedThird } from '../../shared/model/user-authorized-third.model';
 
 @Component({
     selector: 'jhi-material-search-stock-and-sales-utility-dialog',
@@ -80,14 +51,14 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     materials: MaterialStockAndSalesUtility[];
     materialsToDisplay: {
-        id?: any,
-        code?: any,
-        description?: any,
-        materialTypeDefName?: any,
-        lotIdentifierCode?: any,
-        selectedItem?: boolean,
-        displayItem?: boolean,
-        materialTypeDefId?: number
+        id?: any;
+        code?: any;
+        description?: any;
+        materialTypeDefName?: any;
+        lotIdentifierCode?: any;
+        selectedItem?: boolean;
+        displayItem?: boolean;
+        materialTypeDefId?: number;
     }[];
     selectedMaterial: number[];
 
@@ -129,23 +100,22 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         private autThirds: UserAuthorizedThirdService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe((data) => {
+        this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = 1; // data.pagingParams.page;
             this.previousPage = 1; // data.pagingParams.page;
             this.reverse = 'asc'; // data.pagingParams.ascending;
             this.predicate = 'id'; // data.pagingParams.predicate;
-
         });
     }
 
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
-          });
-          this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
+        });
+        this.principal.hasAuthority('ROLE_ADMIN').then(hasAuth => {
             this.hasAdminAuth = hasAuth;
-          });
+        });
     }
 
     ngOnDestroy(): void {
@@ -158,33 +128,38 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         this.selectedMaterialType = +this.activatedRoute.snapshot.queryParams['matType'];
         this.destination = +this.activatedRoute.snapshot.queryParams['destination'];
         this.source = +this.activatedRoute.snapshot.queryParams['source'];
-this.matSubscription = this.materialService.query({
-   page: this.page - 1,
-  size: 10000,
-    sort: this.sort()
-}
-).subscribe(
-    (res: HttpResponse < MaterialhistoryStockAndSalesUtility[] > ) => {
-    this.onSuccess(res.body, res.headers);
-    console.log('found mat type' +  this.selectedMaterialType );
-    console.log('HOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
-    console.log(res.body);
-   // console.log('found mat type' +  this.selectedMaterialType );
-},
-    (res: HttpErrorResponse) => {
-        this.onError(res.message);
-}
-);
+        this.matSubscription = this.materialService
+            .query({
+                page: this.page - 1,
+                size: 10000,
+                sort: this.sort()
+            })
+            .subscribe(
+                (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => {
+                    this.onSuccess(res.body, res.headers);
+                    console.log('found mat type' + this.selectedMaterialType);
+                    console.log('HOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+                    console.log(res.body);
+                    // console.log('found mat type' +  this.selectedMaterialType );
+                },
+                (res: HttpErrorResponse) => {
+                    this.onError(res.message);
+                }
+            );
 
         this.isSaving = false;
- this.transferClassificationSubscription = this.transferclassificationService.query()
-            .subscribe((res: HttpResponse < TransferclassificationStockAndSalesUtility[] > ) => {
+        this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
+            (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
                 this.transferclassifications = res.body;
-            }, (res: HttpErrorResponse) => this.onError(res.message));
-       this.thirdsubscription =  this.thirdService.query()
-            .subscribe((res: HttpResponse < ThirdStockAndSalesUtility[] > ) => {
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.thirdsubscription = this.thirdService.query().subscribe(
+            (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
                 this.thirds = res.body;
-            }, (res: HttpErrorResponse) => this.onError(res.message));
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
 
     private onSuccess(data, headers) {
@@ -197,65 +172,70 @@ this.matSubscription = this.materialService.query({
 
         this.thirdSubscription = this.thirdService.query().subscribe(
             (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
-              this.thirds = res.body;
-              this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe( (user: HttpResponse<User>) => {
-                  const resuser: User = user.body;
-               this.thirdAuthSubscription  = this.autThirds.query({
-                      'userAuthId.equals': resuser.id
-                  }).subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
-                      this.authThirdsList = reslist.body;
-                      const thirds:  ThirdStockAndSalesUtility[] =  this.thirds.slice();
-                      this.thirds = thirds.filter((element) => {
-                          for (const authList of this.authThirdsList) {
-                         if ( authList.thirdAuthId === element.id) {
-                           return true;
-                         }
-                          }
-                      });
-                      const matt:  MaterialStockAndSalesUtility[] =  this.materials.slice();
-                      this.materials = matt.filter((element) => {
-                        for (const authList of this.authThirdsList) {
-                            console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJ');
-                            console.log(element);
-                            console.log(authList.thirdAuthId);
-                            console.log('MATERIAL TYPE' + element.materialTypeDefId);
-                       if ( (authList.thirdAuthId === element.currentLocation &&  this.destination !== element.currentLocation &&  this.source === element.currentLocation) ||
-                    ((!element.currentLocation || element.currentLocation === null)
-                    && this.hasAdminAuth)) {
-                         return true;
-                       }
-                        }
-                    });
-                    this.materialsToDisplay = this.materials.slice();
-                    console.log(this.materialsToDisplay);
-                    this.materialsToDisplay.forEach((element) => {
-                        element.displayItem = true;
-                        element.selectedItem = false;
-                    }
-                            );
+                this.thirds = res.body;
+                this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe((user: HttpResponse<User>) => {
+                    const resuser: User = user.body;
+                    this.thirdAuthSubscription = this.autThirds
+                        .query({
+                            'userAuthId.equals': resuser.id
+                        })
+                        .subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
+                            this.authThirdsList = reslist.body;
+                            const thirds: ThirdStockAndSalesUtility[] = this.thirds.slice();
+                            this.thirds = thirds.filter(element => {
+                                for (const authList of this.authThirdsList) {
+                                    if (authList.thirdAuthId === element.id) {
+                                        return true;
+                                    }
+                                }
+                            });
+                            const matt: MaterialStockAndSalesUtility[] = this.materials.slice();
+                            this.materials = matt.filter(element => {
+                                for (const authList of this.authThirdsList) {
+                                    console.log('JJJJJJJJJJJJJJJJJJJJJJJJJJJ');
+                                    console.log(element);
+                                    console.log(authList.thirdAuthId);
+                                    console.log('MATERIAL TYPE' + element.materialTypeDefId);
+                                    if (
+                                        (authList.thirdAuthId === element.currentLocation &&
+                                            this.destination !== element.currentLocation &&
+                                            this.source === element.currentLocation) ||
+                                        ((!element.currentLocation || element.currentLocation === null) && this.hasAdminAuth)
+                                    ) {
+                                        return true;
+                                    }
+                                }
+                            });
+                            this.materialsToDisplay = this.materials.slice();
+                            console.log(this.materialsToDisplay);
+                            this.materialsToDisplay.forEach(element => {
+                                element.displayItem = true;
+                                element.selectedItem = false;
+                            });
 
                             let mat = this.materialsToDisplay;
-                            if  (this.selectedMaterialType !== null) {
-                                mat = this.materialsToDisplay.filter((item) => {
+                            if (this.selectedMaterialType !== null) {
+                                mat = this.materialsToDisplay.filter(item => {
                                     console.log('HAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' + this.selectedMaterialType);
-                                    
-                                    return item.materialTypeDefId === this.selectedMaterialType; }
-                                ); }
-                                this.materialsToDisplay.forEach((element) => {
-                                    element.displayItem = false;
-                                    const index: number = mat.findIndex((originalElement) => element.id === originalElement.id);
-                                    if (index > -1) { element.displayItem = true; }
-                                });
-                                this.totalItems = mat.length;
-                                this.queryCount = mat.length;
-                  }
-                );
-              });
 
+                                    return item.materialTypeDefId === this.selectedMaterialType;
+                                });
+                            }
+                            this.materialsToDisplay.forEach(element => {
+                                element.displayItem = false;
+                                const index: number = mat.findIndex(originalElement => element.id === originalElement.id);
+                                if (index > -1) {
+                                    element.displayItem = true;
+                                }
+                            });
+                            this.totalItems = mat.length;
+                            this.queryCount = mat.length;
+                        });
+                });
             },
             (res: HttpErrorResponse) => this.onError(res.message)
-          );
-}
+        );
+    }
 
     sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -273,11 +253,20 @@ this.matSubscription = this.materialService.query({
         this.isSaving = true;
         console.log('selected materials');
         // tslint:disable-next-line:arrow-return-shorthand
-        console.log(JSON.stringify(this.materialsToDisplay.filter((material) => {return material.selectedItem === true; })));
+        console.log(
+            JSON.stringify(
+                this.materialsToDisplay.filter(material => {
+                    return material.selectedItem === true;
+                })
+            )
+        );
         // tslint:disable-next-line:arrow-return-shorthand
-        this.materialhistoryService.selectMaterial(this.materialsToDisplay.filter((material) => {return material.selectedItem === true; }));
+        this.materialhistoryService.selectMaterial(
+            this.materialsToDisplay.filter(material => {
+                return material.selectedItem === true;
+            })
+        );
         this.activeModal.close(this.materials);
-
     }
 
     private onError(error: any) {
@@ -285,7 +274,7 @@ this.matSubscription = this.materialService.query({
     }
 
     SelectMaterial(values: any, materialId: number) {
-        const index: number = this.materialsToDisplay.findIndex((element) => element.id === materialId);
+        const index: number = this.materialsToDisplay.findIndex(element => element.id === materialId);
         this.materialsToDisplay[index].selectedItem = values.currentTarget.checked;
         console.log(JSON.stringify(this.materialsToDisplay[index]));
     }
@@ -315,35 +304,39 @@ this.matSubscription = this.materialService.query({
 
     onKey(event: any) {
         let t: {
-            id?: any,
-            code?: any,
-            description?: any,
-            materialTypeDefName?: any,
-            lotIdentifierCode?: any
+            id?: any;
+            code?: any;
+            description?: any;
+            materialTypeDefName?: any;
+            lotIdentifierCode?: any;
         }[] = [];
         // tslint:disable-next-line:curly
         if (!event.target.value) {
-         t = this.materialsToDisplay.filter((it) => {
-             return it.materialTypeDefId === this.selectedMaterialType;
+            t = this.materialsToDisplay.filter(it => {
+                return it.materialTypeDefId === this.selectedMaterialType;
             });
         } else {
-        const searchText = event.target.value.toLowerCase();
+            const searchText = event.target.value.toLowerCase();
 
-        t = this.materialsToDisplay.filter((it) => {
-            return (it.code.toLowerCase().includes(searchText) ||
-                it.description.toLowerCase().includes(searchText) ||
-                it.lotIdentifierCode.toLowerCase().includes(searchText)) && it.materialTypeDefId === this.selectedMaterialType;
+            t = this.materialsToDisplay.filter(it => {
+                return (
+                    (it.code.toLowerCase().includes(searchText) ||
+                        it.description.toLowerCase().includes(searchText) ||
+                        it.lotIdentifierCode.toLowerCase().includes(searchText)) &&
+                    it.materialTypeDefId === this.selectedMaterialType
+                );
+            });
+        }
+        this.totalItems = t.length;
+        this.queryCount = t.length;
 
+        this.materialsToDisplay.forEach(element => {
+            element.displayItem = false;
+            const index: number = t.findIndex(originalElement => element.id === originalElement.id);
+            if (index > -1) {
+                element.displayItem = true;
+            }
         });
-    }
-    this.totalItems = t.length;
-    this.queryCount = t.length;
-
-    this.materialsToDisplay.forEach((element) => {
-        element.displayItem = false;
-        const index: number = t.findIndex((originalElement) => element.id === originalElement.id);
-        if (index > -1) { element.displayItem = true; }
-    });
     }
 }
 
@@ -352,18 +345,13 @@ this.matSubscription = this.materialService.query({
     template: ''
 })
 export class MaterialSearchStockAndSalesUtilityPopupComponent implements OnInit, OnDestroy {
-
     routeSub: any;
 
-    constructor(
-        private route: ActivatedRoute,
-        private materialSearchPopupService: MaterialSearchStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private route: ActivatedRoute, private materialSearchPopupService: MaterialSearchStockAndSalesUtilityPopupService) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.materialSearchPopupService
-                .open(MaterialSearchStockAndSalesUtilityDialogComponent as Component);
+        this.routeSub = this.route.params.subscribe(params => {
+            this.materialSearchPopupService.open(MaterialSearchStockAndSalesUtilityDialogComponent as Component);
         });
     }
 

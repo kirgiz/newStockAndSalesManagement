@@ -1,61 +1,55 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { StockAndSalesManagementSharedModule } from '../../shared';
+import { StockAndSalesManagementSharedModule } from 'app/shared';
 import {
-    MaterialhistoryStockAndSalesUtilityService,
-    MaterialhistoryStockAndSalesUtilityPopupService,
-    MaterialhistoryStockAndSalesUtilityComponent,
     MaterialhistoryStockAndSalesUtilityDetailComponent,
-    MaterialhistoryStockAndSalesUtilityDialogComponent,
-    MaterialhistoryStockAndSalesUtilityPopupComponent,
+    MaterialhistoryStockAndSalesUtilityUpdateComponent,
     MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
     MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
+    MaterialhistoryStockAndSalesUtilityDialogComponent,
     materialhistoryRoute,
-    materialhistoryPopupRoute,
     MaterialhistoryStockAndSalesUtilityResolvePagingParams,
     materialSearchRoute,
     MaterialSearchStockAndSalesUtilityResolvePagingParams,
     materialSearchPopupRoute,
     MaterialSearchStockAndSalesUtilityPopupService,
     MaterialSearchStockAndSalesUtilityDialogComponent,
-    MaterialSearchStockAndSalesUtilityPopupComponent
+    MaterialSearchStockAndSalesUtilityPopupComponent,
+    MaterialhistoryStockAndSalesUtilityService,
+    MaterialhistoryStockAndSalesUtilityComponent
 } from './';
 import { MaterialSearchStockAndSalesUtilityComponent } from './material-search-stock-and-sales-utility.component';
+import { MaterialhistoryStockAndSalesUtilityPopupComponent } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility-dialog.component';
+import { materialhistoryPopupRoute } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.route';
+import { MaterialhistoryStockAndSalesUtilityPopupService } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility-popup.service';
 
-
-const ENTITY_STATES = [
-    ...materialhistoryRoute,
-    ...materialhistoryPopupRoute,
-    ...materialSearchRoute,
-    ...materialSearchPopupRoute,
-];
+const ENTITY_STATES = [...materialhistoryRoute, ...materialhistoryPopupRoute, ...materialSearchRoute, ...materialSearchPopupRoute];
 
 @NgModule({
-    imports: [
-        StockAndSalesManagementSharedModule,
-        RouterModule.forChild(ENTITY_STATES)
-    ],
+    imports: [StockAndSalesManagementSharedModule, RouterModule.forChild(ENTITY_STATES)],
     declarations: [
         MaterialhistoryStockAndSalesUtilityComponent,
         MaterialhistoryStockAndSalesUtilityDetailComponent,
         MaterialhistoryStockAndSalesUtilityDialogComponent,
+        MaterialhistoryStockAndSalesUtilityUpdateComponent,
         MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
         MaterialhistoryStockAndSalesUtilityPopupComponent,
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
         MaterialSearchStockAndSalesUtilityComponent,
         MaterialSearchStockAndSalesUtilityDialogComponent,
-        MaterialSearchStockAndSalesUtilityPopupComponent
+        MaterialSearchStockAndSalesUtilityPopupComponent,
+        MaterialhistoryStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         MaterialhistoryStockAndSalesUtilityComponent,
-        MaterialhistoryStockAndSalesUtilityDialogComponent,
-        MaterialhistoryStockAndSalesUtilityPopupComponent,
+        MaterialhistoryStockAndSalesUtilityUpdateComponent,
         MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
         MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
         MaterialSearchStockAndSalesUtilityComponent,
         MaterialSearchStockAndSalesUtilityDialogComponent,
         MaterialSearchStockAndSalesUtilityPopupComponent,
+        MaterialhistoryStockAndSalesUtilityDialogComponent
     ],
     providers: [
         MaterialhistoryStockAndSalesUtilityService,
@@ -63,6 +57,7 @@ const ENTITY_STATES = [
         MaterialhistoryStockAndSalesUtilityResolvePagingParams,
         MaterialSearchStockAndSalesUtilityResolvePagingParams,
         MaterialSearchStockAndSalesUtilityPopupService,
+        MaterialhistoryStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

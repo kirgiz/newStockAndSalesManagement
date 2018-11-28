@@ -1,5 +1,5 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.dashboard.home.title">Dashboards</span>
     </h2>
     <div class="row">
@@ -43,16 +43,110 @@
             </select>
         </div>
 
+      
+        <div class="form-group col-md-2">
+                        <label class="form-control-label"  for="field_fromDate">Début</label>
+                        <div class="input-group">
+            <input id="field_fromDate" type="text" class="form-control" name="field_fromDate" ngbDatepicker  #fromDateDp="ngbDatepicker" [(ngModel)]="fromDate" (ngModelChange)="filterResults()"
+            /> <button type="button" class="btn btn-outline-dark" (click)="fromDateDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+        </div>
     </div>
+
+        <div class="form-group col-md-2">               
+                        <label class="form-control-label"  for="field_toDate">Fin</label>
+                        <div class="input-group">
+            <input id="field_toDate" type="text" class="form-control" name="field_toDate" ngbDatepicker  #toDateDp="ngbDatepicker" [(ngModel)]="toDate" (ngModelChange)="filterResults()" />
+                <button type="button" class="btn btn-outline-dark" (click)="toDateDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+        </div>
+    </div>
+
+        <!-- <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-dashboard-stock-and-sales-utility" [routerLink]="['/dashboard-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="stockAndSalesManagementApp.dashboard.home.createLabel">
+            Create new Dashboard
+            </span>
+        </button> -->
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <!-- <div class="table-responsive" *ngIf="dashboards">
+        <table class="table  table-dark table-striped  table-sm table-hover">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferDate">Transfer Date</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.profitAndLoss">Profit And Loss</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.numberOfItems">Number Of Items</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.currencyForDashboard">Currency For Dashboard</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.transferForDashboard">Transfer For Dashboard</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.warehouseOutg">Warehouse Outg</span></th>
+            <th><span jhiTranslate="stockAndSalesManagementApp.dashboard.materialTypeDefDashboard">Material Type Def Dashboard</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let dashboard of dashboards ;trackBy: trackId">
+                <td><a [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'view' ]">{{dashboard.id}}</a></td>
+                <td>{{dashboard.transferDate | date:'mediumDate'}}</td>
+                <td>{{dashboard.profitAndLoss}}</td>
+                <td>{{dashboard.numberOfItems}}</td>
+                <td>
+                    <div *ngIf="dashboard.currencyForDashboardId">
+                        <a [routerLink]="['../currency-stock-and-sales-utility', dashboard.currencyForDashboardId , 'view' ]" >{{dashboard.currencyForDashboardName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="dashboard.transferForDashboardId">
+                        <a [routerLink]="['../transferclassification-stock-and-sales-utility', dashboard.transferForDashboardId , 'view' ]" >{{dashboard.transferForDashboardName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="dashboard.warehouseOutgId">
+                        <a [routerLink]="['../third-stock-and-sales-utility', dashboard.warehouseOutgId , 'view' ]" >{{dashboard.warehouseOutgName}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="dashboard.materialTypeDefDashboardId">
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', dashboard.materialTypeDefDashboardId , 'view' ]" >{{dashboard.materialTypeDefDashboardCode}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'view' ]"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                           <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> 
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/dashboard-stock-and-sales-utility', dashboard.id, 'edit']"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                        <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> 
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'dashboard-stock-and-sales-utility/'+ dashboard.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> 
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div> -->
 </div>
 <br/>
 <!-- div class="col"> -->
-    <div class="container">
+   <!-- <div class="container"> -->
         <div class="row">
-            <div class="col">
+            <div class="col-8">
                 <h4 class="list-group-item-heading">Transfers</h4>
                 <div class="table-responsive" *ngIf="dashboards">
-                    <table class="table table-striped">
+                    <table class="table   table-dark table-striped  table-sm table-hover">
                         <thead>
                             <tr>
                                 <!-- <th><span jhiTranslate="global.field.id">ID</span></th>-->
@@ -109,9 +203,9 @@
 
                                 <td class="text-right">
                                     <div class="btn-group flex-btn-group-container">
-                                      <!--  <button type="submit" [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]" class="btn btn-info btn-sm">
+                                      <!--  <button type="submit" [routerLink]="['../dashboard-stock-and-sales-utility', dashboard.id ]" class="btn btn-outline-secondary btn-sm">
                                             <span class="fa fa-eye"></span>
-                                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> 
                                         </button> -->
                                     </div>
                                 </td>
@@ -122,10 +216,11 @@
             </div>
 
 
-            <div class="row">
-                <div class="col">
+          <!--  <div class="row"> -->
+                <div class="col-4">
                     <h4 class="list-group-item-heading">Stock</h4>
-                    <table class="table table-striped">
+                    <div class="table-responsive" *ngIf="inventories">
+                    <table class="table table-dark table-striped  table-sm table-hover">
                         <thead>
                             <tr>
                                 <!-- <th><span jhiTranslate="global.field.id">ID</span></th>-->
@@ -150,7 +245,8 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
+            </div>
+       </div>
+  </div> 
 <!--</div>-->
 <!--</div> -->

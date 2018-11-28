@@ -2,22 +2,24 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { MaterialStockAndSalesUtility } from './material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 import { MaterialStockAndSalesUtilityPopupService } from './material-stock-and-sales-utility-popup.service';
 import { MaterialStockAndSalesUtilityService } from './material-stock-and-sales-utility.service';
-import { MaterialclassificationStockAndSalesUtility, MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility';
-import { LotStockAndSalesUtility, LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
+import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility';
+import { MaterialclassificationStockAndSalesUtility } from '../../shared/model/materialclassification-stock-and-sales-utility.model';
+import { LotStockAndSalesUtility } from '../../shared/model/lot-stock-and-sales-utility.model';
+import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
+import * as moment from 'moment';
 
 @Component({
     selector: 'jhi-material-stock-and-sales-utility-dialog',
     templateUrl: './material-stock-and-sales-utility-dialog.component.html'
 })
 export class MaterialStockAndSalesUtilityDialogComponent implements OnInit {
-
     material: MaterialStockAndSalesUtility;
     isSaving: boolean;
 
@@ -33,16 +35,22 @@ export class MaterialStockAndSalesUtilityDialogComponent implements OnInit {
         private materialclassificationService: MaterialclassificationStockAndSalesUtilityService,
         private lotService: LotStockAndSalesUtilityService,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.isSaving = false;
-        this.materialclassificationService.query()
-            .subscribe((res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
-                 this.materialclassifications = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
-        this.lotService.query()
-            .subscribe((res: HttpResponse<LotStockAndSalesUtility[]>) => { this.lots = res.body; }, (res: HttpErrorResponse) => this.onError(res.message));
+        this.materialclassificationService.query().subscribe(
+            (res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+                this.materialclassifications = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.lotService.query().subscribe(
+            (res: HttpResponse<LotStockAndSalesUtility[]>) => {
+                this.lots = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
 
     clear() {
@@ -52,31 +60,32 @@ export class MaterialStockAndSalesUtilityDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         const theDate = new Date(Date.now());
-        const year1  =  new Date(Date.now()).getFullYear() ;
-        const month1 = new Date(Date.now()).getMonth() + 1 ;
-        const day1 = new Date(Date.now()).getDate() ;
-        const dd:  {year: any; month: any; day: any} = {
+        const year1 = new Date(Date.now()).getFullYear();
+        const month1 = new Date(Date.now()).getMonth() + 1;
+        const day1 = new Date(Date.now()).getDate();
+        const dd: { year: any; month: any; day: any } = {
             year: year1,
             month: month1,
-            day: day1};
-        this.material.creationDate = dd;
+            day: day1
+        };
+        this.material.creationDate = moment();
         this.isSaving = true;
         if (this.material.id !== undefined) {
-            this.subscribeToSaveResponse(
-                this.materialService.update(this.material));
+            this.subscribeToSaveResponse(this.materialService.update(this.material));
         } else {
-            this.subscribeToSaveResponse(
-                this.materialService.create(this.material));
+            this.subscribeToSaveResponse(this.materialService.create(this.material));
         }
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<MaterialStockAndSalesUtility>>) {
-        result.subscribe((res: HttpResponse<MaterialStockAndSalesUtility>) =>
-            this.onSaveSuccess(res.body), (res: HttpErrorResponse) => this.onSaveError());
+        result.subscribe(
+            (res: HttpResponse<MaterialStockAndSalesUtility>) => this.onSaveSuccess(res.body),
+            (res: HttpErrorResponse) => this.onSaveError()
+        );
     }
 
     private onSaveSuccess(result: MaterialStockAndSalesUtility) {
-        this.eventManager.broadcast({ name: 'materialListModification', content: 'OK'});
+        this.eventManager.broadcast({ name: 'materialListModification', content: 'OK' });
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
@@ -103,22 +112,16 @@ export class MaterialStockAndSalesUtilityDialogComponent implements OnInit {
     template: ''
 })
 export class MaterialStockAndSalesUtilityPopupComponent implements OnInit, OnDestroy {
-
     routeSub: any;
 
-    constructor(
-        private route: ActivatedRoute,
-        private materialPopupService: MaterialStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private route: ActivatedRoute, private materialPopupService: MaterialStockAndSalesUtilityPopupService) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            if ( params['id'] ) {
-                this.materialPopupService
-                    .open(MaterialStockAndSalesUtilityDialogComponent as Component, params['id']);
+        this.routeSub = this.route.params.subscribe(params => {
+            if (params['id']) {
+                this.materialPopupService.open(MaterialStockAndSalesUtilityDialogComponent as Component, params['id']);
             } else {
-                this.materialPopupService
-                    .open(MaterialStockAndSalesUtilityDialogComponent as Component);
+                this.materialPopupService.open(MaterialStockAndSalesUtilityDialogComponent as Component);
             }
         });
     }

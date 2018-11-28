@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 
+
 import static com.kirgiz.stocksndsalesmanagement.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -129,10 +130,10 @@ public class AddressResourceIntTest {
             .validTo(DEFAULT_VALID_TO)
             .comments(DEFAULT_COMMENTS);
         // Add required entity
-        Addressclassification addressClassif = AddressclassificationResourceIntTest.createEntity(em);
-        em.persist(addressClassif);
+        Addressclassification addressclassification = AddressclassificationResourceIntTest.createEntity(em);
+        em.persist(addressclassification);
         em.flush();
-        address.setAddressClassif(addressClassif);
+        address.setAddressClassif(addressclassification);
         return address;
     }
 
@@ -230,7 +231,7 @@ public class AddressResourceIntTest {
             .andExpect(jsonPath("$.[*].validTo").value(hasItem(DEFAULT_VALID_TO.toString())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
     }
-
+    
     @Test
     @Transactional
     public void getAddress() throws Exception {
@@ -267,10 +268,11 @@ public class AddressResourceIntTest {
     public void updateAddress() throws Exception {
         // Initialize the database
         addressRepository.saveAndFlush(address);
+
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
 
         // Update the address
-        Address updatedAddress = addressRepository.findOne(address.getId());
+        Address updatedAddress = addressRepository.findById(address.getId()).get();
         // Disconnect from session so that the updates on updatedAddress are not directly saved in db
         em.detach(updatedAddress);
         updatedAddress
@@ -315,15 +317,15 @@ public class AddressResourceIntTest {
         // Create the Address
         AddressDTO addressDTO = addressMapper.toDto(address);
 
-        // If the entity doesn't have an ID, it will be created instead of just being updated
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restAddressMockMvc.perform(put("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
-            .andExpect(status().isCreated());
+            .andExpect(status().isBadRequest());
 
         // Validate the Address in the database
         List<Address> addressList = addressRepository.findAll();
-        assertThat(addressList).hasSize(databaseSizeBeforeUpdate + 1);
+        assertThat(addressList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
@@ -331,6 +333,7 @@ public class AddressResourceIntTest {
     public void deleteAddress() throws Exception {
         // Initialize the database
         addressRepository.saveAndFlush(address);
+
         int databaseSizeBeforeDelete = addressRepository.findAll().size();
 
         // Get the address

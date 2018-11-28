@@ -1,57 +1,53 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.addressclassification.home.title">Addressclassifications</span>
-        <button class="btn btn-primary float-right jh-create-entity create-addressclassification-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['addressclassification-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-addressclassification-stock-and-sales-utility" [routerLink]="['/addressclassification-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.addressclassification.home.createLabel">
             Create new Addressclassification
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="addressclassifications">
-        <table class="table table-striped">
+        <table class="table table-dark table-striped  table-sm table-hover">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.code">Code</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="name"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.name">Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.comments">Comments</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="name"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.name">Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.addressclassification.comments">Comments</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let addressclassification of addressclassifications ;trackBy: trackId">
-                <td><a [routerLink]="['../addressclassification-stock-and-sales-utility', addressclassification.id ]">{{addressclassification.id}}</a></td>
+                <td><a [routerLink]="['/addressclassification-stock-and-sales-utility', addressclassification.id, 'view' ]">{{addressclassification.id}}</a></td>
                 <td>{{addressclassification.code}}</td>
                 <td>{{addressclassification.name}}</td>
                 <td>{{addressclassification.comments}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../addressclassification-stock-and-sales-utility', addressclassification.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                [routerLink]="['/addressclassification-stock-and-sales-utility', addressclassification.id, 'view' ]"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'addressclassification-stock-and-sales-utility/'+ addressclassification.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                [routerLink]="['/addressclassification-stock-and-sales-utility', addressclassification.id, 'edit']"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'addressclassification-stock-and-sales-utility/'+ addressclassification.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                             <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
                         </button>
                     </div>
                 </td>

@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "dashboard" : {
+        "dashboard": {
             "home": {
                 "title": "Dashboards",
                 "createLabel": "Create a new Dashboard",

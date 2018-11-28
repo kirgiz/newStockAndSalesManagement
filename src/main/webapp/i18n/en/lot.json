@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "lot" : {
+        "lot": {
             "home": {
                 "title": "Lots",
                 "createLabel": "Create a new Lot",

@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { TransferclassificationStockAndSalesUtility } from './transferclassification-stock-and-sales-utility.model';
+import { ITransferclassificationStockAndSalesUtility } from 'app/shared/model/transferclassification-stock-and-sales-utility.model';
+import { Principal } from 'app/core';
+
+import { ITEMS_PER_PAGE } from 'app/shared';
 import { TransferclassificationStockAndSalesUtilityService } from './transferclassification-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
 
 @Component({
     selector: 'jhi-transferclassification-stock-and-sales-utility',
     templateUrl: './transferclassification-stock-and-sales-utility.component.html'
 })
 export class TransferclassificationStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-
-    transferclassifications: TransferclassificationStockAndSalesUtility[];
+    transferclassifications: ITransferclassificationStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
     itemsPerPage: number;
@@ -42,14 +43,17 @@ export class TransferclassificationStockAndSalesUtilityComponent implements OnIn
     }
 
     loadAll() {
-        this.transferclassificationService.query({
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-        }).subscribe(
-            (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => this.onSuccess(res.body, res.headers),
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+        this.transferclassificationService
+            .query({
+                page: this.page,
+                size: this.itemsPerPage,
+                sort: this.sort()
+            })
+            .subscribe(
+                (res: HttpResponse<ITransferclassificationStockAndSalesUtility[]>) =>
+                    this.paginateTransferclassifications(res.body, res.headers),
+                (res: HttpErrorResponse) => this.onError(res.message)
+            );
     }
 
     reset() {
@@ -62,9 +66,10 @@ export class TransferclassificationStockAndSalesUtilityComponent implements OnIn
         this.page = page;
         this.loadAll();
     }
+
     ngOnInit() {
         this.loadAll();
-        this.principal.identity().then((account) => {
+        this.principal.identity().then(account => {
             this.currentAccount = account;
         });
         this.registerChangeInTransferclassifications();
@@ -74,11 +79,12 @@ export class TransferclassificationStockAndSalesUtilityComponent implements OnIn
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: TransferclassificationStockAndSalesUtility) {
+    trackId(index: number, item: ITransferclassificationStockAndSalesUtility) {
         return item.id;
     }
+
     registerChangeInTransferclassifications() {
-        this.eventSubscriber = this.eventManager.subscribe('transferclassificationListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('transferclassificationListModification', response => this.reset());
     }
 
     sort() {
@@ -89,15 +95,15 @@ export class TransferclassificationStockAndSalesUtilityComponent implements OnIn
         return result;
     }
 
-    private onSuccess(data, headers) {
+    private paginateTransferclassifications(data: ITransferclassificationStockAndSalesUtility[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         for (let i = 0; i < data.length; i++) {
             this.transferclassifications.push(data[i]);
         }
     }
 
-    private onError(error) {
-        this.jhiAlertService.error(error.message, null, null);
+    private onError(errorMessage: string) {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 }

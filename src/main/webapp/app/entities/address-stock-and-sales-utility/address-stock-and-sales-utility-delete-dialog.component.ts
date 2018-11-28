@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { AddressStockAndSalesUtility } from './address-stock-and-sales-utility.model';
-import { AddressStockAndSalesUtilityPopupService } from './address-stock-and-sales-utility-popup.service';
+import { IAddressStockAndSalesUtility } from 'app/shared/model/address-stock-and-sales-utility.model';
 import { AddressStockAndSalesUtilityService } from './address-stock-and-sales-utility.service';
 
 @Component({
@@ -13,22 +12,20 @@ import { AddressStockAndSalesUtilityService } from './address-stock-and-sales-ut
     templateUrl: './address-stock-and-sales-utility-delete-dialog.component.html'
 })
 export class AddressStockAndSalesUtilityDeleteDialogComponent {
-
-    address: AddressStockAndSalesUtility;
+    address: IAddressStockAndSalesUtility;
 
     constructor(
         private addressService: AddressStockAndSalesUtilityService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {
-    }
+    ) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
     }
 
     confirmDelete(id: number) {
-        this.addressService.delete(id).subscribe((response) => {
+        this.addressService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
                 name: 'addressListModification',
                 content: 'Deleted an address'
@@ -43,22 +40,33 @@ export class AddressStockAndSalesUtilityDeleteDialogComponent {
     template: ''
 })
 export class AddressStockAndSalesUtilityDeletePopupComponent implements OnInit, OnDestroy {
+    private ngbModalRef: NgbModalRef;
 
-    routeSub: any;
-
-    constructor(
-        private route: ActivatedRoute,
-        private addressPopupService: AddressStockAndSalesUtilityPopupService
-    ) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
-            this.addressPopupService
-                .open(AddressStockAndSalesUtilityDeleteDialogComponent as Component, params['id']);
+        this.activatedRoute.data.subscribe(({ address }) => {
+            setTimeout(() => {
+                this.ngbModalRef = this.modalService.open(AddressStockAndSalesUtilityDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.address = address;
+                this.ngbModalRef.result.then(
+                    result => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    },
+                    reason => {
+                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.ngbModalRef = null;
+                    }
+                );
+            }, 0);
         });
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
+        this.ngbModalRef = null;
     }
 }

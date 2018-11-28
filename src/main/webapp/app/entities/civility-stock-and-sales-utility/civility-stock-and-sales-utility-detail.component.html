@@ -1,34 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="civility">
+            <h2><span jhiTranslate="stockAndSalesManagementApp.civility.detail.title">Civility</span> {{civility.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="stockAndSalesManagementApp.civility.code">Code</span></dt>
+                <dd>
+                    <span>{{civility.code}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.civility.name">Name</span></dt>
+                <dd>
+                    <span>{{civility.name}}</span>
+                </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.civility.comments">Comments</span></dt>
+                <dd>
+                    <span>{{civility.comments}}</span>
+                </dd>
+            </dl>
 
-<div *ngIf="civility">
-    <h2><span jhiTranslate="stockAndSalesManagementApp.civility.detail.title">Civility</span> {{civility.id}}</h2>
-    <hr>
-    <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="stockAndSalesManagementApp.civility.code">Code</span></dt>
-        <dd>
-            <span>{{civility.code}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.civility.name">Name</span></dt>
-        <dd>
-            <span>{{civility.name}}</span>
-        </dd>
-        <dt><span jhiTranslate="stockAndSalesManagementApp.civility.comments">Comments</span></dt>
-        <dd>
-            <span>{{civility.comments}}</span>
-        </dd>
-    </dl>
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
 
-    <button type="submit"
-            (click)="previousState()"
-            class="btn btn-info">
-        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
-    </button>
-
-    <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'civility-stock-and-sales-utility/'+ civility.id + '/edit'} }]"
-            replaceUrl="true"
-            queryParamsHandling="merge"
-            class="btn btn-primary">
-        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
-    </button>
+            <button type="button"
+                    [routerLink]="['/civility-stock-and-sales-utility', civility.id, 'edit']"
+                    class="btn btn-outline-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
 </div>

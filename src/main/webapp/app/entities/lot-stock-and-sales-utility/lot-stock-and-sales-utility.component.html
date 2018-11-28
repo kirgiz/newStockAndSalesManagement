@@ -1,36 +1,34 @@
 <div>
-    <h2>
+    <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.lot.home.title">Lots</span>
-        <button class="btn btn-primary float-right jh-create-entity create-lot-stock-and-sales-utility" [routerLink]="['/', { outlets: { popup: ['lot-stock-and-sales-utility-new'] } }]">
-            <span class="fa fa-plus"></span>
+        <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-lot-stock-and-sales-utility" [routerLink]="['/lot-stock-and-sales-utility/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
             <span  jhiTranslate="stockAndSalesManagementApp.lot.home.createLabel">
             Create new Lot
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
-    </div>
     <br/>
     <div class="table-responsive" *ngIf="lots">
-        <table class="table table-striped">
+        <table class="table table-dark table-striped  table-sm table-hover">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.lot.code">Code</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="description"><span jhiTranslate="stockAndSalesManagementApp.lot.description">Description</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="creationDate"><span jhiTranslate="stockAndSalesManagementApp.lot.creationDate">Creation Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="numberOfItems"><span jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems">Number Of Items</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.lot.comments">Comments</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="unitBuyPrice"><span jhiTranslate="stockAndSalesManagementApp.lot.unitBuyPrice">Unit Buy Price</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="buycurrencylotIsoCode"><span jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="materialclassificationName"><span jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.lot.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="description"><span jhiTranslate="stockAndSalesManagementApp.lot.description">Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="creationDate"><span jhiTranslate="stockAndSalesManagementApp.lot.creationDate">Creation Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="numberOfItems"><span jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems">Number Of Items</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.lot.comments">Comments</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="unitBuyPrice"><span jhiTranslate="stockAndSalesManagementApp.lot.unitBuyPrice">Unit Buy Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="buycurrencylotIsoCode"><span jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="materialclassificationName"><span jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let lot of lots ;trackBy: trackId">
-                <td><a [routerLink]="['../lot-stock-and-sales-utility', lot.id ]">{{lot.id}}</a></td>
+                <td><a [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'view' ]">{{lot.id}}</a></td>
                 <td>{{lot.code}}</td>
                 <td>{{lot.description}}</td>
                 <td>{{lot.creationDate | date:'mediumDate'}}</td>
@@ -39,37 +37,35 @@
                 <td>{{lot.unitBuyPrice}}</td>
                 <td>
                     <div *ngIf="lot.buycurrencylotId">
-                        <a [routerLink]="['../currency-stock-and-sales-utility', lot.buycurrencylotId  ]" >{{lot.buycurrencylotIsoCode}}</a>
+                        <a [routerLink]="['../currency-stock-and-sales-utility', lot.buycurrencylotId , 'view' ]" >{{lot.buycurrencylotIsoCode}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="lot.materialclassificationId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', lot.materialclassificationId  ]" >{{lot.materialclassificationName}}</a>
+                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', lot.materialclassificationId , 'view' ]" >{{lot.materialclassificationName}}</a>
                     </div>
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../lot-stock-and-sales-utility', lot.id ]"
-                                class="btn btn-info btn-sm">
-                            <span class="fa fa-eye"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'view' ]"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'lot-stock-and-sales-utility/'+ lot.id + '/edit'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'edit']"
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'lot-stock-and-sales-utility/'+ lot.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <span class="fa fa-remove"></span>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                class="btn btn-outline-secondary btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                             <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
                         </button>
                     </div>
                 </td>

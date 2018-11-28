@@ -1,423 +1,516 @@
 import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.service';
-import { MaterialclassificationStockAndSalesUtility } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.model';
+import { MaterialclassificationStockAndSalesUtility } from '../../shared/model/materialclassification-stock-and-sales-utility.model';
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs/Subscription';
+// import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import { DashboardStockAndSalesUtility } from './dashboard-stock-and-sales-utility.model';
-import { TransferclassificationStockAndSalesUtility } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.model';
+import { DashboardStockAndSalesUtility } from '../../shared/model/dashboard-stock-and-sales-utility.model';
+import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtility } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from '../materialhistory-stock-and-sales-utility/materialhistory-stock-and-sales-utility.service';
-import { ITEMS_PER_PAGE, Principal, User, BaseEntity } from '../../shared';
+import { BaseEntity } from '../../shared/model/base-entity.model';
+import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
 import { TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility/transferclassification-stock-and-sales-utility.service';
-import { ThirdStockAndSalesUtility } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.model';
+import { ThirdStockAndSalesUtility } from '../../shared/model/third-stock-and-sales-utility.model';
 import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility/third-stock-and-sales-utility.service';
-import { UserService } from '../../shared/user/user.service';
+import { UserService } from '../../../app/core/user/user.service';
 import { UserAuthorizedThirdService } from '../user-authorized-third/user-authorized-third.service';
-import { UserAuthorizedThird } from '../user-authorized-third';
-import { CompanyStockAndSalesUtilityService, CompanyStockAndSalesUtility } from '../company-stock-and-sales-utility';
-import { CurrencyStockAndSalesUtilityService, CurrencyStockAndSalesUtility } from '../currency-stock-and-sales-utility';
-import { MaterialStockAndSalesUtilityService, MaterialStockAndSalesUtility } from '../material-stock-and-sales-utility';
+import { UserAuthorizedThird } from '../../shared/model/user-authorized-third.model';
+import { CompanyStockAndSalesUtility, ICompanyStockAndSalesUtility } from '../../shared/model/company-stock-and-sales-utility.model';
+import { CurrencyStockAndSalesUtility, ICurrencyStockAndSalesUtility } from '../../shared/model/currency-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
+import { CurrencyStockAndSalesUtilityService } from '../currency-stock-and-sales-utility';
+import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
+// import { Component, OnInit, OnDestroy } from '@angular/core';
+// import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+// import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
+
+import { IDashboardStockAndSalesUtility } from 'app/shared/model/dashboard-stock-and-sales-utility.model';
+import { Principal, User } from 'app/core';
+import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
+import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility';
+import { ILotStockAndSalesUtility, LotStockAndSalesUtility } from '../../shared/model/lot-stock-and-sales-utility.model';
+import { ForexratesStockAndSalesUtilityService } from '../forexrates-stock-and-sales-utility';
+import { ForexratesStockAndSalesUtility } from '../../shared/model/forexrates-stock-and-sales-utility.model';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 @Component({
-	selector: 'jhi-dashboard-stock-and-sales-utility',
+    selector: 'jhi-dashboard-stock-and-sales-utility',
     templateUrl: './dashboard-stock-and-sales-utility.component.html',
-    styleUrls: [
-        '../../../../../../node_modules/nvd3/build/nv.d3.css'
-      ],
-      encapsulation: ViewEncapsulation.None
+    styleUrls: ['../../../../../../node_modules/nvd3/build/nv.d3.css'],
+    encapsulation: ViewEncapsulation.None
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-	inventories: any[];
-	predicate: string;
-	reverse: string;
-	previousPage: number;
-	page: number;
-	materials: MaterialStockAndSalesUtility[];
+    fromDateDp: any;
+    toDateDp: any;
+    inventories: any[];
+    predicate: string;
+    reverse: string;
+    previousPage: number;
+    page: number;
+    materials: MaterialStockAndSalesUtility[];
     currency: CurrencyStockAndSalesUtility;
     company: CompanyStockAndSalesUtility[];
-	materialTypeList: MaterialclassificationStockAndSalesUtility[];
-	materialType: number;
-	materialClassificationSubscription: any;
-	data: any;
-	options: {
-		chart: {
-			type: string;
-			height: number;
-			margin: { top: number; right: number; bottom: number; left: number };
-			x: (d: any) => any;
-			y: (d: any) => any;
-			useInteractiveGuideline: boolean;
-			xAxis: { axisLabel: string; tickFormat: (d: any) => string };
-			yAxis: { axisLabel: string; tickFormat: (d: any) => string; axisLabelDistance: number };
-		};
-	};
-	transferclassifications: TransferclassificationStockAndSalesUtility[];
-	hasAdminAuth: boolean;
-	materialhistories: MaterialhistoryStockAndSalesUtility[];
-	thirdSubscription: Subscription;
-	transferClassificationSubscription: Subscription;
-	thirdAuthSubscription: Subscription;
-	usrSubscription: Subscription;
-	materialhistoriesToDisplay: {
-		id?: number;
-		code?: string;
-		creationDate?: any;
-		price?: number;
-		comments?: string;
-		userMod?: number;
-		itemTransfereds?: BaseEntity[];
-		transferClassifId?: number;
-		warehousefromId?: number;
-		warehousetoId?: number;
-		userModName?: string;
-		materialclassificationDescription?: string;
-	}[];
-	authThirdsList: UserAuthorizedThird[];
+    materialTypeList: MaterialclassificationStockAndSalesUtility[];
+    materialType: number;
+    materialClassificationSubscription: any;
+    data: any;
+    options: {
+        chart: {
+            type: string;
+            height: number;
+            margin: { top: number; right: number; bottom: number; left: number };
+            x: (d: any) => any;
+            y: (d: any) => any;
+            useInteractiveGuideline: boolean;
+            xAxis: { axisLabel: string; tickFormat: (d: any) => string };
+            yAxis: { axisLabel: string; tickFormat: (d: any) => string; axisLabelDistance: number };
+        };
+    };
+    transferclassifications: TransferclassificationStockAndSalesUtility[];
+    hasAdminAuth: boolean;
+    materialhistories: MaterialhistoryStockAndSalesUtility[];
+    thirdSubscription: Subscription;
+    transferClassificationSubscription: Subscription;
+    thirdAuthSubscription: Subscription;
+    usrSubscription: Subscription;
+    materialhistoriesToDisplay: {
+        id?: number;
+        code?: string;
+        creationDate?: any;
+        price?: number;
+        comments?: string;
+        userMod?: number;
+        itemTransfereds?: MaterialStockAndSalesUtility[];
+        transferClassifId?: number;
+        warehousefromId?: number;
+        warehousetoId?: number;
+        userModName?: string;
+        materialclassificationDescription?: string;
+        profitAndLoss?: number;
+    }[];
+    authThirdsList: UserAuthorizedThird[];
 
-	userList: User[];
-	userServiceSubscription: Subscription;
-	historySubscription: Subscription;
-	dashboards: any[];
-	currentAccount: any;
-	eventSubscriber: Subscription;
-	bpReadings: any = {};
-	bpOptions: any = {};
-	thirdList: ThirdStockAndSalesUtility[];
-	transferSource: number;
-	transferDest: number;
-	dashboardsToDisplay: any[];
-	transferClassifId: number;
-	dashboardsToDisplay2: any[];
-	dashboardsToDisplay3: any[];
+    userList: User[];
+    userServiceSubscription: Subscription;
+    historySubscription: Subscription;
+    dashboards: any[];
+    currentAccount: any;
+    eventSubscriber: Subscription;
+    bpReadings: any = {};
+    bpOptions: any = {};
+    thirdList: ThirdStockAndSalesUtility[];
+    transferSource: number;
+    transferDest: number;
+    dashboardsToDisplay: any[];
+    transferClassifId: number;
+    dashboardsToDisplay2: any[];
+    dashboardsToDisplay3: any[];
 
-	constructor(
-		private jhiAlertService: JhiAlertService,
-		private eventManager: JhiEventManager,
-		private principal: Principal,
-		private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
-		private userService: UserService,
-		private autThirds: UserAuthorizedThirdService,
-		private thirdService: ThirdStockAndSalesUtilityService,
-		private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
+    constructor(
+        private jhiAlertService: JhiAlertService,
+        private eventManager: JhiEventManager,
+        private principal: Principal,
+        private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
+        private userService: UserService,
+        private autThirds: UserAuthorizedThirdService,
+        private thirdService: ThirdStockAndSalesUtilityService,
+        private transferclassificationService: TransferclassificationStockAndSalesUtilityService,
         private materialClassificationService: MaterialclassificationStockAndSalesUtilityService,
         private companyService: CompanyStockAndSalesUtilityService,
-		private currencyService: CurrencyStockAndSalesUtilityService,
-		private materialService: MaterialStockAndSalesUtilityService
-		
-	) {
-		this.page = 1; // data.pagingParams.page;
-		this.previousPage = 1; // data.pagingParams.page;
-		this.reverse = 'asc'; // data.pagingParams.ascending;
-		this.predicate = 'id'; // data.pagingParams.predicate;
-
-	}
-
-	loadAll() {
-		this.historySubscription = this.materialhistoryService.query({}).subscribe(
-			(res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => {
-				this.onSuccess(res.body, res.headers);
-				this.userServiceSubscription = this.userService.query().subscribe(
-					(res1: HttpResponse<User[]>) => {
-						this.userList = res1.body;
-						this.materialhistoriesToDisplay.forEach((item) =>
-							this.userList.forEach((element) => {
-								if (element.id === item.userMod) {
-									item.userModName = element.login;
-								}
-							})
-						);
-					},
-					(res1: HttpErrorResponse) => this.onError(res1.message)
-				);
-				this.usrSubscription = this.userService
-					.find(this.currentAccount.login)
-					.subscribe((user: HttpResponse<User>) => {
-						const resuser: User = user.body;
-						this.thirdAuthSubscription = this.autThirds
-							.query({
-								'userAuthId.equals': resuser.id
-							})
-							.subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
-								this.authThirdsList = reslist.body;
-								this.materialhistoryService.setDefaultThird(
-									this.thirdList.find((third: ThirdStockAndSalesUtility) => {
-										return (
-											this.authThirdsList.find((thirdAuth) => {
-												return thirdAuth.defaultThird === true;
-											}).thirdAuthId === third.id
-										);
-									})
-								);
-
-								this.materialhistoryService.setDefaultDestination(
-									this.thirdList.find((third: ThirdStockAndSalesUtility) => {
-										return (
-											this.authThirdsList.find((thirdAuth) => {
-												return thirdAuth.defaultDestination === true;
-											}).thirdAuthId === third.id
-										);
-									})
-                                );
-
-
-
-								const mat: MaterialhistoryStockAndSalesUtility[] = this.materialhistoriesToDisplay.slice();
-								this.materialhistoriesToDisplay = mat.filter((element) => {
-									for (const authList of this.authThirdsList) {
-										if (
-											authList.thirdAuthId === element.warehousefromId ||
-											authList.thirdAuthId === element.warehousetoId
-										) {
-											return true;
-										}
-									}
-                                });
-
-                                this.companyService.query().take(1).subscribe(
-                                    (company: HttpResponse<CompanyStockAndSalesUtility[]>) => {
-                                        this.company = company.body;
-                                        this.currencyService.find(this.company[0].baseCurrencyId).subscribe(
-                                            (currency: HttpResponse<CurrencyStockAndSalesUtility>) => {
-                                                this.currency = currency.body;
-								this.dashboards = this.materialhistoriesToDisplay.slice();
-								this.dashboards.forEach((element) => {
-									element.numberOfItems = element.itemTransfereds.length;
-									element.profitAndLoss = 0;
-									element.currencyForDashboardName = this.currency.isoCode;
-                                });
-
-								this.dashboardsToDisplay = [];
-								if (this.dashboards && this.dashboardsToDisplay) {
-									this.dashboardsToDisplay = this.dashboards;
-									this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
-									console.log('AAAAAAAAAAAAAA');
-									console.log(this.dashboardsToDisplay2);
-									for (let i = 0; i < 15; i++) {
-										this.dashboardsToDisplay2.push({
-											...this.dashboardsToDisplay2[1],
-											creationDate: new Date(
-												this.dashboardsToDisplay2[1].creationDate.getTime() +
-													i * 60 * 60 * 1000 * 24
-											),
-											numberOfItems: i + 2
-										});
-
-										this.dashboardsToDisplay2.push({
-											...this.dashboardsToDisplay2[0],
-											creationDate: new Date(
-												this.dashboardsToDisplay2[0].creationDate.getTime() +
-													i * 60 * 60 * 1000 * 24
-											),
-											numberOfItems: i + 1
-										});
-									}
-									this.options = {
-										chart: {
-											type: 'lineChart',
-											height: 450,
-											margin: {
-												top: 20,
-												right: 20,
-												bottom: 40,
-												left: 55
-											},
-											x(d) {
-												return d.x;
-											},
-											y(d) {
-												return d.y;
-											},
-											useInteractiveGuideline: true,
-											xAxis: {
-												axisLabel: 'Jours',
-												tickFormat(d) {
-													return d3.time.format('%b %d')(new Date(d));
-												}
-											},
-											yAxis: {
-												axisLabel: 'Ventes',
-												tickFormat(d) {
-													return d3.format('.02f')(d);
-												},
-												axisLabelDistance: -10
-											}
-										}
-									};
-									this.dashboardsToDisplay3 = [];
-									const result = [];
-									this.materialClassificationSubscription = this.materialClassificationService
-										.query()
-										.subscribe(
-											(res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
-												this.materialTypeList = res1.body;
-												for (let index = 0; index < this.materialTypeList.length; index++) {
-													const tmpData = this.dashboardsToDisplay2.filter((element) => {
-														return (
-															element.materialclassificationId ===
-															this.materialTypeList[index].id
-														);
-													});
-
-													tmpData.reduce(function(res2, value) {
-														if (!res2[value.creationDate]) {
-															res2[value.creationDate] = {
-																...value,
-																numberOfItems: 0
-															};
-															result.push(res2[value.creationDate]);
-														}
-														res2[value.creationDate].numberOfItems += value.numberOfItems;
-														return res2;
-													}, {});
-													console.log('OOOOOOOOOOOOOO');
-													console.log(result);
-												}
-												this.dashboardsToDisplay = result.slice();
-												this.data = this.buildGraphData();
-											},
-											(res1: HttpErrorResponse) => this.onError(res1.message)
-										);
-
-									this.transferClassificationSubscription = this.transferclassificationService
-										.query()
-										.subscribe(
-											(res1: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
-												this.transferclassifications = res1.body;
-											},
-											(res1: HttpErrorResponse) => this.onError(res1.message)
-										);
-								}
-
-								// TO DO : Allow grouping by month instead of days + chart
-
-								console.log(this.dashboardsToDisplay);
-								const thirds = this.thirdList.slice();
-								this.thirdList = thirds.filter((element) => {
-									for (const authList of this.authThirdsList) {
-										if (authList.thirdAuthId === element.id) {
-											return true;
-										}
-									}
-								});
-								this.transferDest = this.materialhistoryService.getDefaultDestination().id;
-								this.transferSource = this.materialhistoryService.getDefaultThird().id;
-                                this.filterResults();
-                                console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY');
-                                console.log(this.currency);
-                            }
-                        );
-                    }
-                );
-							});
-					});
-			},
-			(res: HttpErrorResponse) => this.onError(res.message)
-		);
-
-		this.thirdSubscription = this.thirdService.query().subscribe(
-			(res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
-				this.thirdList = res.body;
-			},
-			(res: HttpErrorResponse) => this.onError(res.message)
-		);
-
-		this.principal.hasAuthority('ROLE_ADMIN').then((hasAuth) => {
-			this.hasAdminAuth = hasAuth;
-		});
+        private currencyService: CurrencyStockAndSalesUtilityService,
+        private materialService: MaterialStockAndSalesUtilityService,
+        private lotService: LotStockAndSalesUtilityService,
+        private forexratesService: ForexratesStockAndSalesUtilityService
+    ) {
+        this.page = 1; // data.pagingParams.page;
+        this.previousPage = 1; // data.pagingParams.page;
+        this.reverse = 'asc'; // data.pagingParams.ascending;
+        this.predicate = 'id'; // data.pagingParams.predicate;
     }
 
+    loadAll() {
+        /*let fxrates: ForexratesStockAndSalesUtility[];
+		const fxRatesSubscription =  this.forexratesService.query().subscribe(
+			(res: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
+				fxrates = res.body;
+				console.log('FXXXXXXXXXXXXXXXXXXXXXXXXXx');
+				console.log(moment());
+				console.log(fxrates);
+				console.log(this.closestFxrate(fxrates, moment(), 1002));
+				console.log('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
+console.log(parseInt(moment().format('YYYYMMDD'), 10));
+			}
+		);*/
+        this.historySubscription = this.materialhistoryService.query({}).subscribe(
+            (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => {
+                this.onSuccess(res.body, res.headers);
+                this.userServiceSubscription = this.userService.query().subscribe(
+                    (res1: HttpResponse<User[]>) => {
+                        this.userList = res1.body;
+                        this.materialhistoriesToDisplay.forEach(item =>
+                            this.userList.forEach(element => {
+                                if (element.id === item.userMod) {
+                                    item.userModName = element.login;
+                                }
+                            })
+                        );
+                    },
+                    (res1: HttpErrorResponse) => this.onError(res1.message)
+                );
+                this.usrSubscription = this.userService.find(this.currentAccount.login).subscribe((user: HttpResponse<User>) => {
+                    const resuser: User = user.body;
+                    this.thirdAuthSubscription = this.autThirds
+                        .query({
+                            'userAuthId.equals': resuser.id
+                        })
+                        .subscribe((reslist: HttpResponse<UserAuthorizedThird[]>) => {
+                            this.authThirdsList = reslist.body;
+                            this.materialhistoryService.setDefaultThird(
+                                this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                    return (
+                                        this.authThirdsList.find(thirdAuth => {
+                                            return thirdAuth.defaultThird === true;
+                                        }).thirdAuthId === third.id
+                                    );
+                                })
+                            );
+
+                            this.materialhistoryService.setDefaultDestination(
+                                this.thirdList.find((third: ThirdStockAndSalesUtility) => {
+                                    return (
+                                        this.authThirdsList.find(thirdAuth => {
+                                            return thirdAuth.defaultDestination === true;
+                                        }).thirdAuthId === third.id
+                                    );
+                                })
+                            );
+
+                            const mat: MaterialhistoryStockAndSalesUtility[] = this.materialhistoriesToDisplay.slice();
+                            this.materialhistoriesToDisplay = mat.filter(element => {
+                                for (const authList of this.authThirdsList) {
+                                    if (
+                                        authList.thirdAuthId === element.warehousefromId ||
+                                        authList.thirdAuthId === element.warehousetoId
+                                    ) {
+                                        return true;
+                                    }
+                                }
+                            });
+
+                            this.companyService
+                                .query()
+                                .pipe(take(1))
+                                .subscribe((company: HttpResponse<ICompanyStockAndSalesUtility[]>) => {
+                                    this.company = company.body;
+                                    this.currencyService
+                                        .find(this.company[0].baseCurrencyId)
+                                        .subscribe((currency: HttpResponse<ICurrencyStockAndSalesUtility>) => {
+                                            this.currency = currency.body;
+                                            this.dashboards = this.materialhistoriesToDisplay.slice();
+                                            this.dashboards.forEach(element => {
+                                                element.numberOfItems = element.itemTransfereds.length;
+                                                element.profitAndLoss = 0;
+                                                element.currencyForDashboardName = this.currency.isoCode;
+                                            });
+
+                                            this.dashboardsToDisplay = [];
+                                            if (this.dashboards && this.dashboardsToDisplay) {
+                                                this.dashboardsToDisplay = this.dashboards;
+                                                this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
+                                                console.log('AAAAAAAAAAAAAA');
+                                                console.log(this.dashboardsToDisplay2);
+                                                for (let i = 0; i < 15; i++) {
+                                                    this.dashboardsToDisplay2.push({
+                                                        ...this.dashboardsToDisplay2[1],
+                                                        creationDate: new Date(
+                                                            this.dashboardsToDisplay2[1].creationDate.valueOf() + i * 60 * 60 * 1000 * 24
+                                                        ),
+                                                        numberOfItems: i + 2
+                                                    });
+
+                                                    this.dashboardsToDisplay2.push({
+                                                        ...this.dashboardsToDisplay2[0],
+                                                        creationDate: new Date(
+                                                            this.dashboardsToDisplay2[0].creationDate.valueOf() + i * 60 * 60 * 1000 * 24
+                                                        ),
+                                                        numberOfItems: i + 1
+                                                    });
+                                                }
+                                                this.options = {
+                                                    chart: {
+                                                        type: 'lineChart',
+                                                        height: 450,
+                                                        margin: {
+                                                            top: 20,
+                                                            right: 20,
+                                                            bottom: 40,
+                                                            left: 55
+                                                        },
+                                                        x(d) {
+                                                            return d.x;
+                                                        },
+                                                        y(d) {
+                                                            return d.y;
+                                                        },
+                                                        useInteractiveGuideline: true,
+                                                        xAxis: {
+                                                            axisLabel: 'Jours',
+                                                            tickFormat(d) {
+                                                                return d3.time.format('%b %d')(new Date(d));
+                                                            }
+                                                        },
+                                                        yAxis: {
+                                                            axisLabel: 'Ventes',
+                                                            tickFormat(d) {
+                                                                return d3.format('.02f')(d);
+                                                            },
+                                                            axisLabelDistance: -10
+                                                        }
+                                                    }
+                                                };
+                                                this.dashboardsToDisplay3 = [];
+                                                const result = [];
+                                                this.materialClassificationSubscription = this.materialClassificationService
+                                                    .query()
+                                                    .subscribe(
+                                                        (res1: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+                                                            this.materialTypeList = res1.body;
+                                                            for (let index = 0; index < this.materialTypeList.length; index++) {
+                                                                const tmpData = this.dashboardsToDisplay2.filter(element => {
+                                                                    return (
+                                                                        element.materialclassificationId === this.materialTypeList[index].id
+                                                                    );
+                                                                });
+
+                                                                tmpData.reduce(function(res2, value) {
+                                                                    if (!res2[value.creationDate]) {
+                                                                        res2[value.creationDate] = {
+                                                                            ...value,
+                                                                            numberOfItems: 0,
+                                                                            profitAndLoss: 0
+                                                                        };
+                                                                        result.push(res2[value.creationDate]);
+                                                                    }
+                                                                    res2[value.creationDate].numberOfItems += value.numberOfItems;
+                                                                    res2[value.creationDate].profitAndLoss += value.profitAndLoss;
+                                                                    return res2;
+                                                                }, {});
+                                                                console.log('OOOOOOOOOOOOOO');
+                                                                console.log(result);
+                                                            }
+                                                            this.dashboardsToDisplay = result.slice();
+                                                            this.data = this.buildGraphData();
+                                                        },
+                                                        (res1: HttpErrorResponse) => this.onError(res1.message)
+                                                    );
+
+                                                this.transferClassificationSubscription = this.transferclassificationService
+                                                    .query()
+                                                    .subscribe(
+                                                        (res1: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
+                                                            this.transferclassifications = res1.body;
+                                                        },
+                                                        (res1: HttpErrorResponse) => this.onError(res1.message)
+                                                    );
+                                            }
+
+                                            // TO DO : Allow grouping by month instead of days + chart
+
+                                            console.log(this.dashboardsToDisplay);
+                                            const thirds = this.thirdList.slice();
+                                            this.thirdList = thirds.filter(element => {
+                                                for (const authList of this.authThirdsList) {
+                                                    if (authList.thirdAuthId === element.id) {
+                                                        return true;
+                                                    }
+                                                }
+                                            });
+                                            this.transferDest = this.materialhistoryService.getDefaultDestination().id;
+                                            this.transferSource = this.materialhistoryService.getDefaultThird().id;
+                                            this.computePNL();
+                                            this.filterResults();
+                                            console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY');
+                                            console.log(this.currency);
+                                        });
+                                });
+                        });
+                });
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+
+        this.thirdSubscription = this.thirdService.query().subscribe(
+            (res: HttpResponse<ThirdStockAndSalesUtility[]>) => {
+                this.thirdList = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+
+        this.principal.hasAuthority('ROLE_ADMIN').then(hasAuth => {
+            this.hasAdminAuth = hasAuth;
+        });
+    }
+    private computePNL() {
+        console.log('SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS');
+        console.log(this.materialhistoriesToDisplay);
+        let fxrates: ForexratesStockAndSalesUtility[];
+        const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
+            fxrates = res1.body;
+            // 	console.log(this.closestFxrate(fxrates, moment(), 1002));
+
+            const lotSubscription = this.lotService.query().subscribe((res: HttpResponse<LotStockAndSalesUtility[]>) => {
+                const lots = res.body;
+                console.log(lots);
+                console.log('XXXXXXXXXXXXXXXXXXXXXXXX');
+                console.log(this.dashboards);
+                for (const dashboard of this.materialhistoriesToDisplay) {
+                    let pnlTransfer = 0;
+                    const transferPrice = dashboard.price;
+                    const itemTransfereds = dashboard.itemTransfereds;
+                    // 	console.log('LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+                    // 	console.log(dashboard.itemTransfereds);
+                    if (itemTransfereds) {
+                        for (const item of itemTransfereds) {
+                            const filteredLot = lots.filter(lot => {
+                                if (item.lotIdentifierId === lot.id) {
+                                    return true;
+                                }
+                                // 			console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+                                // 			console.log(itemTransfereds);
+                            });
+                            // 	console.log('PMLPMLPMLPML LOTLOTLOT');
+                            // 		console.log(filteredLot);
+
+                            const lotFxRate: number = this.closestFxrate(
+                                fxrates,
+                                filteredLot[0].creationDate,
+                                filteredLot[0].buycurrencylotId
+                            ).straighRate;
+                            const lotBuyPriceCompanyCCY: number = filteredLot[0].unitBuyPrice;
+                            pnlTransfer = pnlTransfer + dashboard.price - lotBuyPriceCompanyCCY * lotFxRate;
+                            console.log('DASHBOARD PRICE');
+                            console.log(dashboard.price);
+                            console.log('Lot buy price');
+                            console.log(lotBuyPriceCompanyCCY);
+                            console.log('lotFxRate');
+                            console.log(lotFxRate);
+                            dashboard.profitAndLoss = dashboard.profitAndLoss + pnlTransfer;
+                            console.log('PNLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+                            console.log(dashboard.profitAndLoss);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    private closestFxrate(fxrates: ForexratesStockAndSalesUtility[], date: Moment, currency: number) {
+        return fxrates.reduce(
+            (p, v) => {
+                return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
+                    parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
+                    parseInt(v.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
+                    p.rateForCurrencyId === currency
+                    ? v
+                    : p;
+            } // new ForexratesStockAndSalesUtility());
+        );
+    }
 
     /*
  * Return a random number within the defined range,
  * random(0, 5) would return a number between 0 and 5.
  */
-random(max, min) {
-    return Math.floor((Math.random() * (max - min)) + min)
-  }
-
-toHex(numbers) {
-    var r = numbers.r.toString(16),
-        g = numbers.g.toString(16),
-        b = numbers.b.toString(16);
-
-    if(r.length === 1) {
-      r = 0 + r;
-    }
-      if(g.length === 1) {
-      g = 0 + g;
-    }
-      if(b.length === 1) {
-      b = 0 + b;
+    random(max, min) {
+        return Math.floor(Math.random() * (max - min) + min);
     }
 
-    return r + g + b;
-  }
+    toHex(numbers) {
+        let r = numbers.r.toString(16),
+            g = numbers.g.toString(16),
+            b = numbers.b.toString(16);
 
-	buildGraphData() {
+        if (r.length === 1) {
+            r = 0 + r;
+        }
+        if (g.length === 1) {
+            g = 0 + g;
+        }
+        if (b.length === 1) {
+            b = 0 + b;
+        }
 
+        return r + g + b;
+    }
 
-		const retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
-		let matTypeDesc: string;
-		for (let i = 0; i < this.materialTypeList.length; i++) {
-			const tmp = [];
-			const tmpdash = this.dashboardsToDisplay.filter((elle) => {
-				return this.materialTypeList[i].id === elle.materialclassificationId;
-			});
-			tmpdash.forEach((element) => {
-				tmp.push({ x: element.creationDate, y: element.numberOfItems });
-			});
+    buildGraphData() {
+        const retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
+        let matTypeDesc: string;
+        for (let i = 0; i < this.materialTypeList.length; i++) {
+            const tmp = [];
+            const tmpdash = this.dashboardsToDisplay.filter(elle => {
+                return this.materialTypeList[i].id === elle.materialclassificationId;
+            });
+            tmpdash.forEach(element => {
+                tmp.push({ x: element.creationDate, y: element.numberOfItems });
+            });
 
             matTypeDesc = this.materialTypeList[i].name;
             const rgb = {
-                r: this.random(0, 255), /* 2 */
+                r: this.random(0, 255) /* 2 */,
                 g: this.random(0, 255),
                 b: this.random(0, 255)
-              };
+            };
             const lcolor = this.toHex(rgb);
-		/*	let lcolor = '#ff7f0e';
+            /*	let lcolor = '#ff7f0e';
 			if (i > 0) {
 				lcolor = '#f00000';
 			}*/
-			retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
-		}
-		return retvar;
-	}
+            retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
+        }
+        return retvar;
+    }
 
-	private onSuccess(data, headers) {
-		this.materialhistories = data;
-		this.materialhistoriesToDisplay = this.materialhistories.slice();
-	}
+    private onSuccess(data, headers) {
+        this.materialhistories = data;
+        this.materialhistoriesToDisplay = this.materialhistories.slice();
+        this.computePNL();
+    }
 
-	ngOnInit() {
-		this.loadAll();
-		this.principal.identity().then((account) => {
-			this.currentAccount = account;
-		});
-		this.registerChangeInDashboards();
-	}
+    ngOnInit() {
+        this.loadAll();
+        this.principal.identity().then(account => {
+            this.currentAccount = account;
+        });
+        this.registerChangeInDashboards();
+    }
 
-	ngOnDestroy() {
-		this.eventManager.destroy(this.eventSubscriber);
-	}
+    ngOnDestroy() {
+        this.eventManager.destroy(this.eventSubscriber);
+    }
 
-	trackId(index: number, item: DashboardStockAndSalesUtility) {
-		return item.id;
-	}
+    trackId(index: number, item: DashboardStockAndSalesUtility) {
+        return item.id;
+    }
 
-	trackTransferclassificationById(index: number, item: TransferclassificationStockAndSalesUtility) {
-		return item.id;
-	}
+    trackTransferclassificationById(index: number, item: TransferclassificationStockAndSalesUtility) {
+        return item.id;
+    }
 
-	registerChangeInDashboards() {
-		this.eventSubscriber = this.eventManager.subscribe('dashboardListModification', (response) => this.loadAll());
-	}
+    registerChangeInDashboards() {
+        this.eventSubscriber = this.eventManager.subscribe('dashboardListModification', response => this.loadAll());
+    }
 
-	private onError(error) {
-		this.jhiAlertService.error(error.message, null, null);
-	}
+    private onError(error) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
 
-	sort() {
+    sort() {
         const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
         if (this.predicate !== 'id') {
             result.push('id');
@@ -425,73 +518,72 @@ toHex(numbers) {
         return result;
     }
 
-	filterResults() {
-		const dash = this.dashboardsToDisplay2.filter((item) => {
-			return (
-				(item.transferClassifId === this.transferClassifId ||
-					this.transferClassifId === null ||
-					!this.transferClassifId) &&
-				(item.materialclassificationId === this.materialType ||
-					this.materialType === null ||
-					!this.materialType) &&
-				(item.warehousefromId === this.transferSource || this.transferSource === null || !this.transferSource)
-			);
-		});
+    filterResults() {
+        const dash = this.dashboardsToDisplay2.filter(item => {
+            return (
+                (item.transferClassifId === this.transferClassifId || this.transferClassifId === null || !this.transferClassifId) &&
+                (item.materialclassificationId === this.materialType || this.materialType === null || !this.materialType) &&
+                (item.warehousefromId === this.transferSource || this.transferSource === null || !this.transferSource)
+                /*&&
+				(parseInt(item.creationDate.format('YYYYMMDD'), 10) > parseInt(this.fromDateDp.format('YYYYMMDD'), 10)
+				|| this.fromDateDp === null || !this.fromDateDp
+					|| parseInt(item.creationDate.format('YYYYMMDD'), 10) === parseInt(this.fromDateDp.format('YYYYMMDD'), 10)) &&
+				(parseInt(item.creationDate.format('YYYYMMDD'), 10) <= parseInt(this.toDateDp.format('YYYYMMDD'), 10)
+				 || this.toDateDp === null || !this.toDateDp)*/
+            );
+        });
 
-		const result = [];
-		if (this.materialTypeList) {
-			for (let index = 0; index < this.materialTypeList.length; index++) {
-				const tmpData = dash.filter((element) => {
-					return element.materialclassificationId === this.materialTypeList[index].id;
-				});
-				tmpData.reduce(function(res2, value) {
-					if (!res2[value.creationDate]) {
-						res2[value.creationDate] = {
-							...value,
-							numberOfItems: 0
-						};
-						result.push(res2[value.creationDate]);
-					}
-					res2[value.creationDate].numberOfItems += value.numberOfItems;
-					return res2;
-				}, {});
-			}
-			this.dashboardsToDisplay = result.slice();
-			this.data = this.buildGraphData();
-		}
+        console.log('DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
+        console.log(dash);
 
-		this.materialService.queryAll()
-		 .subscribe(
-			(materialsres:HttpResponse<MaterialStockAndSalesUtility[]>) => {
-			let materials = materialsres.body; 
-			const tmpData = materials.filter((element) => {
-				return (
-					element.currentLocation ===
-					this.transferSource
-				);
-			});
+        const result = [];
+        if (this.materialTypeList) {
+            for (let index = 0; index < this.materialTypeList.length; index++) {
+                const tmpData = dash.filter(element => {
+                    return element.materialclassificationId === this.materialTypeList[index].id;
+                });
+                tmpData.reduce(function(res2, value) {
+                    if (!res2[value.creationDate]) {
+                        res2[value.creationDate] = {
+                            ...value,
+                            numberOfItems: 0,
+                            profitAndLoss: 0
+                        };
+                        result.push(res2[value.creationDate]);
+                    }
+                    res2[value.creationDate].numberOfItems += value.numberOfItems;
+                    res2[value.creationDate].profitAndLoss += value.profitAndLoss;
+                    return res2;
+                }, {});
+            }
+            this.dashboardsToDisplay = result.slice();
+            this.data = this.buildGraphData();
+        }
 
-			const result = [];
+        this.materialService.queryAll().subscribe((materialsres: HttpResponse<MaterialStockAndSalesUtility[]>) => {
+            const materials = materialsres.body;
+            const tmpData = materials.filter(element => {
+                return element.currentLocation === this.transferSource;
+            });
 
-			tmpData.reduce(function(res2, value) {
-				if (!res2[value.materialTypeCatId]) {
-					res2[value.materialTypeCatId] = {
-						...value,
-						numberOfItems: 0
-					};
-					result.push(res2[value.materialTypeCatId]);
-				}
-				res2[value.materialTypeCatId].numberOfItems += 1;
-				return res2;
-			}, {});
+            const result2 = [];
 
-			console.log('AGGREGATE STOCKSSS');
-			console.log(tmpData);
-			console.log(result);
-			this.inventories = result;
+            tmpData.reduce(function(res2, value) {
+                if (!res2[value.materialTypeCatId]) {
+                    res2[value.materialTypeCatId] = {
+                        ...value,
+                        numberOfItems: 0
+                    };
+                    result2.push(res2[value.materialTypeCatId]);
+                }
+                res2[value.materialTypeCatId].numberOfItems += 1;
+                return res2;
+            }, {});
 
-			}
-		);
-
-	}
+            console.log('AGGREGATE STOCKSSS');
+            console.log(tmpData);
+            console.log(result);
+            this.inventories = result2;
+        });
+    }
 }

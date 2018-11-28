@@ -1,7 +1,6 @@
-
 {
     "stockAndSalesManagementApp": {
-        "transferclassification" : {
+        "transferclassification": {
             "home": {
                 "title": "Transferclassifications",
                 "createLabel": "Créer un nouveau Transferclassification",

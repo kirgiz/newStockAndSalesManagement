@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.MaterialMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Material.
@@ -38,6 +40,7 @@ public class MaterialService {
      */
     public MaterialDTO save(MaterialDTO materialDTO) {
         log.debug("Request to save Material : {}", materialDTO);
+
         Material material = materialMapper.toEntity(materialDTO);
         material = materialRepository.save(material);
         return materialMapper.toDto(material);
@@ -56,6 +59,7 @@ public class MaterialService {
             .map(materialMapper::toDto);
     }
 
+
     /**
      * Get one material by id.
      *
@@ -63,10 +67,10 @@ public class MaterialService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public MaterialDTO findOne(Long id) {
+    public Optional<MaterialDTO> findOne(Long id) {
         log.debug("Request to get Material : {}", id);
-        Material material = materialRepository.findOne(id);
-        return materialMapper.toDto(material);
+        return materialRepository.findById(id)
+            .map(materialMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class MaterialService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Material : {}", id);
-        materialRepository.delete(id);
+        materialRepository.deleteById(id);
     }
 }

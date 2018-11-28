@@ -38,25 +38,17 @@ public class Currency implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "baseCurrency")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Company> companyBaseCurrencies = new HashSet<>();
-
     @OneToMany(mappedBy = "rateForCurrency")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Forexrates> currencyRates = new HashSet<>();
-
     @OneToMany(mappedBy = "currencyForDashboard")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Dashboard> currencyDashboards = new HashSet<>();
-
     @OneToMany(mappedBy = "buycurrencylot")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Lot> lotBuyCurrencies = new HashSet<>();
-
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

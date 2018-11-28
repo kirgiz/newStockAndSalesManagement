@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.UserAuthorizedThirdDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.UserAuthorizedThirdMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing UserAuthorizedThird.
@@ -38,6 +40,7 @@ public class UserAuthorizedThirdService {
      */
     public UserAuthorizedThirdDTO save(UserAuthorizedThirdDTO userAuthorizedThirdDTO) {
         log.debug("Request to save UserAuthorizedThird : {}", userAuthorizedThirdDTO);
+
         UserAuthorizedThird userAuthorizedThird = userAuthorizedThirdMapper.toEntity(userAuthorizedThirdDTO);
         userAuthorizedThird = userAuthorizedThirdRepository.save(userAuthorizedThird);
         return userAuthorizedThirdMapper.toDto(userAuthorizedThird);
@@ -56,6 +59,7 @@ public class UserAuthorizedThirdService {
             .map(userAuthorizedThirdMapper::toDto);
     }
 
+
     /**
      * Get one userAuthorizedThird by id.
      *
@@ -63,10 +67,10 @@ public class UserAuthorizedThirdService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public UserAuthorizedThirdDTO findOne(Long id) {
+    public Optional<UserAuthorizedThirdDTO> findOne(Long id) {
         log.debug("Request to get UserAuthorizedThird : {}", id);
-        UserAuthorizedThird userAuthorizedThird = userAuthorizedThirdRepository.findOne(id);
-        return userAuthorizedThirdMapper.toDto(userAuthorizedThird);
+        return userAuthorizedThirdRepository.findById(id)
+            .map(userAuthorizedThirdMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class UserAuthorizedThirdService {
      */
     public void delete(Long id) {
         log.debug("Request to delete UserAuthorizedThird : {}", id);
-        userAuthorizedThirdRepository.delete(id);
+        userAuthorizedThirdRepository.deleteById(id);
     }
 }

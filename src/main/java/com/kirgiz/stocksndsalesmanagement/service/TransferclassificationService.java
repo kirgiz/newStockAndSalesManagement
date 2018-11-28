@@ -6,11 +6,13 @@ import com.kirgiz.stocksndsalesmanagement.service.dto.TransferclassificationDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.TransferclassificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 
 /**
  * Service Implementation for managing Transferclassification.
@@ -38,6 +40,7 @@ public class TransferclassificationService {
      */
     public TransferclassificationDTO save(TransferclassificationDTO transferclassificationDTO) {
         log.debug("Request to save Transferclassification : {}", transferclassificationDTO);
+
         Transferclassification transferclassification = transferclassificationMapper.toEntity(transferclassificationDTO);
         transferclassification = transferclassificationRepository.save(transferclassification);
         return transferclassificationMapper.toDto(transferclassification);
@@ -56,6 +59,7 @@ public class TransferclassificationService {
             .map(transferclassificationMapper::toDto);
     }
 
+
     /**
      * Get one transferclassification by id.
      *
@@ -63,10 +67,10 @@ public class TransferclassificationService {
      * @return the entity
      */
     @Transactional(readOnly = true)
-    public TransferclassificationDTO findOne(Long id) {
+    public Optional<TransferclassificationDTO> findOne(Long id) {
         log.debug("Request to get Transferclassification : {}", id);
-        Transferclassification transferclassification = transferclassificationRepository.findOne(id);
-        return transferclassificationMapper.toDto(transferclassification);
+        return transferclassificationRepository.findById(id)
+            .map(transferclassificationMapper::toDto);
     }
 
     /**
@@ -76,6 +80,6 @@ public class TransferclassificationService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Transferclassification : {}", id);
-        transferclassificationRepository.delete(id);
+        transferclassificationRepository.deleteById(id);
     }
 }

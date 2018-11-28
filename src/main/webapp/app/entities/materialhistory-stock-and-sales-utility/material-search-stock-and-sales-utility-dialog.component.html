@@ -68,23 +68,23 @@
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
                                     [routerLink]="['../material-stock-and-sales-utility', material.id ]"
-                                    class="btn btn-info btn-sm">
+                                    class="btn btn-outline-secondary btn-sm">
                                 <span class="fa fa-eye"></span>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> 
                             </button>
                             <button type="submit"
                                     [routerLink]="['/', { outlets: { popup: 'material-stock-and-sales-utility/'+ material.id + '/edit'} }]"
                                     replaceUrl="true"
                                     queryParamsHandling="merge"
-                                    class="btn btn-primary btn-sm">
+                                    class="btn btn-outline-secondary btn-sm">
                                 <span class="fa fa-pencil"></span>
-                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> 
                             </button>
                             <button type="submit"
                                     [routerLink]="['/', { outlets: { popup: 'material-stock-and-sales-utility/'+ material.id + '/delete'} }]"
                                     replaceUrl="true"
                                     queryParamsHandling="merge"
-                                    class="btn btn-danger btn-sm">
+                                    class="btn btn-outline-secondary btn-sm">
                                 <span class="fa fa-remove"></span>
                                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
                             </button>
@@ -105,10 +105,10 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+    <button type="button" class="btn btn-outline-dark" data-dismiss="modal" (click)="clear()">
                 <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
             </button>
-    <button type="submit" class="btn btn-primary"> <!--[disabled]="isSaving"-->
+    <button type="submit" class="btn btn-outline-primary"> <!--[disabled]="isSaving"-->
                 <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
             </button>
 </div>
