@@ -25,11 +25,7 @@ export class MaterialStockAndSalesUtilityPopupService {
                 this.materialService.find(id).subscribe((materialResponse: HttpResponse<MaterialStockAndSalesUtility>) => {
                     const material: MaterialStockAndSalesUtility = materialResponse.body;
                     if (material.creationDate) {
-                        material.creationDate = moment(); /*{
-                                year: material.creationDate.getFullYear(),
-                                month: material.creationDate.getMonth() + 1,
-                                day: material.creationDate.getDate()
-                            };*/
+                        material.creationDate = moment();
                     }
                     this.ngbModalRef = this.materialModalRef(component, material);
                     resolve(this.ngbModalRef);

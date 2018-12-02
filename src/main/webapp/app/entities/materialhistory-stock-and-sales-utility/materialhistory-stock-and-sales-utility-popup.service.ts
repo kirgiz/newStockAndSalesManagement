@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HttpResponse } from '@angular/common/http';
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityPopupService {
@@ -13,7 +14,6 @@ export class MaterialhistoryStockAndSalesUtilityPopupService {
         private modalService: NgbModal,
         private router: Router,
         private materialhistoryService: MaterialhistoryStockAndSalesUtilityService
-
     ) {
         this.ngbModalRef = null;
     }
@@ -26,15 +26,12 @@ export class MaterialhistoryStockAndSalesUtilityPopupService {
             }
 
             if (id) {
-                this.materialhistoryService.find(id)
+                this.materialhistoryService
+                    .find(id)
                     .subscribe((materialhistoryResponse: HttpResponse<MaterialhistoryStockAndSalesUtility>) => {
                         const materialhistory: MaterialhistoryStockAndSalesUtility = materialhistoryResponse.body;
                         if (materialhistory.creationDate) {
-                            materialhistory.creationDate = {
-                                year: materialhistory.creationDate.getFullYear(),
-                                month: materialhistory.creationDate.getMonth() + 1,
-                                day: materialhistory.creationDate.getDate()
-                            };
+                            materialhistory.creationDate = moment();
                         }
                         this.ngbModalRef = this.materialhistoryModalRef(component, materialhistory);
                         resolve(this.ngbModalRef);
@@ -50,15 +47,18 @@ export class MaterialhistoryStockAndSalesUtilityPopupService {
     }
 
     materialhistoryModalRef(component: Component, materialhistory: MaterialhistoryStockAndSalesUtility): NgbModalRef {
-        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static' });
         modalRef.componentInstance.materialhistory = materialhistory;
-        modalRef.result.then((result) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-        }, (reason) => {
-            this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true, queryParamsHandling: 'merge' });
-            this.ngbModalRef = null;
-        });
+        modalRef.result.then(
+            result => {
+                this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                this.ngbModalRef = null;
+            },
+            reason => {
+                this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                this.ngbModalRef = null;
+            }
+        );
         return modalRef;
     }
 }

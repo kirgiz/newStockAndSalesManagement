@@ -35,7 +35,6 @@ const ENTITY_STATES = [...materialhistoryRoute, ...materialhistoryPopupRoute, ..
         MaterialhistoryStockAndSalesUtilityUpdateComponent,
         MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
         MaterialhistoryStockAndSalesUtilityPopupComponent,
-        MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
         MaterialSearchStockAndSalesUtilityComponent,
         MaterialSearchStockAndSalesUtilityDialogComponent,
         MaterialSearchStockAndSalesUtilityPopupComponent,
@@ -49,15 +48,16 @@ const ENTITY_STATES = [...materialhistoryRoute, ...materialhistoryPopupRoute, ..
         MaterialSearchStockAndSalesUtilityComponent,
         MaterialSearchStockAndSalesUtilityDialogComponent,
         MaterialSearchStockAndSalesUtilityPopupComponent,
-        MaterialhistoryStockAndSalesUtilityDialogComponent
+        MaterialhistoryStockAndSalesUtilityDialogComponent,
+        MaterialhistoryStockAndSalesUtilityDeleteDialogComponent,
+        MaterialhistoryStockAndSalesUtilityDeletePopupComponent
     ],
     providers: [
         MaterialhistoryStockAndSalesUtilityService,
         MaterialhistoryStockAndSalesUtilityPopupService,
         MaterialhistoryStockAndSalesUtilityResolvePagingParams,
         MaterialSearchStockAndSalesUtilityResolvePagingParams,
-        MaterialSearchStockAndSalesUtilityPopupService,
-        MaterialhistoryStockAndSalesUtilityDeletePopupComponent
+        MaterialSearchStockAndSalesUtilityPopupService
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

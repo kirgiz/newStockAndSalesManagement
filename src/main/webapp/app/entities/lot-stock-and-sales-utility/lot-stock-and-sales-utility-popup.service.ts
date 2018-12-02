@@ -25,11 +25,7 @@ export class LotStockAndSalesUtilityPopupService {
                 this.lotService.find(id).subscribe((lotResponse: HttpResponse<LotStockAndSalesUtility>) => {
                     const lot: LotStockAndSalesUtility = lotResponse.body;
                     if (lot.creationDate) {
-                        lot.creationDate = moment(); /* {
-                                year: lot.creationDate.getFullYear(),
-                                month: lot.creationDate.getMonth() + 1,
-                                day: lot.creationDate.getDate()
-                            };*/
+                        lot.creationDate = moment();
                     }
                     this.ngbModalRef = this.lotModalRef(component, lot);
                     resolve(this.ngbModalRef);

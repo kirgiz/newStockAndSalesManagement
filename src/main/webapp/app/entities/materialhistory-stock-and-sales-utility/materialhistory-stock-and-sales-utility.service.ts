@@ -44,21 +44,14 @@ export class MaterialhistoryStockAndSalesUtilityService {
             this.materialService.find(element.id).subscribe((resmaterial: HttpResponse<IMaterialStockAndSalesUtility>) => {
                 const material: IMaterialStockAndSalesUtility = resmaterial.body;
                 material.currentLocation = materialhistory.warehousetoId;
-                /* const dd: { year: any; month: any; day: any } = {
-                         year: materialhistory.creationDate.year,
-                         month: materialhistory.creationDate.month,
-                         day: materialhistory.creationDate.day
-                       };
-                       material.creationDate = moment(dd);*/
                 this.subsmat = this.materialService.update(material).subscribe((res: HttpResponse<IMaterialStockAndSalesUtility>) => {});
             });
         });
         return this.http.post<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
-        /// .map((res: EntityResponseType) => this.convertResponse(res));
     }
 
     update(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convert(materialhistory);
+        // const copy = this.convert(materialhistory);
         materialhistory.itemTransfereds.forEach(element => {
             this.materialService.find(element.id).subscribe((resmaterial: HttpResponse<IMaterialStockAndSalesUtility>) => {
                 const material: IMaterialStockAndSalesUtility = resmaterial.body;
@@ -66,8 +59,12 @@ export class MaterialhistoryStockAndSalesUtilityService {
                 this.materialService.update(material).subscribe((res: HttpResponse<IMaterialStockAndSalesUtility>) => {});
             });
         });
-        return this.http.put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
+        // return this.http.put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
         //    .map((res: EntityResponseType) => this.convertResponse(res));
+        const copy = this.convertDateFromClient(materialhistory);
+        return this.http
+            .put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
     //  public resourceUrl = SERVER_API_URL + 'api/materialhistories';
 

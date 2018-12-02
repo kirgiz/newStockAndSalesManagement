@@ -210,6 +210,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.principal.hasAuthority('ROLE_ADMIN').then(hasAuth => {
             this.hasAdminAuth = hasAuth;
         });
+        //   this.registerChangeInMaterialhistories();
     }
 
     loadPage(page: number) {
@@ -226,6 +227,12 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
                 sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
             }
         });
+        this.loadAll();
+    }
+
+    reset() {
+        /*   this.page = 0;
+        this.materialhistories = [];*/
         this.loadAll();
     }
 
@@ -318,7 +325,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         return item.id;
     }
     registerChangeInMaterialhistories() {
-        this.eventSubscriber = this.eventManager.subscribe('materialhistoryListModification', response => this.loadAll());
+        this.eventSubscriber = this.eventManager.subscribe('materialhistoryListModification', response => this.reset());
     }
 
     sort() {

@@ -2,7 +2,6 @@ import { MaterialclassificationStockAndSalesUtilityService } from '../materialcl
 import { MaterialclassificationStockAndSalesUtility } from '../../shared/model/materialclassification-stock-and-sales-utility.model';
 import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-// import { Subscription } from 'rxjs/Subscription';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { DashboardStockAndSalesUtility } from '../../shared/model/dashboard-stock-and-sales-utility.model';
 import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
@@ -22,12 +21,8 @@ import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-
 import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
 import { CurrencyStockAndSalesUtilityService } from '../currency-stock-and-sales-utility';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
-// import { Component, OnInit, OnDestroy } from '@angular/core';
-// import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-// import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-
 import { IDashboardStockAndSalesUtility } from 'app/shared/model/dashboard-stock-and-sales-utility.model';
 import { Principal, User } from 'app/core';
 import { DashboardStockAndSalesUtilityService } from './dashboard-stock-and-sales-utility.service';
@@ -45,8 +40,8 @@ import { Moment } from 'moment';
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy {
-    fromDateDp: any;
-    toDateDp: any;
+    fromDate: any;
+    toDate: any;
     inventories: any[];
     predicate: string;
     reverse: string;
@@ -71,6 +66,21 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             yAxis: { axisLabel: string; tickFormat: (d: any) => string; axisLabelDistance: number };
         };
     };
+
+    dataPnL: any;
+    optionsPnL: {
+        chart: {
+            type: string;
+            height: number;
+            margin: { top: number; right: number; bottom: number; left: number };
+            x: (d: any) => any;
+            y: (d: any) => any;
+            useInteractiveGuideline: boolean;
+            xAxis: { axisLabel: string; tickFormat: (d: any) => string };
+            yAxis: { axisLabel: string; tickFormat: (d: any) => string; axisLabelDistance: number };
+        };
+    };
+
     transferclassifications: TransferclassificationStockAndSalesUtility[];
     hasAdminAuth: boolean;
     materialhistories: MaterialhistoryStockAndSalesUtility[];
@@ -134,18 +144,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     }
 
     loadAll() {
-        /*let fxrates: ForexratesStockAndSalesUtility[];
-		const fxRatesSubscription =  this.forexratesService.query().subscribe(
-			(res: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
-				fxrates = res.body;
-				console.log('FXXXXXXXXXXXXXXXXXXXXXXXXXx');
-				console.log(moment());
-				console.log(fxrates);
-				console.log(this.closestFxrate(fxrates, moment(), 1002));
-				console.log('KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
-console.log(parseInt(moment().format('YYYYMMDD'), 10));
-			}
-		);*/
         this.historySubscription = this.materialhistoryService.query({}).subscribe(
             (res: HttpResponse<MaterialhistoryStockAndSalesUtility[]>) => {
                 this.onSuccess(res.body, res.headers);
@@ -222,28 +220,42 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
                                             if (this.dashboards && this.dashboardsToDisplay) {
                                                 this.dashboardsToDisplay = this.dashboards;
                                                 this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
-                                                console.log('AAAAAAAAAAAAAA');
-                                                console.log(this.dashboardsToDisplay2);
-                                                for (let i = 0; i < 15; i++) {
-                                                    this.dashboardsToDisplay2.push({
-                                                        ...this.dashboardsToDisplay2[1],
-                                                        creationDate: new Date(
-                                                            this.dashboardsToDisplay2[1].creationDate.valueOf() + i * 60 * 60 * 1000 * 24
-                                                        ),
-                                                        numberOfItems: i + 2
-                                                    });
-
-                                                    this.dashboardsToDisplay2.push({
-                                                        ...this.dashboardsToDisplay2[0],
-                                                        creationDate: new Date(
-                                                            this.dashboardsToDisplay2[0].creationDate.valueOf() + i * 60 * 60 * 1000 * 24
-                                                        ),
-                                                        numberOfItems: i + 1
-                                                    });
-                                                }
                                                 this.options = {
                                                     chart: {
                                                         type: 'lineChart',
+                                                        height: 450,
+                                                        margin: {
+                                                            top: 20,
+                                                            right: 20,
+                                                            bottom: 40,
+                                                            left: 55
+                                                        },
+                                                        x(d) {
+                                                            return d.x;
+                                                        },
+                                                        y(d) {
+                                                            return d.y;
+                                                        },
+                                                        useInteractiveGuideline: true,
+                                                        xAxis: {
+                                                            axisLabel: 'Jours',
+                                                            tickFormat(d) {
+                                                                return d3.time.format('%b %d')(new Date(d));
+                                                            }
+                                                        },
+                                                        yAxis: {
+                                                            axisLabel: 'Ventes',
+                                                            tickFormat(d) {
+                                                                return d3.format('.02f')(d);
+                                                            },
+                                                            axisLabelDistance: -10
+                                                        }
+                                                    }
+                                                };
+
+                                                this.optionsPnL = {
+                                                    chart: {
+                                                        type: 'discreteBarChart',
                                                         height: 450,
                                                         margin: {
                                                             top: 20,
@@ -300,11 +312,11 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
                                                                     res2[value.creationDate].profitAndLoss += value.profitAndLoss;
                                                                     return res2;
                                                                 }, {});
-                                                                console.log('OOOOOOOOOOOOOO');
-                                                                console.log(result);
                                                             }
                                                             this.dashboardsToDisplay = result.slice();
                                                             this.data = this.buildGraphData();
+                                                            this.computePNL();
+                                                            this.dataPnL = this.buildGraphDataPnL();
                                                         },
                                                         (res1: HttpErrorResponse) => this.onError(res1.message)
                                                     );
@@ -321,7 +333,6 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
 
                                             // TO DO : Allow grouping by month instead of days + chart
 
-                                            console.log(this.dashboardsToDisplay);
                                             const thirds = this.thirdList.slice();
                                             this.thirdList = thirds.filter(element => {
                                                 for (const authList of this.authThirdsList) {
@@ -332,10 +343,7 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
                                             });
                                             this.transferDest = this.materialhistoryService.getDefaultDestination().id;
                                             this.transferSource = this.materialhistoryService.getDefaultThird().id;
-                                            this.computePNL();
                                             this.filterResults();
-                                            console.log('YYYYYYYYYYYYYYYYYYYYYYYYYY');
-                                            console.log(this.currency);
                                         });
                                 });
                         });
@@ -356,36 +364,22 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
         });
     }
     private computePNL() {
-        console.log('SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS');
-        console.log(this.materialhistoriesToDisplay);
         let fxrates: ForexratesStockAndSalesUtility[];
         const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
             fxrates = res1.body;
-            // 	console.log(this.closestFxrate(fxrates, moment(), 1002));
-
             const lotSubscription = this.lotService.query().subscribe((res: HttpResponse<LotStockAndSalesUtility[]>) => {
                 const lots = res.body;
-                console.log(lots);
-                console.log('XXXXXXXXXXXXXXXXXXXXXXXX');
-                console.log(this.dashboards);
                 for (const dashboard of this.materialhistoriesToDisplay) {
                     let pnlTransfer = 0;
                     const transferPrice = dashboard.price;
                     const itemTransfereds = dashboard.itemTransfereds;
-                    // 	console.log('LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
-                    // 	console.log(dashboard.itemTransfereds);
                     if (itemTransfereds) {
                         for (const item of itemTransfereds) {
                             const filteredLot = lots.filter(lot => {
                                 if (item.lotIdentifierId === lot.id) {
                                     return true;
                                 }
-                                // 			console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
-                                // 			console.log(itemTransfereds);
                             });
-                            // 	console.log('PMLPMLPMLPML LOTLOTLOT');
-                            // 		console.log(filteredLot);
-
                             const lotFxRate: number = this.closestFxrate(
                                 fxrates,
                                 filteredLot[0].creationDate,
@@ -393,15 +387,7 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
                             ).straighRate;
                             const lotBuyPriceCompanyCCY: number = filteredLot[0].unitBuyPrice;
                             pnlTransfer = pnlTransfer + dashboard.price - lotBuyPriceCompanyCCY * lotFxRate;
-                            console.log('DASHBOARD PRICE');
-                            console.log(dashboard.price);
-                            console.log('Lot buy price');
-                            console.log(lotBuyPriceCompanyCCY);
-                            console.log('lotFxRate');
-                            console.log(lotFxRate);
                             dashboard.profitAndLoss = dashboard.profitAndLoss + pnlTransfer;
-                            console.log('PNLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
-                            console.log(dashboard.profitAndLoss);
                         }
                     }
                 }
@@ -410,16 +396,14 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
     }
 
     private closestFxrate(fxrates: ForexratesStockAndSalesUtility[], date: Moment, currency: number) {
-        return fxrates.reduce(
-            (p, v) => {
-                return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
-                    parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
-                    parseInt(v.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
-                    p.rateForCurrencyId === currency
-                    ? v
-                    : p;
-            } // new ForexratesStockAndSalesUtility());
-        );
+        return fxrates.reduce((p, v) => {
+            return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
+                parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
+                parseInt(v.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
+                p.rateForCurrencyId === currency
+                ? v
+                : p;
+        });
     }
 
     /*
@@ -476,6 +460,30 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
         return retvar;
     }
 
+    buildGraphDataPnL() {
+        const retvar: { values: any[]; key: string; color: string; area: boolean }[] = [];
+        let matTypeDesc: string;
+        for (let i = 0; i < this.materialTypeList.length; i++) {
+            const tmp = [];
+            const tmpdash = this.dashboardsToDisplay.filter(elle => {
+                return this.materialTypeList[i].id === elle.materialclassificationId;
+            });
+            tmpdash.forEach(element => {
+                tmp.push({ x: element.creationDate, y: element.profitAndLoss });
+            });
+
+            matTypeDesc = this.materialTypeList[i].name;
+            const rgb = {
+                r: this.random(0, 255),
+                g: this.random(0, 255),
+                b: this.random(0, 255)
+            };
+            const lcolor = this.toHex(rgb);
+            retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
+        }
+        return retvar;
+    }
+
     private onSuccess(data, headers) {
         this.materialhistories = data;
         this.materialhistoriesToDisplay = this.materialhistories.slice();
@@ -520,21 +528,25 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
 
     filterResults() {
         const dash = this.dashboardsToDisplay2.filter(item => {
-            return (
-                (item.transferClassifId === this.transferClassifId || this.transferClassifId === null || !this.transferClassifId) &&
-                (item.materialclassificationId === this.materialType || this.materialType === null || !this.materialType) &&
-                (item.warehousefromId === this.transferSource || this.transferSource === null || !this.transferSource)
-                /*&&
-				(parseInt(item.creationDate.format('YYYYMMDD'), 10) > parseInt(this.fromDateDp.format('YYYYMMDD'), 10)
-				|| this.fromDateDp === null || !this.fromDateDp
-					|| parseInt(item.creationDate.format('YYYYMMDD'), 10) === parseInt(this.fromDateDp.format('YYYYMMDD'), 10)) &&
-				(parseInt(item.creationDate.format('YYYYMMDD'), 10) <= parseInt(this.toDateDp.format('YYYYMMDD'), 10)
-				 || this.toDateDp === null || !this.toDateDp)*/
-            );
+            if (item.creationDate) {
+                return (
+                    (item.transferClassifId === this.transferClassifId || this.transferClassifId === null || !this.transferClassifId) &&
+                    (item.materialclassificationId === this.materialType || this.materialType === null || !this.materialType) &&
+                    (item.warehousefromId === this.transferSource || this.transferSource === null || !this.transferSource) &&
+                    (!this.fromDate ||
+                        ((this.fromDate &&
+                            (parseInt(item.creationDate.format('YYYYMMDD'), 10) > parseInt(this.fromDate.format('YYYYMMDD'), 10) ||
+                                parseInt(item.creationDate.format('YYYYMMDD'), 10) === parseInt(this.fromDate.format('YYYYMMDD'), 10))) ||
+                            this.fromDate === null)) &&
+                    (!this.toDate ||
+                        ((this.toDate &&
+                            parseInt(item.creationDate.format('YYYYMMDD'), 10) <= parseInt(this.toDate.format('YYYYMMDD'), 10)) ||
+                            this.toDate === null))
+                );
+            } else {
+                return false;
+            }
         });
-
-        console.log('DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
-        console.log(dash);
 
         const result = [];
         if (this.materialTypeList) {
@@ -558,6 +570,7 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
             }
             this.dashboardsToDisplay = result.slice();
             this.data = this.buildGraphData();
+            this.dataPnL = this.buildGraphDataPnL();
         }
 
         this.materialService.queryAll().subscribe((materialsres: HttpResponse<MaterialStockAndSalesUtility[]>) => {
@@ -580,9 +593,6 @@ console.log(parseInt(moment().format('YYYYMMDD'), 10));
                 return res2;
             }, {});
 
-            console.log('AGGREGATE STOCKSSS');
-            console.log(tmpData);
-            console.log(result);
             this.inventories = result2;
         });
     }

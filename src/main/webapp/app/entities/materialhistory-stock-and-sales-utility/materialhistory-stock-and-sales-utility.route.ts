@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil } from 'ng-jhipster'; //, JhiResolvePagingParams
+import { JhiPaginationUtil } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
-import { Observable } from 'rxjs'; // , of
+import { Observable, of } from 'rxjs'; // , of
 import { filter, map } from 'rxjs/operators';
 import { MaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
@@ -15,9 +15,6 @@ import { MaterialSearchStockAndSalesUtilityPopupComponent } from './material-sea
 import { MaterialhistoryStockAndSalesUtilityUpdateComponent } from './materialhistory-stock-and-sales-utility-update.component';
 import { MaterialhistoryStockAndSalesUtilityDeletePopupComponent } from './materialhistory-stock-and-sales-utility-delete-dialog.component';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
-
-/*@Injectable()
-export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
 
 @Injectable({ providedIn: 'root' })
 export class MaterialhistoryStockAndSalesUtilityResolve implements Resolve<IMaterialhistoryStockAndSalesUtility> {
@@ -33,7 +30,7 @@ export class MaterialhistoryStockAndSalesUtilityResolve implements Resolve<IMate
         }
         return of(new MaterialhistoryStockAndSalesUtility());
     }
-} */
+}
 
 @Injectable()
 export class MaterialhistoryStockAndSalesUtilityResolvePagingParams implements Resolve<any> {
@@ -87,6 +84,30 @@ export const materialhistoryRoute: Routes = [
             pageTitle: 'stockAndSalesManagementApp.materialhistory.home.title'
         },
         canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'materialhistory-stock-and-sales-utility/:id/view',
+        component: MaterialhistoryStockAndSalesUtilityDetailComponent,
+        resolve: {
+            materialhistory: MaterialhistoryStockAndSalesUtilityResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'stockAndSalesManagementApp.materialhistory.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    },
+    {
+        path: 'materialhistory-stock-and-sales-utility/:id/edit',
+        component: MaterialhistoryStockAndSalesUtilityUpdateComponent,
+        resolve: {
+            materialhistory: MaterialhistoryStockAndSalesUtilityResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'stockAndSalesManagementApp.materialhistory.home.title'
+        },
+        canActivate: [UserRouteAccessService]
     }
 ];
 export const materialSearchRoute: Routes = [
@@ -105,6 +126,19 @@ export const materialSearchRoute: Routes = [
 ];
 
 export const materialSearchPopupRoute: Routes = [
+    /* {
+        path: 'materialhistory-stock-and-sales-utility/:id/delete',
+        component: MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
+        resolve: {
+            materialhistory: MaterialhistoryStockAndSalesUtilityResolve
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'stockAndSalesManagementApp.materialhistory.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }*/
     {
         path: 'material-search-stock-and-sales-utility-popup',
         component: MaterialSearchStockAndSalesUtilityPopupComponent,
@@ -131,7 +165,7 @@ export const materialhistoryPopupRoute: Routes = [
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
     },
-    {
+    /* {
         path: 'materialhistory-stock-and-sales-utility/:id/edit',
         component: MaterialhistoryStockAndSalesUtilityPopupComponent,
         data: {
@@ -140,10 +174,13 @@ export const materialhistoryPopupRoute: Routes = [
         },
         canActivate: [UserRouteAccessService],
         outlet: 'popup'
-    },
+    },*/
     {
         path: 'materialhistory-stock-and-sales-utility/:id/delete',
         component: MaterialhistoryStockAndSalesUtilityDeletePopupComponent,
+        resolve: {
+            materialhistory: MaterialhistoryStockAndSalesUtilityResolve
+        },
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'stockAndSalesManagementApp.materialhistory.home.title'
