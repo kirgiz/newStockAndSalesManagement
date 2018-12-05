@@ -64,6 +64,9 @@ public class LotResourceIntTest {
     private static final Double DEFAULT_UNIT_BUY_PRICE = 1D;
     private static final Double UPDATED_UNIT_BUY_PRICE = 2D;
 
+    private static final Boolean DEFAULT_ITEMS_GENERATED = false;
+    private static final Boolean UPDATED_ITEMS_GENERATED = true;
+
     @Autowired
     private LotRepository lotRepository;
 
@@ -113,7 +116,8 @@ public class LotResourceIntTest {
             .creationDate(DEFAULT_CREATION_DATE)
             .numberOfItems(DEFAULT_NUMBER_OF_ITEMS)
             .comments(DEFAULT_COMMENTS)
-            .unitBuyPrice(DEFAULT_UNIT_BUY_PRICE);
+            .unitBuyPrice(DEFAULT_UNIT_BUY_PRICE)
+            .itemsGenerated(DEFAULT_ITEMS_GENERATED);
         // Add required entity
         Currency currency = CurrencyResourceIntTest.createEntity(em);
         em.persist(currency);
@@ -154,6 +158,7 @@ public class LotResourceIntTest {
         assertThat(testLot.getNumberOfItems()).isEqualTo(DEFAULT_NUMBER_OF_ITEMS);
         assertThat(testLot.getComments()).isEqualTo(DEFAULT_COMMENTS);
         assertThat(testLot.getUnitBuyPrice()).isEqualTo(DEFAULT_UNIT_BUY_PRICE);
+        assertThat(testLot.isItemsGenerated()).isEqualTo(DEFAULT_ITEMS_GENERATED);
     }
 
     @Test
@@ -268,7 +273,8 @@ public class LotResourceIntTest {
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].numberOfItems").value(hasItem(DEFAULT_NUMBER_OF_ITEMS.intValue())))
             .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
-            .andExpect(jsonPath("$.[*].unitBuyPrice").value(hasItem(DEFAULT_UNIT_BUY_PRICE.doubleValue())));
+            .andExpect(jsonPath("$.[*].unitBuyPrice").value(hasItem(DEFAULT_UNIT_BUY_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].itemsGenerated").value(hasItem(DEFAULT_ITEMS_GENERATED.booleanValue())));
     }
     
     @Test
@@ -287,7 +293,8 @@ public class LotResourceIntTest {
             .andExpect(jsonPath("$.creationDate").value(DEFAULT_CREATION_DATE.toString()))
             .andExpect(jsonPath("$.numberOfItems").value(DEFAULT_NUMBER_OF_ITEMS.intValue()))
             .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
-            .andExpect(jsonPath("$.unitBuyPrice").value(DEFAULT_UNIT_BUY_PRICE.doubleValue()));
+            .andExpect(jsonPath("$.unitBuyPrice").value(DEFAULT_UNIT_BUY_PRICE.doubleValue()))
+            .andExpect(jsonPath("$.itemsGenerated").value(DEFAULT_ITEMS_GENERATED.booleanValue()));
     }
 
     @Test
@@ -316,7 +323,8 @@ public class LotResourceIntTest {
             .creationDate(UPDATED_CREATION_DATE)
             .numberOfItems(UPDATED_NUMBER_OF_ITEMS)
             .comments(UPDATED_COMMENTS)
-            .unitBuyPrice(UPDATED_UNIT_BUY_PRICE);
+            .unitBuyPrice(UPDATED_UNIT_BUY_PRICE)
+            .itemsGenerated(UPDATED_ITEMS_GENERATED);
         LotDTO lotDTO = lotMapper.toDto(updatedLot);
 
         restLotMockMvc.perform(put("/api/lots")
@@ -334,6 +342,7 @@ public class LotResourceIntTest {
         assertThat(testLot.getNumberOfItems()).isEqualTo(UPDATED_NUMBER_OF_ITEMS);
         assertThat(testLot.getComments()).isEqualTo(UPDATED_COMMENTS);
         assertThat(testLot.getUnitBuyPrice()).isEqualTo(UPDATED_UNIT_BUY_PRICE);
+        assertThat(testLot.isItemsGenerated()).isEqualTo(UPDATED_ITEMS_GENERATED);
     }
 
     @Test

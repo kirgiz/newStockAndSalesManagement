@@ -9,6 +9,7 @@ export interface ILotStockAndSalesUtility {
     numberOfItems?: number;
     comments?: string;
     unitBuyPrice?: number;
+    itemsGenerated?: boolean;
     materialLots?: IMaterialStockAndSalesUtility[];
     buycurrencylotIsoCode?: string;
     buycurrencylotId?: number;
@@ -25,10 +26,13 @@ export class LotStockAndSalesUtility implements ILotStockAndSalesUtility {
         public numberOfItems?: number,
         public comments?: string,
         public unitBuyPrice?: number,
+        public itemsGenerated?: boolean,
         public materialLots?: IMaterialStockAndSalesUtility[],
         public buycurrencylotIsoCode?: string,
         public buycurrencylotId?: number,
         public materialclassificationName?: string,
         public materialclassificationId?: number
-    ) {}
+    ) {
+        this.itemsGenerated = this.itemsGenerated || false;
+    }
 }

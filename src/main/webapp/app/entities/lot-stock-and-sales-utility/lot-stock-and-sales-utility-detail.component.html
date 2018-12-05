@@ -29,6 +29,10 @@
                 <dd>
                     <span>{{lot.unitBuyPrice}}</span>
                 </dd>
+                <dt><span jhiTranslate="stockAndSalesManagementApp.lot.itemsGenerated">Items Generated</span></dt>
+                <dd>
+                    <span>{{lot.itemsGenerated}}</span>
+                </dd>
                 <dt><span jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span></dt>
                 <dd>
                     <div *ngIf="lot.buycurrencylotId">
@@ -51,7 +55,7 @@
 
             <button type="button"
                     [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'edit']"
-                    class="btn btn-outline-primary">
+                    class="btn btn-primary">
                 <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>

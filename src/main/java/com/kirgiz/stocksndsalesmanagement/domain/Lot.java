@@ -54,12 +54,15 @@ public class Lot implements Serializable {
     @Column(name = "unit_buy_price")
     private Double unitBuyPrice;
 
+    @Column(name = "items_generated")
+    private Boolean itemsGenerated;
+
     @OneToMany(mappedBy = "lotIdentifier")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Material> materialLots = new HashSet<>();
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("lotBuyCurrencies")
+    @JsonIgnoreProperties("")
     private Currency buycurrencylot;
 
     @ManyToOne(optional = false)
@@ -154,6 +157,19 @@ public class Lot implements Serializable {
         this.unitBuyPrice = unitBuyPrice;
     }
 
+    public Boolean isItemsGenerated() {
+        return itemsGenerated;
+    }
+
+    public Lot itemsGenerated(Boolean itemsGenerated) {
+        this.itemsGenerated = itemsGenerated;
+        return this;
+    }
+
+    public void setItemsGenerated(Boolean itemsGenerated) {
+        this.itemsGenerated = itemsGenerated;
+    }
+
     public Set<Material> getMaterialLots() {
         return materialLots;
     }
@@ -236,6 +252,7 @@ public class Lot implements Serializable {
             ", numberOfItems=" + getNumberOfItems() +
             ", comments='" + getComments() + "'" +
             ", unitBuyPrice=" + getUnitBuyPrice() +
+            ", itemsGenerated='" + isItemsGenerated() + "'" +
             "}";
     }
 }

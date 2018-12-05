@@ -86,6 +86,11 @@
                     <input type="number" class="form-control" name="unitBuyPrice" id="field_unitBuyPrice"
                         [(ngModel)]="lot.unitBuyPrice" />
                 </div>
+                <!-- <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.lot.itemsGenerated" for="field_itemsGenerated">Items Generated</label>
+                    <input type="checkbox" class="form-control" name="itemsGenerated" id="field_itemsGenerated"
+                        [(ngModel)]="lot.itemsGenerated" />
+                </div> -->
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot" for="field_buycurrencylot">Buycurrencylot</label>
@@ -121,10 +126,10 @@
                 <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary">
                     <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
                 </button>
-                <button type="button" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary" (click)="createLotAndArticle()">
+                <button type="button" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary" (click)="createLotAndArticle()" *ngIf="!lot.itemsGenerated">
                     <span class="fa fa-save"></span>&nbsp;<span>Generer les Articles</span>
-                </button>
-            </div>
-        </form>
+                </button>      
+                  </div>
+            </form>
     </div>
 </div>

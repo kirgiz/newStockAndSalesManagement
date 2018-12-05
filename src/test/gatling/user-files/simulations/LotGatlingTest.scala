@@ -78,6 +78,7 @@ class LotGatlingTest extends Simulation {
                 , "numberOfItems":null
                 , "comments":"SAMPLE_TEXT"
                 , "unitBuyPrice":null
+                , "itemsGenerated":null
                 }""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_lot_url"))).exitHereIfFailed

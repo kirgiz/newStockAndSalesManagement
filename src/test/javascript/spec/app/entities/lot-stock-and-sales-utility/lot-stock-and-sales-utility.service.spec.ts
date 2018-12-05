@@ -25,7 +25,7 @@ describe('Service Tests', () => {
             httpMock = injector.get(HttpTestingController);
             currentDate = moment();
 
-            elemDefault = new LotStockAndSalesUtility(0, 'AAAAAAA', 'AAAAAAA', currentDate, 0, 'AAAAAAA', 0);
+            elemDefault = new LotStockAndSalesUtility(0, 'AAAAAAA', 'AAAAAAA', currentDate, 0, 'AAAAAAA', 0, false);
         });
 
         describe('Service methods', async () => {
@@ -75,7 +75,8 @@ describe('Service Tests', () => {
                         creationDate: currentDate.format(DATE_FORMAT),
                         numberOfItems: 1,
                         comments: 'BBBBBB',
-                        unitBuyPrice: 1
+                        unitBuyPrice: 1,
+                        itemsGenerated: true
                     },
                     elemDefault
                 );
@@ -102,7 +103,8 @@ describe('Service Tests', () => {
                         creationDate: currentDate.format(DATE_FORMAT),
                         numberOfItems: 1,
                         comments: 'BBBBBB',
-                        unitBuyPrice: 1
+                        unitBuyPrice: 1,
+                        itemsGenerated: true
                     },
                     elemDefault
                 );

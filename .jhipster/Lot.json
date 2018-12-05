@@ -68,10 +68,15 @@
         {
             "fieldName": "unitBuyPrice",
             "fieldType": "Double"
+        },
+        {
+            "fieldName": "itemsGenerated",
+            "fieldType": "Boolean"
         }
     ],
     "changelogDate": "20180704054153",
     "dto": "mapstruct",
+    "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "lot",
     "jpaMetamodelFiltering": false,

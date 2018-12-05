@@ -45,6 +45,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="items_generated" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
             <column name="buycurrencylot_id" type="bigint">
                 <constraints nullable="false" />
             </column>

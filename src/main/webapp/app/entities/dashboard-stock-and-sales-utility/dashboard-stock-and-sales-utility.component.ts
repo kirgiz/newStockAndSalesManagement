@@ -217,6 +217,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                             });
 
                                             this.dashboardsToDisplay = [];
+                                            //  this.computePNL();
                                             if (this.dashboards && this.dashboardsToDisplay) {
                                                 this.dashboardsToDisplay = this.dashboards;
                                                 this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
@@ -277,7 +278,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                                             }
                                                         },
                                                         yAxis: {
-                                                            axisLabel: 'Ventes',
+                                                            axisLabel: 'Profit / Perte',
                                                             tickFormat(d) {
                                                                 return d3.format('.02f')(d);
                                                             },
@@ -364,6 +365,15 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
         });
     }
     private computePNL() {
+        const tmpDash = this.materialhistoriesToDisplay
+            .sort((item1, item2) => {
+                return parseInt(item1.creationDate.format('YYYYMMDD'), 10) - parseInt(item2.creationDate.format('YYYYMMDD'), 10);
+            })
+            .slice();
+        this.materialhistoriesToDisplay = tmpDash.slice();
+        console.log(' this.materialhistoriesToDisplay ');
+        console.log(this.materialhistoriesToDisplay);
+
         let fxrates: ForexratesStockAndSalesUtility[];
         const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
             fxrates = res1.body;
@@ -385,25 +395,42 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 filteredLot[0].creationDate,
                                 filteredLot[0].buycurrencylotId
                             ).straighRate;
+                            const dashfx: number = this.closestFxrate(fxrates, dashboard.creationDate, filteredLot[0].buycurrencylotId)
+                                .straighRate;
                             const lotBuyPriceCompanyCCY: number = filteredLot[0].unitBuyPrice;
-                            pnlTransfer = pnlTransfer + dashboard.price - lotBuyPriceCompanyCCY * lotFxRate;
-                            dashboard.profitAndLoss = dashboard.profitAndLoss + pnlTransfer;
+                            pnlTransfer = pnlTransfer + dashboard.price - lotBuyPriceCompanyCCY * dashfx;
+                            dashboard.profitAndLoss = -(dashboard.profitAndLoss + pnlTransfer);
                         }
                     }
                 }
             });
+            console.log('PPPPPPPPPPPPPPPPPPPPPP');
+            console.log(this.materialhistoriesToDisplay);
         });
     }
 
     private closestFxrate(fxrates: ForexratesStockAndSalesUtility[], date: Moment, currency: number) {
-        return fxrates.reduce((p, v) => {
+        const fx = fxrates
+            .filter(item => {
+                return (
+                    item.rateForCurrencyId === currency &&
+                    parseInt(item.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10)
+                );
+            })
+            .sort((item1, item2) => {
+                return parseInt(item1.rateDate.format('YYYYMMDD'), 10) - parseInt(item2.rateDate.format('YYYYMMDD'), 10);
+            });
+        console.log(fx);
+        console.log(date);
+        return fx[0];
+        /* return fxrates.reduce((p, v) => {
             return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
                 parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
                 parseInt(v.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
-                p.rateForCurrencyId === currency
-                ? v
-                : p;
-        });
+                p.rateForCurrencyId === currency && v.rateForCurrencyId
+                ? p
+                : v;
+        });*/
     }
 
     /*
@@ -451,10 +478,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                 b: this.random(0, 255)
             };
             const lcolor = this.toHex(rgb);
-            /*	let lcolor = '#ff7f0e';
-			if (i > 0) {
-				lcolor = '#f00000';
-			}*/
             retvar.push({ values: tmp, key: matTypeDesc, color: lcolor, area: false });
         }
         return retvar;

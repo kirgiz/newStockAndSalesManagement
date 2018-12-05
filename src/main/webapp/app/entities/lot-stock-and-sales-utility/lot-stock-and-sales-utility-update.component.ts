@@ -118,6 +118,7 @@ export class LotStockAndSalesUtilityUpdateComponent implements OnInit {
     /*  */
     createLotAndArticle() {
         this.createArticle = true;
+        this.lot.itemsGenerated = true;
         this.save();
     }
 

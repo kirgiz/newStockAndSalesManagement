@@ -21,6 +21,7 @@
             <th jhiSortBy="numberOfItems"><span jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems">Number Of Items</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.lot.comments">Comments</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="unitBuyPrice"><span jhiTranslate="stockAndSalesManagementApp.lot.unitBuyPrice">Unit Buy Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="itemsGenerated"><span jhiTranslate="stockAndSalesManagementApp.lot.itemsGenerated">Items Generated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="buycurrencylotIsoCode"><span jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="materialclassificationName"><span jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th></th>
@@ -35,6 +36,7 @@
                 <td>{{lot.numberOfItems}}</td>
                 <td>{{lot.comments}}</td>
                 <td>{{lot.unitBuyPrice}}</td>
+                <td>{{lot.itemsGenerated}}</td>
                 <td>
                     <div *ngIf="lot.buycurrencylotId">
                         <a [routerLink]="['../currency-stock-and-sales-utility', lot.buycurrencylotId , 'view' ]" >{{lot.buycurrencylotIsoCode}}</a>

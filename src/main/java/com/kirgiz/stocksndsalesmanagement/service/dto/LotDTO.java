@@ -31,6 +31,8 @@ public class LotDTO implements Serializable {
 
     private Double unitBuyPrice;
 
+    private Boolean itemsGenerated;
+
     private Long buycurrencylotId;
 
     private String buycurrencylotIsoCode;
@@ -93,6 +95,14 @@ public class LotDTO implements Serializable {
 
     public void setUnitBuyPrice(Double unitBuyPrice) {
         this.unitBuyPrice = unitBuyPrice;
+    }
+
+    public Boolean isItemsGenerated() {
+        return itemsGenerated;
+    }
+
+    public void setItemsGenerated(Boolean itemsGenerated) {
+        this.itemsGenerated = itemsGenerated;
     }
 
     public Long getBuycurrencylotId() {
@@ -158,6 +168,7 @@ public class LotDTO implements Serializable {
             ", numberOfItems=" + getNumberOfItems() +
             ", comments='" + getComments() + "'" +
             ", unitBuyPrice=" + getUnitBuyPrice() +
+            ", itemsGenerated='" + isItemsGenerated() + "'" +
             ", buycurrencylot=" + getBuycurrencylotId() +
             ", buycurrencylot='" + getBuycurrencylotIsoCode() + "'" +
             ", materialclassification=" + getMaterialclassificationId() +

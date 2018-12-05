@@ -21,6 +21,7 @@
             "numberOfItems": "Number Of Items",
             "comments": "Comments",
             "unitBuyPrice": "Unit Buy Price",
+            "itemsGenerated": "Items Generated",
             "materialLot": "Material Lot",
             "buycurrencylot": "Buycurrencylot",
             "materialclassification": "Materialclassification"
