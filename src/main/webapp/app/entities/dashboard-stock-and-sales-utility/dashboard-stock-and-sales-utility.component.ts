@@ -418,7 +418,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                 );
             })
             .sort((item1, item2) => {
-                return parseInt(item1.rateDate.format('YYYYMMDD'), 10) - parseInt(item2.rateDate.format('YYYYMMDD'), 10);
+                return parseInt(item2.rateDate.format('YYYYMMDD'), 10) - parseInt(item1.rateDate.format('YYYYMMDD'), 10);
             });
         console.log(fx);
         console.log(date);

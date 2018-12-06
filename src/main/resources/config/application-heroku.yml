@@ -15,9 +15,6 @@ eureka:
         hostname: stock-and-sales-management.herokuapp.com
         non-secure-port: 80
         prefer-ip-address: false
-    client:
-        service-url:
-            defaultZone: ${JHIPSTER_REGISTRY_URL}/eureka/
 
 spring:
     datasource:

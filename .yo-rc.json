@@ -61,6 +61,7 @@
     ],
     "cacheProvider": "ehcache",
     "enableHibernateCache": true,
-    "herokuDeployType": "git"
+    "herokuDeployType": "git",
+    "herokuAppName": "stock-and-sales-management"
   }
 }
