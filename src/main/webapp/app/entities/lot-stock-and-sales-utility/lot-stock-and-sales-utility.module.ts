@@ -11,6 +11,10 @@ import {
     lotRoute,
     lotPopupRoute
 } from './';
+import {
+    LotStockAndSalesUtilityDialogComponent,
+    LotStockAndSalesUtilityPopupComponent
+} from './lot-stock-and-sales-utility-dialog.component';
 
 const ENTITY_STATES = [...lotRoute, ...lotPopupRoute];
 
@@ -21,13 +25,17 @@ const ENTITY_STATES = [...lotRoute, ...lotPopupRoute];
         LotStockAndSalesUtilityDetailComponent,
         LotStockAndSalesUtilityUpdateComponent,
         LotStockAndSalesUtilityDeleteDialogComponent,
-        LotStockAndSalesUtilityDeletePopupComponent
+        LotStockAndSalesUtilityDeletePopupComponent,
+        LotStockAndSalesUtilityDialogComponent,
+        LotStockAndSalesUtilityPopupComponent
     ],
     entryComponents: [
         LotStockAndSalesUtilityComponent,
         LotStockAndSalesUtilityUpdateComponent,
         LotStockAndSalesUtilityDeleteDialogComponent,
-        LotStockAndSalesUtilityDeletePopupComponent
+        LotStockAndSalesUtilityDeletePopupComponent,
+        LotStockAndSalesUtilityDialogComponent,
+        LotStockAndSalesUtilityPopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
