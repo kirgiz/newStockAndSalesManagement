@@ -26,7 +26,8 @@ const ENTITY_STATES = [...materialRoute, ...materialPopupRoute];
         MaterialStockAndSalesUtilityUpdateComponent,
         MaterialStockAndSalesUtilityDeleteDialogComponent,
         MaterialStockAndSalesUtilityDeletePopupComponent,
-        MaterialStockAndSalesUtilityDialogComponent
+        MaterialStockAndSalesUtilityDialogComponent,
+        MaterialStockAndSalesUtilityPopupComponent
     ],
     entryComponents: [
         MaterialStockAndSalesUtilityComponent,
