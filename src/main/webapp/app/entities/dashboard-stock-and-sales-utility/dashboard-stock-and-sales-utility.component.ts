@@ -1,6 +1,6 @@
 import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility/materialclassification-stock-and-sales-utility.service';
 import { MaterialclassificationStockAndSalesUtility } from '../../shared/model/materialclassification-stock-and-sales-utility.model';
-import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { DashboardStockAndSalesUtility } from '../../shared/model/dashboard-stock-and-sales-utility.model';
@@ -200,6 +200,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                 }
                             });
 
+                            this.computePNL();
+
                             this.companyService
                                 .query()
                                 .pipe(take(1))
@@ -217,7 +219,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                             });
 
                                             this.dashboardsToDisplay = [];
-                                            //  this.computePNL();
+                                            //   this.computePNL();
                                             if (this.dashboards && this.dashboardsToDisplay) {
                                                 this.dashboardsToDisplay = this.dashboards;
                                                 this.dashboardsToDisplay2 = this.dashboardsToDisplay.slice();
@@ -344,6 +346,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                                             });
                                             this.transferDest = this.materialhistoryService.getDefaultDestination().id;
                                             this.transferSource = this.materialhistoryService.getDefaultThird().id;
+                                            // this.computePNL();
                                             this.filterResults();
                                         });
                                 });
@@ -371,8 +374,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             })
             .slice();
         this.materialhistoriesToDisplay = tmpDash.slice();
-        console.log(' this.materialhistoriesToDisplay ');
-        console.log(this.materialhistoriesToDisplay);
+        /*  console.log(' this.materialhistoriesToDisplay ');
+        console.log(this.materialhistoriesToDisplay);*/
 
         let fxrates: ForexratesStockAndSalesUtility[];
         const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
@@ -398,14 +401,20 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                             const dashfx: number = this.closestFxrate(fxrates, dashboard.creationDate, filteredLot[0].buycurrencylotId)
                                 .straighRate;
                             const lotBuyPriceCompanyCCY: number = filteredLot[0].unitBuyPrice;
-                            pnlTransfer = pnlTransfer + dashboard.price - lotBuyPriceCompanyCCY * dashfx;
-                            dashboard.profitAndLoss = -(dashboard.profitAndLoss + pnlTransfer);
+                            pnlTransfer = dashboard.price - lotBuyPriceCompanyCCY * dashfx;
+                            dashboard.profitAndLoss = dashboard.profitAndLoss + pnlTransfer;
+                            /*      console.log('*********************************************************');
+                            console.log(dashboard.creationDate);
+                            console.log(dashboard.price);
+                            console.log(lotBuyPriceCompanyCCY);
+                            console.log(dashfx);
+                            console.log(dashboard.profitAndLoss);*/
                         }
                     }
                 }
             });
-            console.log('PPPPPPPPPPPPPPPPPPPPPP');
-            console.log(this.materialhistoriesToDisplay);
+            /*    console.log('PPPPPPPPPPPPPPPPPPPPPP');
+            console.log(this.materialhistoriesToDisplay);*/
         });
     }
 
@@ -420,8 +429,11 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             .sort((item1, item2) => {
                 return parseInt(item2.rateDate.format('YYYYMMDD'), 10) - parseInt(item1.rateDate.format('YYYYMMDD'), 10);
             });
+        console.log('FXXXXXXXXXXXXXXXXXXXXX');
         console.log(fx);
         console.log(date);
+        console.log(fx[0]);
+        console.log(currency);
         return fx[0];
         /* return fxrates.reduce((p, v) => {
             return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
@@ -432,6 +444,11 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                 : v;
         });*/
     }
+
+    /*   ngAfterViewInit(): void {
+        this.computePNL();
+this.filterResults();
+    }*/
 
     /*
  * Return a random number within the defined range,
@@ -510,7 +527,6 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     private onSuccess(data, headers) {
         this.materialhistories = data;
         this.materialhistoriesToDisplay = this.materialhistories.slice();
-        this.computePNL();
     }
 
     ngOnInit() {
@@ -550,6 +566,7 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
     }
 
     filterResults() {
+        /*  this.computePNL();*/
         const dash = this.dashboardsToDisplay2.filter(item => {
             if (item.creationDate) {
                 return (

@@ -1111,7 +1111,7 @@
                 </dependency>
             </dependencies>
         </profile>
-        <profile>
+        <!-- <profile>
             <id>heroku</id>
             <build>
                 <plugins>
@@ -1146,7 +1146,7 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
+        </profile> -->
         <profile>
             <id>heroku</id>
             <build>
