@@ -279,6 +279,10 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
         console.log(JSON.stringify(this.materialsToDisplay[index]));
     }
 
+    trackId(index: number, item: any) {
+        return item.id;
+    }
+
     transition() {
         this.router.navigate(['/material-search-stock-and-sales-utility'], {
             queryParams: {
@@ -288,6 +292,13 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
             }
         });
         this.loadAll();
+    }
+
+    loadPage(page: number) {
+        if (page !== this.previousPage) {
+            this.previousPage = page;
+            this.transition();
+        }
     }
 
     trackMaterialById(index: number, item: MaterialStockAndSalesUtility) {
