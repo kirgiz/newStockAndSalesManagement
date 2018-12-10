@@ -60,6 +60,8 @@
       "en"
     ],
     "cacheProvider": "ehcache",
-    "enableHibernateCache": true
+    "enableHibernateCache": true,
+    "herokuAppName": "stock-and-sales-management",
+    "herokuDeployType": "git"
   }
 }
