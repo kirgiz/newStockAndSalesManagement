@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility, IMaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 import { Principal } from '../../core/auth/principal.service';
 import { ITEMS_PER_PAGE } from '../../shared/constants/pagination.constants';
@@ -99,7 +99,7 @@ export class MaterialSearchStockAndSalesUtilityComponent implements OnInit, OnDe
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: MaterialStockAndSalesUtility) {
+    trackId(index: number, item: IMaterialStockAndSalesUtility) {
         return item.id;
     }
     registerChangeInMaterials() {
