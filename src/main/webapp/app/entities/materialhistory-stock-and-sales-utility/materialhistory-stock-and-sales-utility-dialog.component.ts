@@ -62,6 +62,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     materialTypeId: number;
     transferType: TransferclassificationStockAndSalesUtility;
     //  selectedValue = 'AM';
+    quantity;
 
     constructor(
         public activeModal: NgbActiveModal,
