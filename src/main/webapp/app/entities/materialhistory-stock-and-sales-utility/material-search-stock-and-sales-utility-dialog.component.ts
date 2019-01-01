@@ -11,7 +11,7 @@ import { MaterialSearchStockAndSalesUtilityPopupService } from './material-searc
 import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-stock-and-sales-utility.service';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 
-import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility, IMaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 
 import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
 
@@ -251,16 +251,6 @@ export class MaterialSearchStockAndSalesUtilityDialogComponent implements OnInit
 
     save() {
         this.isSaving = true;
-        console.log('selected materials');
-        // tslint:disable-next-line:arrow-return-shorthand
-        console.log(
-            JSON.stringify(
-                this.materialsToDisplay.filter(material => {
-                    return material.selectedItem === true;
-                })
-            )
-        );
-        // tslint:disable-next-line:arrow-return-shorthand
         this.materialhistoryService.selectMaterial(
             this.materialsToDisplay.filter(material => {
                 return material.selectedItem === true;

@@ -14,7 +14,7 @@ import { MaterialhistoryStockAndSalesUtilityService } from './materialhistory-st
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
 import { TransferclassificationStockAndSalesUtilityService } from '../transferclassification-stock-and-sales-utility';
 import { ThirdStockAndSalesUtilityService } from '../third-stock-and-sales-utility';
-import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+import { MaterialStockAndSalesUtility, IMaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 import { ThirdStockAndSalesUtility } from '../../shared/model/third-stock-and-sales-utility.model';
 import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
 
@@ -29,6 +29,7 @@ import { Principal } from '../../core/auth/principal.service';
 import { NgForm } from '@angular/forms';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import * as moment from 'moment';
+import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -63,6 +64,11 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     transferType: TransferclassificationStockAndSalesUtility;
     //  selectedValue = 'AM';
     quantity: any;
+    predicate: string;
+    reverse: any;
+    itemsPerPage: any;
+    page: number;
+    previousPage: number;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -77,7 +83,13 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         private userService: UserService,
         private autThirds: UserAuthorizedThirdService,
         private principal: Principal
-    ) {}
+    ) {
+        this.itemsPerPage = ITEMS_PER_PAGE;
+        this.page = 1; // data.pagingParams.page;
+        this.previousPage = 1; // data.pagingParams.page;
+        this.reverse = 'asc'; // data.pagingParams.ascending;
+        this.predicate = 'id'; // data.pagingParams.predicate;
+    }
 
     ngOnInit() {
         this.isSaving = false;
@@ -163,9 +175,76 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         this.activeModal.dismiss('cancel');
     }
 
+    sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
+    }
+
     save() {
+        console.log('HAAAAAAAAAAAAAAAAAAAAAA');
+        const criteria = [
+            {
+                'currentLocation.equals': this.materialhistory.warehousefromId
+            },
+            {
+                'materialTypeCatId.equals': this.materialhistory.materialclassificationId
+            }
+        ];
+        this.materialService
+            .query(
+                {
+                    page: this.page - 1,
+                    size: this.itemsPerPage,
+                    sort: this.sort(),
+                    criteria
+                }
+                // {
+                // 'currentLocation.equals': this.materialhistory.warehousefromId,
+                /// 'materialTypeCatId.equals': this.materialhistory.materialclassificationId
+                // }
+            )
+            .subscribe(
+                (res: HttpResponse<MaterialStockAndSalesUtility[]>) => {
+                    console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
+                    console.log(res.body);
+                    console.log('oooooooooooooooooooooooooooooooooooooooooooooooooo');
+                    this.materialhistory.itemTransfereds = res.body;
+                    const tmpmat = this.materialhistory.itemTransfereds.slice();
+                    console.log(this.materialhistory.itemTransfereds);
+                    console.log('lllllllllllllllllllllllllllllllllllllllllllllllll');
+                    tmpmat.forEach(element => {
+                        element.currentLocation = this.materialhistory.warehousetoId;
+                        element.creationDate = moment();
+                    });
+                    this.materialhistory.itemTransfereds = tmpmat.slice(0, this.quantity - 1);
+
+                    /*  for (const mat of this.materialhistory.itemTransfereds) {
+               this.materialService.update(mat).subscribe();
+            }*/
+
+                    this.materialhistory.creationDate = moment(); // dd;
+                    // this.materialhistory.materialclassificationId = this.materialTypeId;
+                    console.log(this.materialhistory);
+
+                    if (this.materialhistory.id !== undefined) {
+                        console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
+                        this.subscribeToSaveResponse(this.materialhistoryService.update(this.materialhistory));
+                    } else {
+                        // this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
+                        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                        this.subscribeToSaveResponse(this.materialhistoryService.create(this.materialhistory));
+                    }
+                },
+                () => console.log('error')
+            );
+        console.log('HAAAAAAAAAAAAAAAAAAAAAA');
+
+        console.log(this.materialhistory.itemTransfereds);
         this.isSaving = true;
-        const theDate = new Date(Date.now());
+        /* const theDate = new Date(Date.now());
         const year1 = new Date(Date.now()).getFullYear();
         const month1 = new Date(Date.now()).getMonth() + 1;
         const day1 = new Date(Date.now()).getDate();
@@ -173,17 +252,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
             year: year1,
             month: month1,
             day: day1
-        };
-        this.materialhistory.creationDate = moment(); // dd;
-        // this.materialhistory.materialclassificationId = this.materialTypeId;
-        console.log(this.materialhistory);
-
-        if (this.materialhistory.id !== undefined) {
-            this.subscribeToSaveResponse(this.materialhistoryService.update(this.materialhistory));
-        } else {
-            // this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
-            this.subscribeToSaveResponse(this.materialhistoryService.create(this.materialhistory));
-        }
+        };*/
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IMaterialhistoryStockAndSalesUtility>>) {
