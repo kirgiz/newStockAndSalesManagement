@@ -3,7 +3,7 @@
         "address": {
             "home": {
                 "title": "Addresses",
-                "createLabel": "Créer un nouveau Address",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Address"
             },
             "created": "Un nouveau Address a été créé avec l'identifiant {{ param }}",

@@ -3,7 +3,7 @@
         "thirdclassification": {
             "home": {
                 "title": "Thirdclassifications",
-                "createLabel": "Créer un nouveau Thirdclassification",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Thirdclassification"
             },
             "created": "Un nouveau Thirdclassification a été créé avec l'identifiant {{ param }}",

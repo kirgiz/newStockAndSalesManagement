@@ -3,7 +3,7 @@
         "third": {
             "home": {
                 "title": "Thirds",
-                "createLabel": "Créer un nouveau Third",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Third"
             },
             "created": "Un nouveau Third a été créé avec l'identifiant {{ param }}",

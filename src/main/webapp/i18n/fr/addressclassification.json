@@ -3,7 +3,7 @@
         "addressclassification": {
             "home": {
                 "title": "Addressclassifications",
-                "createLabel": "Créer un nouveau Addressclassification",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Addressclassification"
             },
             "created": "Un nouveau Addressclassification a été créé avec l'identifiant {{ param }}",

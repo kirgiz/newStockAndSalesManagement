@@ -3,7 +3,7 @@
         "material": {
             "home": {
                 "title": "Articles",
-                "createLabel": "Créer un nouvel article",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un article"
             },
             "created": "Un nouvel article a été créé avec l'identifiant {{ param }}",

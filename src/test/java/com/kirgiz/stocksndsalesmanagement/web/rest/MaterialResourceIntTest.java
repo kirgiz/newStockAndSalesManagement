@@ -11,6 +11,8 @@ import com.kirgiz.stocksndsalesmanagement.service.MaterialService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.MaterialMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.MaterialQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -72,6 +74,9 @@ public class MaterialResourceIntTest {
     private MaterialService materialService;
 
     @Autowired
+    private MaterialQueryService materialQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -90,7 +95,7 @@ public class MaterialResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MaterialResource materialResource = new MaterialResource(materialService);
+        final MaterialResource materialResource = new MaterialResource(materialService, materialQueryService);
         this.restMaterialMockMvc = MockMvcBuilders.standaloneSetup(materialResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -266,6 +271,350 @@ public class MaterialResourceIntTest {
             .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()))
             .andExpect(jsonPath("$.currentLocation").value(DEFAULT_CURRENT_LOCATION));
     }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where code equals to DEFAULT_CODE
+        defaultMaterialShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the materialList where code equals to UPDATED_CODE
+        defaultMaterialShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultMaterialShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the materialList where code equals to UPDATED_CODE
+        defaultMaterialShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where code is not null
+        defaultMaterialShouldBeFound("code.specified=true");
+
+        // Get all the materialList where code is null
+        defaultMaterialShouldNotBeFound("code.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where description equals to DEFAULT_DESCRIPTION
+        defaultMaterialShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the materialList where description equals to UPDATED_DESCRIPTION
+        defaultMaterialShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultMaterialShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the materialList where description equals to UPDATED_DESCRIPTION
+        defaultMaterialShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where description is not null
+        defaultMaterialShouldBeFound("description.specified=true");
+
+        // Get all the materialList where description is null
+        defaultMaterialShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCreationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where creationDate equals to DEFAULT_CREATION_DATE
+        defaultMaterialShouldBeFound("creationDate.equals=" + DEFAULT_CREATION_DATE);
+
+        // Get all the materialList where creationDate equals to UPDATED_CREATION_DATE
+        defaultMaterialShouldNotBeFound("creationDate.equals=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCreationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where creationDate in DEFAULT_CREATION_DATE or UPDATED_CREATION_DATE
+        defaultMaterialShouldBeFound("creationDate.in=" + DEFAULT_CREATION_DATE + "," + UPDATED_CREATION_DATE);
+
+        // Get all the materialList where creationDate equals to UPDATED_CREATION_DATE
+        defaultMaterialShouldNotBeFound("creationDate.in=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCreationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where creationDate is not null
+        defaultMaterialShouldBeFound("creationDate.specified=true");
+
+        // Get all the materialList where creationDate is null
+        defaultMaterialShouldNotBeFound("creationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCreationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where creationDate greater than or equals to DEFAULT_CREATION_DATE
+        defaultMaterialShouldBeFound("creationDate.greaterOrEqualThan=" + DEFAULT_CREATION_DATE);
+
+        // Get all the materialList where creationDate greater than or equals to UPDATED_CREATION_DATE
+        defaultMaterialShouldNotBeFound("creationDate.greaterOrEqualThan=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCreationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where creationDate less than or equals to DEFAULT_CREATION_DATE
+        defaultMaterialShouldNotBeFound("creationDate.lessThan=" + DEFAULT_CREATION_DATE);
+
+        // Get all the materialList where creationDate less than or equals to UPDATED_CREATION_DATE
+        defaultMaterialShouldBeFound("creationDate.lessThan=" + UPDATED_CREATION_DATE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCommentsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where comments equals to DEFAULT_COMMENTS
+        defaultMaterialShouldBeFound("comments.equals=" + DEFAULT_COMMENTS);
+
+        // Get all the materialList where comments equals to UPDATED_COMMENTS
+        defaultMaterialShouldNotBeFound("comments.equals=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCommentsIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where comments in DEFAULT_COMMENTS or UPDATED_COMMENTS
+        defaultMaterialShouldBeFound("comments.in=" + DEFAULT_COMMENTS + "," + UPDATED_COMMENTS);
+
+        // Get all the materialList where comments equals to UPDATED_COMMENTS
+        defaultMaterialShouldNotBeFound("comments.in=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCommentsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where comments is not null
+        defaultMaterialShouldBeFound("comments.specified=true");
+
+        // Get all the materialList where comments is null
+        defaultMaterialShouldNotBeFound("comments.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCurrentLocationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where currentLocation equals to DEFAULT_CURRENT_LOCATION
+        defaultMaterialShouldBeFound("currentLocation.equals=" + DEFAULT_CURRENT_LOCATION);
+
+        // Get all the materialList where currentLocation equals to UPDATED_CURRENT_LOCATION
+        defaultMaterialShouldNotBeFound("currentLocation.equals=" + UPDATED_CURRENT_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCurrentLocationIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where currentLocation in DEFAULT_CURRENT_LOCATION or UPDATED_CURRENT_LOCATION
+        defaultMaterialShouldBeFound("currentLocation.in=" + DEFAULT_CURRENT_LOCATION + "," + UPDATED_CURRENT_LOCATION);
+
+        // Get all the materialList where currentLocation equals to UPDATED_CURRENT_LOCATION
+        defaultMaterialShouldNotBeFound("currentLocation.in=" + UPDATED_CURRENT_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCurrentLocationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where currentLocation is not null
+        defaultMaterialShouldBeFound("currentLocation.specified=true");
+
+        // Get all the materialList where currentLocation is null
+        defaultMaterialShouldNotBeFound("currentLocation.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCurrentLocationIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where currentLocation greater than or equals to DEFAULT_CURRENT_LOCATION
+        defaultMaterialShouldBeFound("currentLocation.greaterOrEqualThan=" + DEFAULT_CURRENT_LOCATION);
+
+        // Get all the materialList where currentLocation greater than or equals to UPDATED_CURRENT_LOCATION
+        defaultMaterialShouldNotBeFound("currentLocation.greaterOrEqualThan=" + UPDATED_CURRENT_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByCurrentLocationIsLessThanSomething() throws Exception {
+        // Initialize the database
+        materialRepository.saveAndFlush(material);
+
+        // Get all the materialList where currentLocation less than or equals to DEFAULT_CURRENT_LOCATION
+        defaultMaterialShouldNotBeFound("currentLocation.lessThan=" + DEFAULT_CURRENT_LOCATION);
+
+        // Get all the materialList where currentLocation less than or equals to UPDATED_CURRENT_LOCATION
+        defaultMaterialShouldBeFound("currentLocation.lessThan=" + UPDATED_CURRENT_LOCATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByMaterialTypeDefIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Materialclassification materialTypeDef = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialTypeDef);
+        em.flush();
+        material.setMaterialTypeDef(materialTypeDef);
+        materialRepository.saveAndFlush(material);
+        Long materialTypeDefId = materialTypeDef.getId();
+
+        // Get all the materialList where materialTypeDef equals to materialTypeDefId
+        defaultMaterialShouldBeFound("materialTypeDefId.equals=" + materialTypeDefId);
+
+        // Get all the materialList where materialTypeDef equals to materialTypeDefId + 1
+        defaultMaterialShouldNotBeFound("materialTypeDefId.equals=" + (materialTypeDefId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByLotIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Lot lotIdentifier = LotResourceIntTest.createEntity(em);
+        em.persist(lotIdentifier);
+        em.flush();
+        material.setLotIdentifier(lotIdentifier);
+        materialRepository.saveAndFlush(material);
+        Long lotIdentifierId = lotIdentifier.getId();
+
+        // Get all the materialList where lotIdentifier equals to lotIdentifierId
+        defaultMaterialShouldBeFound("lotIdentifierId.equals=" + lotIdentifierId);
+
+        // Get all the materialList where lotIdentifier equals to lotIdentifierId + 1
+        defaultMaterialShouldNotBeFound("lotIdentifierId.equals=" + (lotIdentifierId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialsByMaterialTypeCatIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Materialclassification materialTypeCat = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialTypeCat);
+        em.flush();
+        material.setMaterialTypeCat(materialTypeCat);
+        materialRepository.saveAndFlush(material);
+        Long materialTypeCatId = materialTypeCat.getId();
+
+        // Get all the materialList where materialTypeCat equals to materialTypeCatId
+        defaultMaterialShouldBeFound("materialTypeCatId.equals=" + materialTypeCatId);
+
+        // Get all the materialList where materialTypeCat equals to materialTypeCatId + 1
+        defaultMaterialShouldNotBeFound("materialTypeCatId.equals=" + (materialTypeCatId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultMaterialShouldBeFound(String filter) throws Exception {
+        restMaterialMockMvc.perform(get("/api/materials?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(material.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].currentLocation").value(hasItem(DEFAULT_CURRENT_LOCATION)));
+
+        // Check, that the count call also returns 1
+        restMaterialMockMvc.perform(get("/api/materials/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultMaterialShouldNotBeFound(String filter) throws Exception {
+        restMaterialMockMvc.perform(get("/api/materials?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restMaterialMockMvc.perform(get("/api/materials/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

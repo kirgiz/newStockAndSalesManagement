@@ -6,12 +6,14 @@ import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertExcepti
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.PaginationUtil;
 import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialDTO;
+import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.MaterialQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +39,11 @@ public class MaterialResource {
 
     private final MaterialService materialService;
 
-    public MaterialResource(MaterialService materialService) {
+    private final MaterialQueryService materialQueryService;
+
+    public MaterialResource(MaterialService materialService, MaterialQueryService materialQueryService) {
         this.materialService = materialService;
+        this.materialQueryService = materialQueryService;
     }
 
     /**
@@ -87,22 +92,30 @@ public class MaterialResource {
      * GET  /materials : get all the materials.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of materials in body
      */
     @GetMapping("/materials")
     @Timed
-    public ResponseEntity<List<MaterialDTO>> getAllMaterials(Pageable pageable) {
-        log.debug("REST request to get a page of Materials");
-        Page<MaterialDTO> page = materialService.findAll(pageable);
+    public ResponseEntity<List<MaterialDTO>> getAllMaterials(MaterialCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Materials by criteria: {}", criteria);
+        Page<MaterialDTO> page = materialQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materials");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
-     * GET  /allmaterials : get all all the materials.
-     *
-     * @return the ResponseEntity with status 200 (OK) and the list of materials in body
-     */
+    * GET  /materials/count : count all the materials.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/materials/count")
+    @Timed
+    public ResponseEntity<Long> countMaterials(MaterialCriteria criteria) {
+        log.debug("REST request to count Materials by criteria: {}", criteria);
+        return ResponseEntity.ok().body(materialQueryService.countByCriteria(criteria));
+        }
 
      @GetMapping("/allmaterials")
     @Timed
@@ -113,6 +126,7 @@ public class MaterialResource {
   HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/allmaterials");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         }
+
 
     /**
      * GET  /materials/:id : get the "id" material.

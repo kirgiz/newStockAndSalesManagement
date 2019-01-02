@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
 import { IMaterialStockAndSalesUtility, MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
+
 import { JhiDateUtils } from 'ng-jhipster';
 
 type EntityResponseType = HttpResponse<IMaterialStockAndSalesUtility>;
@@ -15,7 +16,7 @@ type EntityArrayResponseType = HttpResponse<IMaterialStockAndSalesUtility[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MaterialStockAndSalesUtilityService {
-    private resourceUrl = SERVER_API_URL + 'api/materials';
+    public resourceUrl = SERVER_API_URL + 'api/materials';
     private resourceUrlall = SERVER_API_URL + 'api/allmaterials';
 
     constructor(private http: HttpClient, private dateUtils: JhiDateUtils) {}
@@ -24,16 +25,9 @@ export class MaterialStockAndSalesUtilityService {
         console.log(material.creationDate);
         const copy = this.convertDateFromClient(material);
         return this.http
-            .post<MaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-    }
-
-    /* create(material: IMaterialStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convertDateFromClient(material);
-        return this.http
             .post<IMaterialStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-    }*/
+    }
 
     update(material: IMaterialStockAndSalesUtility): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(material);
@@ -54,7 +48,6 @@ export class MaterialStockAndSalesUtilityService {
             .get<IMaterialStockAndSalesUtility[]>(this.resourceUrl, { params: options, observe: 'response' })
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
-
     queryAll(req?: any): Observable<HttpResponse<MaterialStockAndSalesUtility[]>> {
         const options = createRequestOption(req);
         return this.http

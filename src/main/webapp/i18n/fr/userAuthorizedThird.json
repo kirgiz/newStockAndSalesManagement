@@ -2,23 +2,23 @@
     "stockAndSalesManagementApp": {
         "userAuthorizedThird": {
             "home": {
-                "title": "UserAuthorizedThirds",
-                "createLabel": "Créer un nouveau User Authorized Third",
+                "title": "Droits utilisateur/Tier",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un User Authorized Third"
             },
             "created": "Un nouveau User Authorized Third a été créé avec l'identifiant {{ param }}",
-            "updated": "Le User Authorized Third avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le User Authorized Third avec l'identifiant {{ param }} a été supprimé",
+            "updated": "Le droits utilisateur/Tier avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le droits utilisateur/Tier avec l'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le User Authorized Third {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Droits utilisateur/Tier {{ id }} ?"
             },
             "detail": {
-                "title": "User Authorized Third"
+                "title": "Droits utilisateur/Tier"
             },
-            "defaultThird": "Default Third",
-            "defaultDestination": "Default Destination",
-            "userAuth": "User Auth",
-            "thirdAuth": "Third Auth"
+            "defaultThird": "Source par défaut",
+            "defaultDestination": "Destination par défaut",
+            "userAuth": "Utilisateur",
+            "thirdAuth": "Tier"
         }
     }
 }

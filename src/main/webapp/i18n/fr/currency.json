@@ -3,7 +3,7 @@
         "currency": {
             "home": {
                 "title": "Currencies",
-                "createLabel": "Créer un nouveau Currency",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Currency"
             },
             "created": "Un nouveau Currency a été créé avec l'identifiant {{ param }}",

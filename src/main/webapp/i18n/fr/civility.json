@@ -3,7 +3,7 @@
         "civility": {
             "home": {
                 "title": "Civilities",
-                "createLabel": "Créer un nouveau Civility",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Civility"
             },
             "created": "Un nouveau Civility a été créé avec l'identifiant {{ param }}",

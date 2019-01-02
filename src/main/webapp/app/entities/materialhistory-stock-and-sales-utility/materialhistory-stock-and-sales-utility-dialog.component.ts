@@ -84,7 +84,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         private autThirds: UserAuthorizedThirdService,
         private principal: Principal
     ) {
-        this.itemsPerPage = ITEMS_PER_PAGE;
+        this.itemsPerPage = 100000000;
         this.page = 1; // data.pagingParams.page;
         this.previousPage = 1; // data.pagingParams.page;
         this.reverse = 'asc'; // data.pagingParams.ascending;
@@ -184,28 +184,18 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     }
 
     save() {
-        console.log('HAAAAAAAAAAAAAAAAAAAAAA');
-        const criteria = [
-            {
-                'currentLocation.equals': this.materialhistory.warehousefromId
-            },
-            {
-                'materialTypeCatId.equals': this.materialhistory.materialclassificationId
-            }
-        ];
         this.materialService
-            .query(
-                {
-                    page: this.page - 1,
-                    size: this.itemsPerPage,
-                    sort: this.sort(),
-                    criteria
-                }
+            .query({
+                page: this.page - 1,
+                size: this.itemsPerPage,
+                sort: this.sort(),
+                /* unpaged: true,*/
+                'currentLocation.equals': this.materialhistory.warehousefromId,
+                'materialTypeCatId.equals': this.materialhistory.materialclassificationId
                 // {
                 // 'currentLocation.equals': this.materialhistory.warehousefromId,
                 /// 'materialTypeCatId.equals': this.materialhistory.materialclassificationId
-                // }
-            )
+            })
             .subscribe(
                 (res: HttpResponse<MaterialStockAndSalesUtility[]>) => {
                     console.log('rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr');
@@ -219,7 +209,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
                         element.currentLocation = this.materialhistory.warehousetoId;
                         element.creationDate = moment();
                     });
-                    this.materialhistory.itemTransfereds = tmpmat.slice(0, this.quantity - 1);
+                    this.materialhistory.itemTransfereds = tmpmat.slice(0, this.quantity);
 
                     /*  for (const mat of this.materialhistory.itemTransfereds) {
                this.materialService.update(mat).subscribe();

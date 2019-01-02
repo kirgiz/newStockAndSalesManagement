@@ -3,7 +3,7 @@
         "company": {
             "home": {
                 "title": "Companies",
-                "createLabel": "Créer un nouveau Company",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Company"
             },
             "created": "Un nouveau Company a été créé avec l'identifiant {{ param }}",

@@ -11,10 +11,6 @@ import {
     materialRoute,
     materialPopupRoute
 } from './';
-import {
-    MaterialStockAndSalesUtilityDialogComponent,
-    MaterialStockAndSalesUtilityPopupComponent
-} from './material-stock-and-sales-utility-dialog.component';
 
 const ENTITY_STATES = [...materialRoute, ...materialPopupRoute];
 
@@ -25,17 +21,13 @@ const ENTITY_STATES = [...materialRoute, ...materialPopupRoute];
         MaterialStockAndSalesUtilityDetailComponent,
         MaterialStockAndSalesUtilityUpdateComponent,
         MaterialStockAndSalesUtilityDeleteDialogComponent,
-        MaterialStockAndSalesUtilityDeletePopupComponent,
-        MaterialStockAndSalesUtilityDialogComponent,
-        MaterialStockAndSalesUtilityPopupComponent
+        MaterialStockAndSalesUtilityDeletePopupComponent
     ],
     entryComponents: [
         MaterialStockAndSalesUtilityComponent,
         MaterialStockAndSalesUtilityUpdateComponent,
         MaterialStockAndSalesUtilityDeleteDialogComponent,
-        MaterialStockAndSalesUtilityDeletePopupComponent,
-        MaterialStockAndSalesUtilityDialogComponent,
-        MaterialStockAndSalesUtilityPopupComponent
+        MaterialStockAndSalesUtilityDeletePopupComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

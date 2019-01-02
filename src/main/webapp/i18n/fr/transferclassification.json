@@ -3,7 +3,7 @@
         "transferclassification": {
             "home": {
                 "title": "Transferclassifications",
-                "createLabel": "Créer un nouveau Transferclassification",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Transferclassification"
             },
             "created": "Un nouveau Transferclassification a été créé avec l'identifiant {{ param }}",

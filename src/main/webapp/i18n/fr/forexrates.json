@@ -3,7 +3,7 @@
         "forexrates": {
             "home": {
                 "title": "Forexrates",
-                "createLabel": "Créer un nouveau Forexrates",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Forexrates"
             },
             "created": "Un nouveau Forexrates a été créé avec l'identifiant {{ param }}",

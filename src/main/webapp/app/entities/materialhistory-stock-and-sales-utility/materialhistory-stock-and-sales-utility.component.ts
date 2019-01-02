@@ -110,7 +110,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.historySubscription = this.materialhistoryService
             .query({
                 page: this.page - 1,
-                size: this.itemsPerPage,
+                size: 100000000 /*this.itemsPerPage,*/,
                 sort: this.sort()
             })
             .subscribe(
@@ -258,6 +258,11 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
             );
         });
         this.materialhistoriesToDisplay = mat.slice();
+        this.page = 1;
+        this.itemsPerPage = 20;
+        this.queryCount = this.materialhistoriesToDisplay.length;
+        this.totalItems = this.materialhistoriesToDisplay.length;
+        console.log('AGGREGATE STOCKSSS');
         console.log(this.materialhistoriesToDisplay);
 
         this.materialService.queryAll().subscribe((materialsres: HttpResponse<MaterialStockAndSalesUtility[]>) => {
@@ -280,9 +285,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
                 return res2;
             }, {});
 
-            console.log('AGGREGATE STOCKSSS');
-            console.log(tmpData);
-            console.log(result);
+            /* console.log(tmpData);
+            console.log(result);*/
             this.inventories = result;
         });
     }

@@ -3,7 +3,7 @@
         "lot": {
             "home": {
                 "title": "Lots",
-                "createLabel": "Créer un nouveau Lot",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Lot"
             },
             "created": "Un nouveau Lot a été créé avec l'identifiant {{ param }}",

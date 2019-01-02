@@ -49,17 +49,17 @@ public class Material implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("materialCategories")
+    @JsonIgnoreProperties("")
     private Materialclassification materialTypeDef;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("materialLots")
+    @JsonIgnoreProperties("")
     private Lot lotIdentifier;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("materialCats")
+    @JsonIgnoreProperties("")
     private Materialclassification materialTypeCat;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

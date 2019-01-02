@@ -3,7 +3,7 @@
         "materialclassification": {
             "home": {
                 "title": "Type d'Article",
-                "createLabel": "Créer un nouveau Materialclassification",
+                "createLabel": "Nouveau",
                 "createOrEditLabel": "Créer ou éditer un Materialclassification"
             },
             "created": "Un nouveau Materialclassification a été créé avec l'identifiant {{ param }}",
