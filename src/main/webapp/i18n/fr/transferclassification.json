@@ -1,27 +1,27 @@
 {
     "stockAndSalesManagementApp": {
-        "transferclassification": {
+        "Type de Transfers": {
             "home": {
-                "title": "Transferclassifications",
+                "title": "Type de Transfers",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Transferclassification"
+                "createOrEditLabel": "Créer ou éditer un Type de Transfers"
             },
-            "created": "Un nouveau Transferclassification a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Transferclassification avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Transferclassification avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Type de Transfers a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Type de Transfers d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Type de Transfers d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Transferclassification {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Type de Transfers {{ id }} ?"
             },
             "detail": {
-                "title": "Transferclassification"
+                "title": "Type de Transfers"
             },
             "code": "Code",
             "name": "Name",
-            "isOutgoingTransfer": "Is Outgoing Transfer",
-            "isIncomingTransfer": "Is Incoming Transfer",
-            "isInternalTransfer": "Is Internal Transfer",
-            "comments": "Comments",
-            "materialhistoryCategory": "Materialhistory Category",
+            "isOutgoingTransfer": "Transfert Sortant",
+            "isIncomingTransfer": "Transfert Entrant",
+            "isInternalTransfer": "Transfert Interne",
+            "comments": "Commentaire",
+            "materialhistoryCategory": "Type de Transfers",
             "transferDashboard": "Transfer Dashboard"
         }
     }

@@ -2,26 +2,26 @@
     "stockAndSalesManagementApp": {
         "third": {
             "home": {
-                "title": "Thirds",
+                "title": "Tiers",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Third"
+                "createOrEditLabel": "Créer/Modifier un Tiers"
             },
-            "created": "Un nouveau Third a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Third avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Third avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Tiers a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Tiers d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Tiers d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Third {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Tiers {{ id }} ?"
             },
             "detail": {
-                "title": "Third"
+                "title": "Tiers"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
+            "name": "Nom",
+            "comments": "Commentaire",
             "defaultWarehouse": "Dépôt principal",
-            "materialhistoryfrom": "Materialhistoryfrom",
-            "materialhistoryto": "Materialhistoryto",
-            "warehouseOut": "Warehouse Out",
+            "materialhistoryfrom": "Source",
+            "materialhistoryto": "Destination",
+            "warehouseOut": "Tiers sortie",
             "addressthird": "Adresse",
             "thirdClassif": "Type",
             "civilityClassif": "Civilité"

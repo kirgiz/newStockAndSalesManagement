@@ -4,21 +4,21 @@
             "home": {
                 "title": "Articles",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un article"
+                "createOrEditLabel": "Créer/Modifier un article"
             },
-            "created": "Un nouvel article a été créé avec l'identifiant {{ param }}",
-            "updated": "Le article avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le article avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouvel Article a été créé avec l'identifiant {{ param }}",
+            "updated": "L'Article d'identifiant {{ param }} a été mis à jour",
+            "deleted": "L'Article d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer l'article' {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer l'Article' {{ id }} ?"
             },
             "detail": {
                 "title": "Article"
             },
             "code": "Code",
             "description": "Description",
-            "creationDate": "Creation Date",
-            "comments": "Comments",
+            "creationDate": "Date de Création",
+            "comments": "Commentaire",
             "materialTypeDef": "Type",
             "lotIdentifier": "Lot",
             "materialTypeCat": "Type",

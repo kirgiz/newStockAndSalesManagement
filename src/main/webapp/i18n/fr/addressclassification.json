@@ -2,23 +2,23 @@
     "stockAndSalesManagementApp": {
         "addressclassification": {
             "home": {
-                "title": "Addressclassifications",
+                "title": "Type d'Adresse",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Addressclassification"
+                "createOrEditLabel": "Créer/Modifier un Type d'Adresse"
             },
-            "created": "Un nouveau Addressclassification a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Addressclassification avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Addressclassification avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Type d'Adresse a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Type d'Adresse d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Type d'Adresse d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Addressclassification {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Type d'Adresse {{ id }} ?"
             },
             "detail": {
-                "title": "Addressclassification"
+                "title": "Type d'Adresse"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
-            "addressCategory": "Address Category"
+            "name": "Nom",
+            "comments": "Commentaire",
+            "addressCategory": "Type d'adresse"
         }
     }
 }

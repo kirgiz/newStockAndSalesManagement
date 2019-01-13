@@ -2,23 +2,23 @@
     "stockAndSalesManagementApp": {
         "company": {
             "home": {
-                "title": "Companies",
+                "title": "Société",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Company"
+                "createOrEditLabel": "Créer/Modifier une Société"
             },
-            "created": "Un nouveau Company a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Company avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Company avec l'identifiant {{ param }} a été supprimé",
+            "created": "Une nouvelle Société a été créé avec l'identifiant {{ param }}",
+            "updated": "La Société d'identifiant {{ param }} a été mis à jour",
+            "deleted": "La Société d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Company {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer la Société {{ id }} ?"
             },
             "detail": {
-                "title": "Company"
+                "title": "Société"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
-            "baseCurrency": "Base Currency"
+            "name": "Nom",
+            "comments": "Commentaires",
+            "baseCurrency": "Monnaie de Base"
         }
     }
 }

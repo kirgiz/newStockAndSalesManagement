@@ -2,23 +2,23 @@
     "stockAndSalesManagementApp": {
         "civility": {
             "home": {
-                "title": "Civilities",
+                "title": "Civilité",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Civility"
+                "createOrEditLabel": "Créer/Modifié une Civilité"
             },
-            "created": "Un nouveau Civility a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Civility avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Civility avec l'identifiant {{ param }} a été supprimé",
+            "created": "Une nouvelle Civilité a été créé avec l'identifiant {{ param }}",
+            "updated": "La Civilité d'identifiant {{ param }} a été mis à jour",
+            "deleted": "La Civilité d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Civility {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer la Civilité {{ id }} ?"
             },
             "detail": {
-                "title": "Civility"
+                "title": "Civilité"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
-            "thirdCivility": "Third Civility"
+            "name": "Nom",
+            "comments": "Commentaires",
+            "thirdCivility": "Civilité Tiers"
         }
     }
 }

@@ -1,24 +1,24 @@
 {
     "stockAndSalesManagementApp": {
-        "thirdclassification": {
+        "Type de Tiers": {
             "home": {
-                "title": "Thirdclassifications",
+                "title": "Type de Tiers",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Thirdclassification"
+                "createOrEditLabel": "Créer ou éditer un Type de Tiers"
             },
-            "created": "Un nouveau Thirdclassification a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Thirdclassification avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Thirdclassification avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Type de Tiers a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Type de Tiers d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Type de Tiers d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Thirdclassification {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Type de Tiers {{ id }} ?"
             },
             "detail": {
-                "title": "Thirdclassification"
+                "title": "Type de Tiers"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
-            "thirdCategory": "Third Category"
+            "name": "Nom",
+            "comments": "Commentaire",
+            "thirdCategory": "Type de Tiers"
         }
     }
 }

@@ -1,23 +1,23 @@
 {
     "stockAndSalesManagementApp": {
-        "materialclassification": {
+        "Type d'Article": {
             "home": {
                 "title": "Type d'Article",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Materialclassification"
+                "createOrEditLabel": "Créer/Modifier un Type d'Article"
             },
-            "created": "Un nouveau Materialclassification a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Materialclassification avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Materialclassification avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Type d'Article a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Type d'Article d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Type d'Article d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Materialclassification {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Type d'Article {{ id }} ?"
             },
             "detail": {
-                "title": "Materialclassification"
+                "title": "Type d'Article"
             },
             "code": "Code",
-            "name": "Name",
-            "comments": "Comments",
+            "name": "Nom",
+            "comments": "Commentaire",
             "materialCategory": "Type d'Article",
             "materialCat": "Type d'Article",
             "materialCategoryDashboard": "Type d'Article"

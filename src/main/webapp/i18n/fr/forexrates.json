@@ -2,22 +2,22 @@
     "stockAndSalesManagementApp": {
         "forexrates": {
             "home": {
-                "title": "Forexrates",
+                "title": "Taux de Change",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Forexrates"
+                "createOrEditLabel": "Créer/Modifier un Taux de Change"
             },
-            "created": "Un nouveau Forexrates a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Forexrates avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Forexrates avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Taux de Change a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Taux de Change d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Taux de Change d'identifiant {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Forexrates {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer le Taux de Change {{ id }} ?"
             },
             "detail": {
-                "title": "Forexrates"
+                "title": "Taux de Change"
             },
-            "rateDate": "Rate Date",
-            "straighRate": "Straigh Rate",
-            "rateForCurrency": "Rate For Currency"
+            "rateDate": "Date",
+            "straighRate": "Taux droit",
+            "rateForCurrency": "Taux pour Monnaie"
         }
     }
 }

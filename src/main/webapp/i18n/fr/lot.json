@@ -4,11 +4,11 @@
             "home": {
                 "title": "Lots",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer ou éditer un Lot"
+                "createOrEditLabel": "Créer /Modifier un Lot"
             },
             "created": "Un nouveau Lot a été créé avec l'identifiant {{ param }}",
-            "updated": "Le Lot avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le Lot avec l'identifiant {{ param }} a été supprimé",
+            "updated": "Le Lot d'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Lot d'identifiant {{ param }} a été supprimé",
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Lot {{ id }} ?"
             },
@@ -18,11 +18,11 @@
             "code": "Code",
             "description": "Description",
             "creationDate": "Date Achat",
-            "numberOfItems": "Number Of Items",
+            "numberOfItems": "Nombre d'Articles",
             "comments": "Comments",
-            "unitBuyPrice": "Unit Buy Price",
-            "itemsGenerated": "Items Generated",
-            "materialLot": "Material Lot",
+            "unitBuyPrice": "Prix Unitaire",
+            "itemsGenerated": "Articles créés",
+            "materialLot": "Articel Lot",
             "buycurrencylot": "Monnaie d'achat",
             "materialclassification": "Materialclassification"
         }

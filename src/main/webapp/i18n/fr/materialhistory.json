@@ -3,17 +3,17 @@
         "materialhistory": {
             "home": {
                 "title": "Transfers/Ventes/Achats",
-                "createLabel": "Nouveau Transfert",
-                "createOrEditLabel": "Transfer"
+                "createLabel": "Nouveau",
+                "createOrEditLabel": "Créer/Modifier un Transfert"
             },
-            "created": "Un nouveau transfert a été créé avec l'identifiant {{ param }}",
-            "updated": "Le transfert avec l'identifiant {{ param }} a été mis à jour",
-            "deleted": "Le transfert avec l'identifiant {{ param }} a été supprimé",
+            "created": "Un nouveau Transfert a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Transfert didentifiant {{ param }} a été mis à jour",
+            "deleted": "Le Transfert d'identifiant {{ param }} a été supprimé",
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le transfert {{ id }} ?"
             },
             "detail": {
-                "title": "Transfers"
+                "title": "Transfert"
             },
             "code": "Code",
             "creationDate": "Date de Création",
