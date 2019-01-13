@@ -194,7 +194,7 @@
                             <span jhiTranslate="global.menu.admin.userManagement">User management</span>
                         </a>
                     </li>
-                    <li>
+                   <li>
                         <a class="dropdown-item" routerLink="admin/jhi-metrics" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon [icon]="'tachometer-alt'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.metrics">Metrics</span>
@@ -206,7 +206,7 @@
                             <span jhiTranslate="global.menu.admin.health">Health</span>
                         </a>
                     </li>
-                    <li>
+                   <li>
                         <a class="dropdown-item" routerLink="admin/jhi-configuration" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon [icon]="'list'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.configuration">Configuration</span>
@@ -215,6 +215,7 @@
                     <li >
                         <a class="dropdown-item" routerLink="audits" routerLinkActive="active" (click)="collapseNavbar()">
                             <i class="fa fa-fw fa-bell" aria-hidden="true"></i>
+                            </li>
                     <li>
                         <a class="dropdown-item" routerLink="admin/audits" routerLinkActive="active" (click)="collapseNavbar()">
                             <fa-icon [icon]="'bell'" [fixedWidth]="true"></fa-icon>
@@ -232,9 +233,9 @@
                             <fa-icon [icon]="'book'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.apidocs">API</span>
                         </a>
-                    </li>
+                    </li> 
                     <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
-                    <li *ngIf="!inProduction">
+                  <li *ngIf="!inProduction">
                         <a class="dropdown-item" href='./h2-console' target="_tab" (click)="collapseNavbar()">
                             <fa-icon [icon]="'hdd'" [fixedWidth]="true"></fa-icon>
                             <span jhiTranslate="global.menu.admin.database">Database</span>

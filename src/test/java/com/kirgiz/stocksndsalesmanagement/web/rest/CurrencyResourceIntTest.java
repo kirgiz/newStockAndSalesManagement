@@ -3,11 +3,17 @@ package com.kirgiz.stocksndsalesmanagement.web.rest;
 import com.kirgiz.stocksndsalesmanagement.StockAndSalesManagementApp;
 
 import com.kirgiz.stocksndsalesmanagement.domain.Currency;
+import com.kirgiz.stocksndsalesmanagement.domain.Company;
+import com.kirgiz.stocksndsalesmanagement.domain.Forexrates;
+import com.kirgiz.stocksndsalesmanagement.domain.Dashboard;
+import com.kirgiz.stocksndsalesmanagement.domain.Lot;
 import com.kirgiz.stocksndsalesmanagement.repository.CurrencyRepository;
 import com.kirgiz.stocksndsalesmanagement.service.CurrencyService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.CurrencyDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.CurrencyMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.CurrencyCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.CurrencyQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +64,9 @@ public class CurrencyResourceIntTest {
     private CurrencyService currencyService;
 
     @Autowired
+    private CurrencyQueryService currencyQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -76,7 +85,7 @@ public class CurrencyResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CurrencyResource currencyResource = new CurrencyResource(currencyService);
+        final CurrencyResource currencyResource = new CurrencyResource(currencyService, currencyQueryService);
         this.restCurrencyMockMvc = MockMvcBuilders.standaloneSetup(currencyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -209,6 +218,195 @@ public class CurrencyResourceIntTest {
             .andExpect(jsonPath("$.isoCode").value(DEFAULT_ISO_CODE.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByIsoCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isoCode equals to DEFAULT_ISO_CODE
+        defaultCurrencyShouldBeFound("isoCode.equals=" + DEFAULT_ISO_CODE);
+
+        // Get all the currencyList where isoCode equals to UPDATED_ISO_CODE
+        defaultCurrencyShouldNotBeFound("isoCode.equals=" + UPDATED_ISO_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByIsoCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isoCode in DEFAULT_ISO_CODE or UPDATED_ISO_CODE
+        defaultCurrencyShouldBeFound("isoCode.in=" + DEFAULT_ISO_CODE + "," + UPDATED_ISO_CODE);
+
+        // Get all the currencyList where isoCode equals to UPDATED_ISO_CODE
+        defaultCurrencyShouldNotBeFound("isoCode.in=" + UPDATED_ISO_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByIsoCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isoCode is not null
+        defaultCurrencyShouldBeFound("isoCode.specified=true");
+
+        // Get all the currencyList where isoCode is null
+        defaultCurrencyShouldNotBeFound("isoCode.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where name equals to DEFAULT_NAME
+        defaultCurrencyShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the currencyList where name equals to UPDATED_NAME
+        defaultCurrencyShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultCurrencyShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the currencyList where name equals to UPDATED_NAME
+        defaultCurrencyShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where name is not null
+        defaultCurrencyShouldBeFound("name.specified=true");
+
+        // Get all the currencyList where name is null
+        defaultCurrencyShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByCompanyBaseCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Company companyBaseCurrency = CompanyResourceIntTest.createEntity(em);
+        em.persist(companyBaseCurrency);
+        em.flush();
+        currency.addCompanyBaseCurrency(companyBaseCurrency);
+        currencyRepository.saveAndFlush(currency);
+        Long companyBaseCurrencyId = companyBaseCurrency.getId();
+
+        // Get all the currencyList where companyBaseCurrency equals to companyBaseCurrencyId
+        defaultCurrencyShouldBeFound("companyBaseCurrencyId.equals=" + companyBaseCurrencyId);
+
+        // Get all the currencyList where companyBaseCurrency equals to companyBaseCurrencyId + 1
+        defaultCurrencyShouldNotBeFound("companyBaseCurrencyId.equals=" + (companyBaseCurrencyId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByCurrencyRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Forexrates currencyRate = ForexratesResourceIntTest.createEntity(em);
+        em.persist(currencyRate);
+        em.flush();
+        currency.addCurrencyRate(currencyRate);
+        currencyRepository.saveAndFlush(currency);
+        Long currencyRateId = currencyRate.getId();
+
+        // Get all the currencyList where currencyRate equals to currencyRateId
+        defaultCurrencyShouldBeFound("currencyRateId.equals=" + currencyRateId);
+
+        // Get all the currencyList where currencyRate equals to currencyRateId + 1
+        defaultCurrencyShouldNotBeFound("currencyRateId.equals=" + (currencyRateId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByCurrencyDashboardIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Dashboard currencyDashboard = DashboardResourceIntTest.createEntity(em);
+        em.persist(currencyDashboard);
+        em.flush();
+        currency.addCurrencyDashboard(currencyDashboard);
+        currencyRepository.saveAndFlush(currency);
+        Long currencyDashboardId = currencyDashboard.getId();
+
+        // Get all the currencyList where currencyDashboard equals to currencyDashboardId
+        defaultCurrencyShouldBeFound("currencyDashboardId.equals=" + currencyDashboardId);
+
+        // Get all the currencyList where currencyDashboard equals to currencyDashboardId + 1
+        defaultCurrencyShouldNotBeFound("currencyDashboardId.equals=" + (currencyDashboardId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCurrenciesByLotBuyCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Lot lotBuyCurrency = LotResourceIntTest.createEntity(em);
+        em.persist(lotBuyCurrency);
+        em.flush();
+        currency.addLotBuyCurrency(lotBuyCurrency);
+        currencyRepository.saveAndFlush(currency);
+        Long lotBuyCurrencyId = lotBuyCurrency.getId();
+
+        // Get all the currencyList where lotBuyCurrency equals to lotBuyCurrencyId
+        defaultCurrencyShouldBeFound("lotBuyCurrencyId.equals=" + lotBuyCurrencyId);
+
+        // Get all the currencyList where lotBuyCurrency equals to lotBuyCurrencyId + 1
+        defaultCurrencyShouldNotBeFound("lotBuyCurrencyId.equals=" + (lotBuyCurrencyId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultCurrencyShouldBeFound(String filter) throws Exception {
+        restCurrencyMockMvc.perform(get("/api/currencies?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(currency.getId().intValue())))
+            .andExpect(jsonPath("$.[*].isoCode").value(hasItem(DEFAULT_ISO_CODE.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())));
+
+        // Check, that the count call also returns 1
+        restCurrencyMockMvc.perform(get("/api/currencies/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultCurrencyShouldNotBeFound(String filter) throws Exception {
+        restCurrencyMockMvc.perform(get("/api/currencies?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restCurrencyMockMvc.perform(get("/api/currencies/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

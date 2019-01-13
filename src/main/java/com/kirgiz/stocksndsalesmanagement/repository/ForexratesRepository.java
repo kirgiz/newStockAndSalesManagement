@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ForexratesRepository extends JpaRepository<Forexrates, Long> {
+public interface ForexratesRepository extends JpaRepository<Forexrates, Long>, JpaSpecificationExecutor<Forexrates> {
 
 }

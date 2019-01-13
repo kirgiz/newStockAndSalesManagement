@@ -5,6 +5,8 @@ import com.kirgiz.stocksndsalesmanagement.service.ForexratesService;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertException;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.service.dto.ForexratesDTO;
+import com.kirgiz.stocksndsalesmanagement.service.dto.ForexratesCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.ForexratesQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +33,11 @@ public class ForexratesResource {
 
     private final ForexratesService forexratesService;
 
-    public ForexratesResource(ForexratesService forexratesService) {
+    private final ForexratesQueryService forexratesQueryService;
+
+    public ForexratesResource(ForexratesService forexratesService, ForexratesQueryService forexratesQueryService) {
         this.forexratesService = forexratesService;
+        this.forexratesQueryService = forexratesQueryService;
     }
 
     /**
@@ -80,13 +85,28 @@ public class ForexratesResource {
     /**
      * GET  /forexrates : get all the forexrates.
      *
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of forexrates in body
      */
     @GetMapping("/forexrates")
     @Timed
-    public List<ForexratesDTO> getAllForexrates() {
-        log.debug("REST request to get all Forexrates");
-        return forexratesService.findAll();
+    public ResponseEntity<List<ForexratesDTO>> getAllForexrates(ForexratesCriteria criteria) {
+        log.debug("REST request to get Forexrates by criteria: {}", criteria);
+        List<ForexratesDTO> entityList = forexratesQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+    * GET  /forexrates/count : count all the forexrates.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/forexrates/count")
+    @Timed
+    public ResponseEntity<Long> countForexrates(ForexratesCriteria criteria) {
+        log.debug("REST request to count Forexrates by criteria: {}", criteria);
+        return ResponseEntity.ok().body(forexratesQueryService.countByCriteria(criteria));
     }
 
     /**

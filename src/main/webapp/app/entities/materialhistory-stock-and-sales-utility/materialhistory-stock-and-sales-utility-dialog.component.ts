@@ -151,20 +151,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         this.materialhistory.warehousefromId = this.materialhistoryService.getDefaultThird().id;
         this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
         this.materialhistory.transferClassifId = this.transferType.id;
-        console.log('HHHHHHHHHHHHH');
-        // console.log(transType);
-        console.log(this.materialhistory.warehousefromId);
 
-        /* this.editForm.form.patchValue({transferClassif:
-        {code: 'VEN',
-        comments  :  null,
-        id :  1001,
-        isIncomingTransfer :  false,
-        isInternalTransfer :  false,
-        isOutgoingTransfer :  true,
-                name    :      'VENTE'}});*/
-        //    this.selectedValue = 'AM';
-        //         this.materialhistory.transferClassifId=1001;
+        console.log(this.materialhistory.warehousefromId);
     }
 
     ngAfterViewInit() {
@@ -189,12 +177,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
                 page: this.page - 1,
                 size: this.itemsPerPage,
                 sort: this.sort(),
-                /* unpaged: true,*/
                 'currentLocation.equals': this.materialhistory.warehousefromId,
                 'materialTypeCatId.equals': this.materialhistory.materialclassificationId
-                // {
-                // 'currentLocation.equals': this.materialhistory.warehousefromId,
-                /// 'materialTypeCatId.equals': this.materialhistory.materialclassificationId
             })
             .subscribe(
                 (res: HttpResponse<MaterialStockAndSalesUtility[]>) => {

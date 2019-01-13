@@ -36,7 +36,7 @@ public class Forexrates implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("currencyRates")
+    @JsonIgnoreProperties("")
     private Currency rateForCurrency;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

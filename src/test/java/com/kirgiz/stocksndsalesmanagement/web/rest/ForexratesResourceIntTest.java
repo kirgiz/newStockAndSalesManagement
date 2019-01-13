@@ -9,6 +9,8 @@ import com.kirgiz.stocksndsalesmanagement.service.ForexratesService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.ForexratesDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.ForexratesMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.ForexratesCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.ForexratesQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +63,9 @@ public class ForexratesResourceIntTest {
     private ForexratesService forexratesService;
 
     @Autowired
+    private ForexratesQueryService forexratesQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +84,7 @@ public class ForexratesResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ForexratesResource forexratesResource = new ForexratesResource(forexratesService);
+        final ForexratesResource forexratesResource = new ForexratesResource(forexratesService, forexratesQueryService);
         this.restForexratesMockMvc = MockMvcBuilders.standaloneSetup(forexratesResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -217,6 +222,165 @@ public class ForexratesResourceIntTest {
             .andExpect(jsonPath("$.rateDate").value(DEFAULT_RATE_DATE.toString()))
             .andExpect(jsonPath("$.straighRate").value(DEFAULT_STRAIGH_RATE.doubleValue()));
     }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where rateDate equals to DEFAULT_RATE_DATE
+        defaultForexratesShouldBeFound("rateDate.equals=" + DEFAULT_RATE_DATE);
+
+        // Get all the forexratesList where rateDate equals to UPDATED_RATE_DATE
+        defaultForexratesShouldNotBeFound("rateDate.equals=" + UPDATED_RATE_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where rateDate in DEFAULT_RATE_DATE or UPDATED_RATE_DATE
+        defaultForexratesShouldBeFound("rateDate.in=" + DEFAULT_RATE_DATE + "," + UPDATED_RATE_DATE);
+
+        // Get all the forexratesList where rateDate equals to UPDATED_RATE_DATE
+        defaultForexratesShouldNotBeFound("rateDate.in=" + UPDATED_RATE_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where rateDate is not null
+        defaultForexratesShouldBeFound("rateDate.specified=true");
+
+        // Get all the forexratesList where rateDate is null
+        defaultForexratesShouldNotBeFound("rateDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where rateDate greater than or equals to DEFAULT_RATE_DATE
+        defaultForexratesShouldBeFound("rateDate.greaterOrEqualThan=" + DEFAULT_RATE_DATE);
+
+        // Get all the forexratesList where rateDate greater than or equals to UPDATED_RATE_DATE
+        defaultForexratesShouldNotBeFound("rateDate.greaterOrEqualThan=" + UPDATED_RATE_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where rateDate less than or equals to DEFAULT_RATE_DATE
+        defaultForexratesShouldNotBeFound("rateDate.lessThan=" + DEFAULT_RATE_DATE);
+
+        // Get all the forexratesList where rateDate less than or equals to UPDATED_RATE_DATE
+        defaultForexratesShouldBeFound("rateDate.lessThan=" + UPDATED_RATE_DATE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllForexratesByStraighRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where straighRate equals to DEFAULT_STRAIGH_RATE
+        defaultForexratesShouldBeFound("straighRate.equals=" + DEFAULT_STRAIGH_RATE);
+
+        // Get all the forexratesList where straighRate equals to UPDATED_STRAIGH_RATE
+        defaultForexratesShouldNotBeFound("straighRate.equals=" + UPDATED_STRAIGH_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByStraighRateIsInShouldWork() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where straighRate in DEFAULT_STRAIGH_RATE or UPDATED_STRAIGH_RATE
+        defaultForexratesShouldBeFound("straighRate.in=" + DEFAULT_STRAIGH_RATE + "," + UPDATED_STRAIGH_RATE);
+
+        // Get all the forexratesList where straighRate equals to UPDATED_STRAIGH_RATE
+        defaultForexratesShouldNotBeFound("straighRate.in=" + UPDATED_STRAIGH_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByStraighRateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        forexratesRepository.saveAndFlush(forexrates);
+
+        // Get all the forexratesList where straighRate is not null
+        defaultForexratesShouldBeFound("straighRate.specified=true");
+
+        // Get all the forexratesList where straighRate is null
+        defaultForexratesShouldNotBeFound("straighRate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllForexratesByRateForCurrencyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Currency rateForCurrency = CurrencyResourceIntTest.createEntity(em);
+        em.persist(rateForCurrency);
+        em.flush();
+        forexrates.setRateForCurrency(rateForCurrency);
+        forexratesRepository.saveAndFlush(forexrates);
+        Long rateForCurrencyId = rateForCurrency.getId();
+
+        // Get all the forexratesList where rateForCurrency equals to rateForCurrencyId
+        defaultForexratesShouldBeFound("rateForCurrencyId.equals=" + rateForCurrencyId);
+
+        // Get all the forexratesList where rateForCurrency equals to rateForCurrencyId + 1
+        defaultForexratesShouldNotBeFound("rateForCurrencyId.equals=" + (rateForCurrencyId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultForexratesShouldBeFound(String filter) throws Exception {
+        restForexratesMockMvc.perform(get("/api/forexrates?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(forexrates.getId().intValue())))
+            .andExpect(jsonPath("$.[*].rateDate").value(hasItem(DEFAULT_RATE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].straighRate").value(hasItem(DEFAULT_STRAIGH_RATE.doubleValue())));
+
+        // Check, that the count call also returns 1
+        restForexratesMockMvc.perform(get("/api/forexrates/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultForexratesShouldNotBeFound(String filter) throws Exception {
+        restForexratesMockMvc.perform(get("/api/forexrates?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restForexratesMockMvc.perform(get("/api/forexrates/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

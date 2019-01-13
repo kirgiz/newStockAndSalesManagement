@@ -6,6 +6,8 @@ import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertExcepti
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.PaginationUtil;
 import com.kirgiz.stocksndsalesmanagement.service.dto.CurrencyDTO;
+import com.kirgiz.stocksndsalesmanagement.service.dto.CurrencyCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.CurrencyQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,11 @@ public class CurrencyResource {
 
     private final CurrencyService currencyService;
 
-    public CurrencyResource(CurrencyService currencyService) {
+    private final CurrencyQueryService currencyQueryService;
+
+    public CurrencyResource(CurrencyService currencyService, CurrencyQueryService currencyQueryService) {
         this.currencyService = currencyService;
+        this.currencyQueryService = currencyQueryService;
     }
 
     /**
@@ -86,15 +91,29 @@ public class CurrencyResource {
      * GET  /currencies : get all the currencies.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of currencies in body
      */
     @GetMapping("/currencies")
     @Timed
-    public ResponseEntity<List<CurrencyDTO>> getAllCurrencies(Pageable pageable) {
-        log.debug("REST request to get a page of Currencies");
-        Page<CurrencyDTO> page = currencyService.findAll(pageable);
+    public ResponseEntity<List<CurrencyDTO>> getAllCurrencies(CurrencyCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Currencies by criteria: {}", criteria);
+        Page<CurrencyDTO> page = currencyQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/currencies");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /currencies/count : count all the currencies.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/currencies/count")
+    @Timed
+    public ResponseEntity<Long> countCurrencies(CurrencyCriteria criteria) {
+        log.debug("REST request to count Currencies by criteria: {}", criteria);
+        return ResponseEntity.ok().body(currencyQueryService.countByCriteria(criteria));
     }
 
     /**

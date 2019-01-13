@@ -41,7 +41,7 @@ public class Company implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("companyBaseCurrencies")
+    @JsonIgnoreProperties("")
     private Currency baseCurrency;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

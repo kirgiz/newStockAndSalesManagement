@@ -30,6 +30,6 @@
     "dto": "mapstruct",
     "pagination": "no",
     "service": "serviceClass",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "angularJSSuffix": "StockAndSalesUtility"
 }

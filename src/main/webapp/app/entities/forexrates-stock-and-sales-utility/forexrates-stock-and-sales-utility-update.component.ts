@@ -9,6 +9,8 @@ import { IForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-sto
 import { ForexratesStockAndSalesUtilityService } from './forexrates-stock-and-sales-utility.service';
 import { ICurrencyStockAndSalesUtility } from 'app/shared/model/currency-stock-and-sales-utility.model';
 import { CurrencyStockAndSalesUtilityService } from 'app/entities/currency-stock-and-sales-utility';
+import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
+import { ICompanyStockAndSalesUtility } from 'app/shared/model/company-stock-and-sales-utility.model';
 
 @Component({
     selector: 'jhi-forexrates-stock-and-sales-utility-update',
@@ -20,12 +22,14 @@ export class ForexratesStockAndSalesUtilityUpdateComponent implements OnInit {
 
     currencies: ICurrencyStockAndSalesUtility[];
     rateDateDp: any;
+    companies: ICompanyStockAndSalesUtility[];
 
     constructor(
         private jhiAlertService: JhiAlertService,
         private forexratesService: ForexratesStockAndSalesUtilityService,
         private currencyService: CurrencyStockAndSalesUtilityService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private companyService: CompanyStockAndSalesUtilityService
     ) {}
 
     ngOnInit() {
@@ -33,12 +37,26 @@ export class ForexratesStockAndSalesUtilityUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ forexrates }) => {
             this.forexrates = forexrates;
         });
-        this.currencyService.query().subscribe(
-            (res: HttpResponse<ICurrencyStockAndSalesUtility[]>) => {
-                this.currencies = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+
+        this.companyService.query().subscribe((resc: HttpResponse<ICompanyStockAndSalesUtility[]>) => {
+            this.companies = resc.body;
+
+            console.log('Base Currency');
+            console.log(this.companies);
+            console.log(this.companies[0].baseCurrencyId);
+
+            this.currencyService
+                .query({
+                    'id.lessThan': this.companies[0].baseCurrencyId,
+                    'id.greaterThan': this.companies[0].baseCurrencyId
+                })
+                .subscribe(
+                    (res: HttpResponse<ICurrencyStockAndSalesUtility[]>) => {
+                        this.currencies = res.body;
+                    },
+                    (res: HttpErrorResponse) => this.onError(res.message)
+                );
+        });
     }
 
     previousState() {
