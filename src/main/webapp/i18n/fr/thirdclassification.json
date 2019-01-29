@@ -1,6 +1,6 @@
 {
     "stockAndSalesManagementApp": {
-        "Type de Tiers": {
+        "thirdclassification": {
             "home": {
                 "title": "Type de Tiers",
                 "createLabel": "Nouveau",

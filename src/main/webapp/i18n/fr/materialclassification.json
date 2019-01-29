@@ -1,6 +1,6 @@
 {
     "stockAndSalesManagementApp": {
-        "Type d'Article": {
+        "materialclassification": {
             "home": {
                 "title": "Type d'Article",
                 "createLabel": "Nouveau",

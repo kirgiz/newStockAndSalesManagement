@@ -1,6 +1,6 @@
 {
     "stockAndSalesManagementApp": {
-        "Type de Transfers": {
+        "transferclassification": {
             "home": {
                 "title": "Type de Transfers",
                 "createLabel": "Nouveau",

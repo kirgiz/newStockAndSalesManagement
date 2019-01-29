@@ -403,12 +403,12 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
                             const lotBuyPriceCompanyCCY: number = filteredLot[0].unitBuyPrice;
                             pnlTransfer = dashboard.price - lotBuyPriceCompanyCCY * dashfx;
                             dashboard.profitAndLoss = dashboard.profitAndLoss + pnlTransfer;
-                            /*      console.log('*********************************************************');
+                            console.log('*********************************************************');
                             console.log(dashboard.creationDate);
                             console.log(dashboard.price);
                             console.log(lotBuyPriceCompanyCCY);
                             console.log(dashfx);
-                            console.log(dashboard.profitAndLoss);*/
+                            console.log(dashboard.profitAndLoss);
                         }
                     }
                 }

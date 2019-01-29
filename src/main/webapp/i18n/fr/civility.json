@@ -4,7 +4,7 @@
             "home": {
                 "title": "Civilité",
                 "createLabel": "Nouveau",
-                "createOrEditLabel": "Créer/Modifié une Civilité"
+                "createOrEditLabel": "Créer/Modifier une Civilité"
             },
             "created": "Une nouvelle Civilité a été créé avec l'identifiant {{ param }}",
             "updated": "La Civilité d'identifiant {{ param }} a été mis à jour",
