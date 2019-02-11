@@ -383,6 +383,9 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             const lotSubscription = this.lotService.query().subscribe((res: HttpResponse<LotStockAndSalesUtility[]>) => {
                 const lots = res.body;
                 for (const dashboard of this.materialhistoriesToDisplay) {
+                    dashboard.profitAndLoss = 0;
+                }
+                for (const dashboard of this.materialhistoriesToDisplay) {
                     let pnlTransfer = 0;
                     const transferPrice = dashboard.price;
                     const itemTransfereds = dashboard.itemTransfereds;
