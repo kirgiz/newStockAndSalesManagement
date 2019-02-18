@@ -100,6 +100,21 @@ export class MaterialhistoryStockAndSalesUtilityService {
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
+        this.find(id).subscribe((res: HttpResponse<IMaterialhistoryStockAndSalesUtility>) => {
+            const result: IMaterialhistoryStockAndSalesUtility = res.body;
+            result.itemTransfereds.forEach((mat: IMaterialStockAndSalesUtility) => {
+                mat.currentLocation = result.warehousefromId;
+                mat.creationDate = moment();
+                console.log('Deleting Material');
+                console.log(mat);
+                this.materialService.update(mat).subscribe(
+                    () => {},
+                    () => {
+                        console.log('BIG ERROR');
+                    }
+                );
+            });
+        });
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 

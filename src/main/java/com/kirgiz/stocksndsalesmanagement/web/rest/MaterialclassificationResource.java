@@ -6,6 +6,8 @@ import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertExcepti
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.PaginationUtil;
 import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialclassificationDTO;
+import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialclassificationCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.MaterialclassificationQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,11 @@ public class MaterialclassificationResource {
 
     private final MaterialclassificationService materialclassificationService;
 
-    public MaterialclassificationResource(MaterialclassificationService materialclassificationService) {
+    private final MaterialclassificationQueryService materialclassificationQueryService;
+
+    public MaterialclassificationResource(MaterialclassificationService materialclassificationService, MaterialclassificationQueryService materialclassificationQueryService) {
         this.materialclassificationService = materialclassificationService;
+        this.materialclassificationQueryService = materialclassificationQueryService;
     }
 
     /**
@@ -86,15 +91,29 @@ public class MaterialclassificationResource {
      * GET  /materialclassifications : get all the materialclassifications.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of materialclassifications in body
      */
     @GetMapping("/materialclassifications")
     @Timed
-    public ResponseEntity<List<MaterialclassificationDTO>> getAllMaterialclassifications(Pageable pageable) {
-        log.debug("REST request to get a page of Materialclassifications");
-        Page<MaterialclassificationDTO> page = materialclassificationService.findAll(pageable);
+    public ResponseEntity<List<MaterialclassificationDTO>> getAllMaterialclassifications(MaterialclassificationCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Materialclassifications by criteria: {}", criteria);
+        Page<MaterialclassificationDTO> page = materialclassificationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/materialclassifications");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /materialclassifications/count : count all the materialclassifications.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/materialclassifications/count")
+    @Timed
+    public ResponseEntity<Long> countMaterialclassifications(MaterialclassificationCriteria criteria) {
+        log.debug("REST request to count Materialclassifications by criteria: {}", criteria);
+        return ResponseEntity.ok().body(materialclassificationQueryService.countByCriteria(criteria));
     }
 
     /**

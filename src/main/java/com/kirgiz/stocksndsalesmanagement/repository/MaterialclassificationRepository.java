@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MaterialclassificationRepository extends JpaRepository<Materialclassification, Long> {
+public interface MaterialclassificationRepository extends JpaRepository<Materialclassification, Long>, JpaSpecificationExecutor<Materialclassification> {
 
 }

@@ -30,6 +30,7 @@ import { NgForm } from '@angular/forms';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import * as moment from 'moment';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { first } from 'rxjs/operators';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -69,6 +70,8 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     itemsPerPage: any;
     page: number;
     previousPage: number;
+    materialClassificationsToDisplay: MaterialclassificationStockAndSalesUtility[];
+    quantityAvailable: boolean;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -142,17 +145,60 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
             this.materials = this.materialhistory.itemTransfereds;
         }
 
-        this.materialClassificationSubscription = this.materialclassificationStockAndSalesUtilityService
-            .query()
-            .subscribe((res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
+        this.materialClassificationSubscription = this.materialclassificationStockAndSalesUtilityService.query().subscribe(
+            (res: HttpResponse<MaterialclassificationStockAndSalesUtility[]>) => {
                 this.materialClassifications = res.body;
-            });
+            },
+            () => {
+                console.log('Error');
+            },
+            () => {
+                this.filterClassification();
+            }
+        );
         this.transferType = this.materialhistoryService.getTransTypeEvent();
         this.materialhistory.warehousefromId = this.materialhistoryService.getDefaultThird().id;
         this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
         this.materialhistory.transferClassifId = this.transferType.id;
 
         console.log(this.materialhistory.warehousefromId);
+        // this.filterClassification();
+    }
+
+    filterClassification() {
+        this.materialClassificationsToDisplay = [];
+        for (const classif of this.materialClassifications) {
+            this.materialService
+                .query({
+                    'currentLocation.equals': this.materialhistory.warehousefromId,
+                    'materialTypeCatId.equals': classif.id
+                })
+                .pipe(first())
+                .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => {
+                    const tmp: MaterialStockAndSalesUtility[] = res.body;
+                    if (tmp !== null && tmp !== undefined) {
+                        if (tmp.length > 0) {
+                            this.materialClassificationsToDisplay.push(classif);
+                        }
+                    }
+                });
+        }
+    }
+
+    checkQuantity() {
+        this.materialService
+            .query({
+                'currentLocation.equals': this.materialhistory.warehousefromId,
+                'materialTypeCatId.equals': this.materialhistory.materialclassificationId
+            })
+            .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => {
+                const tmp: MaterialStockAndSalesUtility[] = res.body;
+                if (tmp.length >= this.quantity) {
+                    this.quantityAvailable = true;
+                } else {
+                    this.quantityAvailable = false;
+                }
+            });
     }
 
     ngAfterViewInit() {

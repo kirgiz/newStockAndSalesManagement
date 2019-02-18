@@ -3,11 +3,16 @@ package com.kirgiz.stocksndsalesmanagement.web.rest;
 import com.kirgiz.stocksndsalesmanagement.StockAndSalesManagementApp;
 
 import com.kirgiz.stocksndsalesmanagement.domain.Materialclassification;
+import com.kirgiz.stocksndsalesmanagement.domain.Material;
+import com.kirgiz.stocksndsalesmanagement.domain.Material;
+import com.kirgiz.stocksndsalesmanagement.domain.Dashboard;
 import com.kirgiz.stocksndsalesmanagement.repository.MaterialclassificationRepository;
 import com.kirgiz.stocksndsalesmanagement.service.MaterialclassificationService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialclassificationDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.MaterialclassificationMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.MaterialclassificationCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.MaterialclassificationQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +66,9 @@ public class MaterialclassificationResourceIntTest {
     private MaterialclassificationService materialclassificationService;
 
     @Autowired
+    private MaterialclassificationQueryService materialclassificationQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -79,7 +87,7 @@ public class MaterialclassificationResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final MaterialclassificationResource materialclassificationResource = new MaterialclassificationResource(materialclassificationService);
+        final MaterialclassificationResource materialclassificationResource = new MaterialclassificationResource(materialclassificationService, materialclassificationQueryService);
         this.restMaterialclassificationMockMvc = MockMvcBuilders.standaloneSetup(materialclassificationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -216,6 +224,216 @@ public class MaterialclassificationResourceIntTest {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
             .andExpect(jsonPath("$.comments").value(DEFAULT_COMMENTS.toString()));
     }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where code equals to DEFAULT_CODE
+        defaultMaterialclassificationShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the materialclassificationList where code equals to UPDATED_CODE
+        defaultMaterialclassificationShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultMaterialclassificationShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the materialclassificationList where code equals to UPDATED_CODE
+        defaultMaterialclassificationShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where code is not null
+        defaultMaterialclassificationShouldBeFound("code.specified=true");
+
+        // Get all the materialclassificationList where code is null
+        defaultMaterialclassificationShouldNotBeFound("code.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where name equals to DEFAULT_NAME
+        defaultMaterialclassificationShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the materialclassificationList where name equals to UPDATED_NAME
+        defaultMaterialclassificationShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultMaterialclassificationShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the materialclassificationList where name equals to UPDATED_NAME
+        defaultMaterialclassificationShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where name is not null
+        defaultMaterialclassificationShouldBeFound("name.specified=true");
+
+        // Get all the materialclassificationList where name is null
+        defaultMaterialclassificationShouldNotBeFound("name.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCommentsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where comments equals to DEFAULT_COMMENTS
+        defaultMaterialclassificationShouldBeFound("comments.equals=" + DEFAULT_COMMENTS);
+
+        // Get all the materialclassificationList where comments equals to UPDATED_COMMENTS
+        defaultMaterialclassificationShouldNotBeFound("comments.equals=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCommentsIsInShouldWork() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where comments in DEFAULT_COMMENTS or UPDATED_COMMENTS
+        defaultMaterialclassificationShouldBeFound("comments.in=" + DEFAULT_COMMENTS + "," + UPDATED_COMMENTS);
+
+        // Get all the materialclassificationList where comments equals to UPDATED_COMMENTS
+        defaultMaterialclassificationShouldNotBeFound("comments.in=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByCommentsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        materialclassificationRepository.saveAndFlush(materialclassification);
+
+        // Get all the materialclassificationList where comments is not null
+        defaultMaterialclassificationShouldBeFound("comments.specified=true");
+
+        // Get all the materialclassificationList where comments is null
+        defaultMaterialclassificationShouldNotBeFound("comments.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByMaterialCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Material materialCategory = MaterialResourceIntTest.createEntity(em);
+        em.persist(materialCategory);
+        em.flush();
+        materialclassification.addMaterialCategory(materialCategory);
+        materialclassificationRepository.saveAndFlush(materialclassification);
+        Long materialCategoryId = materialCategory.getId();
+
+        // Get all the materialclassificationList where materialCategory equals to materialCategoryId
+        defaultMaterialclassificationShouldBeFound("materialCategoryId.equals=" + materialCategoryId);
+
+        // Get all the materialclassificationList where materialCategory equals to materialCategoryId + 1
+        defaultMaterialclassificationShouldNotBeFound("materialCategoryId.equals=" + (materialCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByMaterialCatIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Material materialCat = MaterialResourceIntTest.createEntity(em);
+        em.persist(materialCat);
+        em.flush();
+        materialclassification.addMaterialCat(materialCat);
+        materialclassificationRepository.saveAndFlush(materialclassification);
+        Long materialCatId = materialCat.getId();
+
+        // Get all the materialclassificationList where materialCat equals to materialCatId
+        defaultMaterialclassificationShouldBeFound("materialCatId.equals=" + materialCatId);
+
+        // Get all the materialclassificationList where materialCat equals to materialCatId + 1
+        defaultMaterialclassificationShouldNotBeFound("materialCatId.equals=" + (materialCatId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMaterialclassificationsByMaterialCategoryDashboardIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Dashboard materialCategoryDashboard = DashboardResourceIntTest.createEntity(em);
+        em.persist(materialCategoryDashboard);
+        em.flush();
+        materialclassification.addMaterialCategoryDashboard(materialCategoryDashboard);
+        materialclassificationRepository.saveAndFlush(materialclassification);
+        Long materialCategoryDashboardId = materialCategoryDashboard.getId();
+
+        // Get all the materialclassificationList where materialCategoryDashboard equals to materialCategoryDashboardId
+        defaultMaterialclassificationShouldBeFound("materialCategoryDashboardId.equals=" + materialCategoryDashboardId);
+
+        // Get all the materialclassificationList where materialCategoryDashboard equals to materialCategoryDashboardId + 1
+        defaultMaterialclassificationShouldNotBeFound("materialCategoryDashboardId.equals=" + (materialCategoryDashboardId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultMaterialclassificationShouldBeFound(String filter) throws Exception {
+        restMaterialclassificationMockMvc.perform(get("/api/materialclassifications?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(materialclassification.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())));
+
+        // Check, that the count call also returns 1
+        restMaterialclassificationMockMvc.perform(get("/api/materialclassifications/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultMaterialclassificationShouldNotBeFound(String filter) throws Exception {
+        restMaterialclassificationMockMvc.perform(get("/api/materialclassifications?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restMaterialclassificationMockMvc.perform(get("/api/materialclassifications/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

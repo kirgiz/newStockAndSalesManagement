@@ -32,10 +32,10 @@
 
             <div class="form-group col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d article</label>
-                <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialhistory.materialclassificationId"
+                <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialhistory.materialclassificationId"  
                     required>
                     <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
-                    <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
+                    <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassificationsToDisplay; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
                 </select>
             </div>
             <div [hidden]="!(editForm.controls.materialClassif?.dirty && editForm.controls.materialClassif?.invalid)">
@@ -87,7 +87,7 @@
 
             <div class="form-group  col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_warehousefrom">Warehousefrom</label>
-                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId"
+                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId" (ngModelChange)="filterClassification()"
                     required #warehousefrom="ngModel">
                     <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
                     <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
@@ -102,11 +102,16 @@
         <div class="form-row">
                 <div class="form-group  col-md-6">
                         <h5 class="list-group-item-heading"  for="field_quantity">Quantité</h5>
-                        <input type="number" class="form-control" name="quantity" id="field_quantity" [(ngModel)]="quantity" [required]="true" />
+                        <input type="number" class="form-control" name="quantity" id="field_quantity" [(ngModel)]="quantity" [required]="true" (ngModelChange)="checkQuantity()"/>
                     </div>
                     <div [hidden]="!(editForm.controls.field_quantity?.dirty && editForm.controls.field_quantity?.invalid)">
                         <small class="form-text text-danger" [hidden]="!editForm.controls.field_quantity?.errors?.required" jhiTranslate="entity.validation.required">
                             This field is required.
+                        </small>
+                    </div>
+                    <div [hidden]="quantityAvailable">
+                        <small class="form-text text-danger" [hidden]="quantityAvailable">
+                            Pas assez de stock
                         </small>
                     </div>
                 </div>
