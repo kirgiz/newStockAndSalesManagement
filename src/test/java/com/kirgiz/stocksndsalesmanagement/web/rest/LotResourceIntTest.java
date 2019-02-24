@@ -3,6 +3,7 @@ package com.kirgiz.stocksndsalesmanagement.web.rest;
 import com.kirgiz.stocksndsalesmanagement.StockAndSalesManagementApp;
 
 import com.kirgiz.stocksndsalesmanagement.domain.Lot;
+import com.kirgiz.stocksndsalesmanagement.domain.Material;
 import com.kirgiz.stocksndsalesmanagement.domain.Currency;
 import com.kirgiz.stocksndsalesmanagement.domain.Materialclassification;
 import com.kirgiz.stocksndsalesmanagement.repository.LotRepository;
@@ -10,6 +11,8 @@ import com.kirgiz.stocksndsalesmanagement.service.LotService;
 import com.kirgiz.stocksndsalesmanagement.service.dto.LotDTO;
 import com.kirgiz.stocksndsalesmanagement.service.mapper.LotMapper;
 import com.kirgiz.stocksndsalesmanagement.web.rest.errors.ExceptionTranslator;
+import com.kirgiz.stocksndsalesmanagement.service.dto.LotCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.LotQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -77,6 +80,9 @@ public class LotResourceIntTest {
     private LotService lotService;
 
     @Autowired
+    private LotQueryService lotQueryService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -95,7 +101,7 @@ public class LotResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final LotResource lotResource = new LotResource(lotService);
+        final LotResource lotResource = new LotResource(lotService, lotQueryService);
         this.restLotMockMvc = MockMvcBuilders.standaloneSetup(lotResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -296,6 +302,430 @@ public class LotResourceIntTest {
             .andExpect(jsonPath("$.unitBuyPrice").value(DEFAULT_UNIT_BUY_PRICE.doubleValue()))
             .andExpect(jsonPath("$.itemsGenerated").value(DEFAULT_ITEMS_GENERATED.booleanValue()));
     }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where code equals to DEFAULT_CODE
+        defaultLotShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the lotList where code equals to UPDATED_CODE
+        defaultLotShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultLotShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the lotList where code equals to UPDATED_CODE
+        defaultLotShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where code is not null
+        defaultLotShouldBeFound("code.specified=true");
+
+        // Get all the lotList where code is null
+        defaultLotShouldNotBeFound("code.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where description equals to DEFAULT_DESCRIPTION
+        defaultLotShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the lotList where description equals to UPDATED_DESCRIPTION
+        defaultLotShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultLotShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the lotList where description equals to UPDATED_DESCRIPTION
+        defaultLotShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where description is not null
+        defaultLotShouldBeFound("description.specified=true");
+
+        // Get all the lotList where description is null
+        defaultLotShouldNotBeFound("description.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCreationDateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where creationDate equals to DEFAULT_CREATION_DATE
+        defaultLotShouldBeFound("creationDate.equals=" + DEFAULT_CREATION_DATE);
+
+        // Get all the lotList where creationDate equals to UPDATED_CREATION_DATE
+        defaultLotShouldNotBeFound("creationDate.equals=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCreationDateIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where creationDate in DEFAULT_CREATION_DATE or UPDATED_CREATION_DATE
+        defaultLotShouldBeFound("creationDate.in=" + DEFAULT_CREATION_DATE + "," + UPDATED_CREATION_DATE);
+
+        // Get all the lotList where creationDate equals to UPDATED_CREATION_DATE
+        defaultLotShouldNotBeFound("creationDate.in=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCreationDateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where creationDate is not null
+        defaultLotShouldBeFound("creationDate.specified=true");
+
+        // Get all the lotList where creationDate is null
+        defaultLotShouldNotBeFound("creationDate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCreationDateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where creationDate greater than or equals to DEFAULT_CREATION_DATE
+        defaultLotShouldBeFound("creationDate.greaterOrEqualThan=" + DEFAULT_CREATION_DATE);
+
+        // Get all the lotList where creationDate greater than or equals to UPDATED_CREATION_DATE
+        defaultLotShouldNotBeFound("creationDate.greaterOrEqualThan=" + UPDATED_CREATION_DATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCreationDateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where creationDate less than or equals to DEFAULT_CREATION_DATE
+        defaultLotShouldNotBeFound("creationDate.lessThan=" + DEFAULT_CREATION_DATE);
+
+        // Get all the lotList where creationDate less than or equals to UPDATED_CREATION_DATE
+        defaultLotShouldBeFound("creationDate.lessThan=" + UPDATED_CREATION_DATE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllLotsByNumberOfItemsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where numberOfItems equals to DEFAULT_NUMBER_OF_ITEMS
+        defaultLotShouldBeFound("numberOfItems.equals=" + DEFAULT_NUMBER_OF_ITEMS);
+
+        // Get all the lotList where numberOfItems equals to UPDATED_NUMBER_OF_ITEMS
+        defaultLotShouldNotBeFound("numberOfItems.equals=" + UPDATED_NUMBER_OF_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByNumberOfItemsIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where numberOfItems in DEFAULT_NUMBER_OF_ITEMS or UPDATED_NUMBER_OF_ITEMS
+        defaultLotShouldBeFound("numberOfItems.in=" + DEFAULT_NUMBER_OF_ITEMS + "," + UPDATED_NUMBER_OF_ITEMS);
+
+        // Get all the lotList where numberOfItems equals to UPDATED_NUMBER_OF_ITEMS
+        defaultLotShouldNotBeFound("numberOfItems.in=" + UPDATED_NUMBER_OF_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByNumberOfItemsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where numberOfItems is not null
+        defaultLotShouldBeFound("numberOfItems.specified=true");
+
+        // Get all the lotList where numberOfItems is null
+        defaultLotShouldNotBeFound("numberOfItems.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByNumberOfItemsIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where numberOfItems greater than or equals to DEFAULT_NUMBER_OF_ITEMS
+        defaultLotShouldBeFound("numberOfItems.greaterOrEqualThan=" + DEFAULT_NUMBER_OF_ITEMS);
+
+        // Get all the lotList where numberOfItems greater than or equals to UPDATED_NUMBER_OF_ITEMS
+        defaultLotShouldNotBeFound("numberOfItems.greaterOrEqualThan=" + UPDATED_NUMBER_OF_ITEMS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByNumberOfItemsIsLessThanSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where numberOfItems less than or equals to DEFAULT_NUMBER_OF_ITEMS
+        defaultLotShouldNotBeFound("numberOfItems.lessThan=" + DEFAULT_NUMBER_OF_ITEMS);
+
+        // Get all the lotList where numberOfItems less than or equals to UPDATED_NUMBER_OF_ITEMS
+        defaultLotShouldBeFound("numberOfItems.lessThan=" + UPDATED_NUMBER_OF_ITEMS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllLotsByCommentsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where comments equals to DEFAULT_COMMENTS
+        defaultLotShouldBeFound("comments.equals=" + DEFAULT_COMMENTS);
+
+        // Get all the lotList where comments equals to UPDATED_COMMENTS
+        defaultLotShouldNotBeFound("comments.equals=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCommentsIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where comments in DEFAULT_COMMENTS or UPDATED_COMMENTS
+        defaultLotShouldBeFound("comments.in=" + DEFAULT_COMMENTS + "," + UPDATED_COMMENTS);
+
+        // Get all the lotList where comments equals to UPDATED_COMMENTS
+        defaultLotShouldNotBeFound("comments.in=" + UPDATED_COMMENTS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByCommentsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where comments is not null
+        defaultLotShouldBeFound("comments.specified=true");
+
+        // Get all the lotList where comments is null
+        defaultLotShouldNotBeFound("comments.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByUnitBuyPriceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where unitBuyPrice equals to DEFAULT_UNIT_BUY_PRICE
+        defaultLotShouldBeFound("unitBuyPrice.equals=" + DEFAULT_UNIT_BUY_PRICE);
+
+        // Get all the lotList where unitBuyPrice equals to UPDATED_UNIT_BUY_PRICE
+        defaultLotShouldNotBeFound("unitBuyPrice.equals=" + UPDATED_UNIT_BUY_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByUnitBuyPriceIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where unitBuyPrice in DEFAULT_UNIT_BUY_PRICE or UPDATED_UNIT_BUY_PRICE
+        defaultLotShouldBeFound("unitBuyPrice.in=" + DEFAULT_UNIT_BUY_PRICE + "," + UPDATED_UNIT_BUY_PRICE);
+
+        // Get all the lotList where unitBuyPrice equals to UPDATED_UNIT_BUY_PRICE
+        defaultLotShouldNotBeFound("unitBuyPrice.in=" + UPDATED_UNIT_BUY_PRICE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByUnitBuyPriceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where unitBuyPrice is not null
+        defaultLotShouldBeFound("unitBuyPrice.specified=true");
+
+        // Get all the lotList where unitBuyPrice is null
+        defaultLotShouldNotBeFound("unitBuyPrice.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByItemsGeneratedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where itemsGenerated equals to DEFAULT_ITEMS_GENERATED
+        defaultLotShouldBeFound("itemsGenerated.equals=" + DEFAULT_ITEMS_GENERATED);
+
+        // Get all the lotList where itemsGenerated equals to UPDATED_ITEMS_GENERATED
+        defaultLotShouldNotBeFound("itemsGenerated.equals=" + UPDATED_ITEMS_GENERATED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByItemsGeneratedIsInShouldWork() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where itemsGenerated in DEFAULT_ITEMS_GENERATED or UPDATED_ITEMS_GENERATED
+        defaultLotShouldBeFound("itemsGenerated.in=" + DEFAULT_ITEMS_GENERATED + "," + UPDATED_ITEMS_GENERATED);
+
+        // Get all the lotList where itemsGenerated equals to UPDATED_ITEMS_GENERATED
+        defaultLotShouldNotBeFound("itemsGenerated.in=" + UPDATED_ITEMS_GENERATED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByItemsGeneratedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        lotRepository.saveAndFlush(lot);
+
+        // Get all the lotList where itemsGenerated is not null
+        defaultLotShouldBeFound("itemsGenerated.specified=true");
+
+        // Get all the lotList where itemsGenerated is null
+        defaultLotShouldNotBeFound("itemsGenerated.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllLotsByMaterialLotIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Material materialLot = MaterialResourceIntTest.createEntity(em);
+        em.persist(materialLot);
+        em.flush();
+        lot.addMaterialLot(materialLot);
+        lotRepository.saveAndFlush(lot);
+        Long materialLotId = materialLot.getId();
+
+        // Get all the lotList where materialLot equals to materialLotId
+        defaultLotShouldBeFound("materialLotId.equals=" + materialLotId);
+
+        // Get all the lotList where materialLot equals to materialLotId + 1
+        defaultLotShouldNotBeFound("materialLotId.equals=" + (materialLotId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllLotsByBuycurrencylotIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Currency buycurrencylot = CurrencyResourceIntTest.createEntity(em);
+        em.persist(buycurrencylot);
+        em.flush();
+        lot.setBuycurrencylot(buycurrencylot);
+        lotRepository.saveAndFlush(lot);
+        Long buycurrencylotId = buycurrencylot.getId();
+
+        // Get all the lotList where buycurrencylot equals to buycurrencylotId
+        defaultLotShouldBeFound("buycurrencylotId.equals=" + buycurrencylotId);
+
+        // Get all the lotList where buycurrencylot equals to buycurrencylotId + 1
+        defaultLotShouldNotBeFound("buycurrencylotId.equals=" + (buycurrencylotId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllLotsByMaterialclassificationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        Materialclassification materialclassification = MaterialclassificationResourceIntTest.createEntity(em);
+        em.persist(materialclassification);
+        em.flush();
+        lot.setMaterialclassification(materialclassification);
+        lotRepository.saveAndFlush(lot);
+        Long materialclassificationId = materialclassification.getId();
+
+        // Get all the lotList where materialclassification equals to materialclassificationId
+        defaultLotShouldBeFound("materialclassificationId.equals=" + materialclassificationId);
+
+        // Get all the lotList where materialclassification equals to materialclassificationId + 1
+        defaultLotShouldNotBeFound("materialclassificationId.equals=" + (materialclassificationId + 1));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is returned
+     */
+    private void defaultLotShouldBeFound(String filter) throws Exception {
+        restLotMockMvc.perform(get("/api/lots?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(lot.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
+            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(DEFAULT_CREATION_DATE.toString())))
+            .andExpect(jsonPath("$.[*].numberOfItems").value(hasItem(DEFAULT_NUMBER_OF_ITEMS.intValue())))
+            .andExpect(jsonPath("$.[*].comments").value(hasItem(DEFAULT_COMMENTS.toString())))
+            .andExpect(jsonPath("$.[*].unitBuyPrice").value(hasItem(DEFAULT_UNIT_BUY_PRICE.doubleValue())))
+            .andExpect(jsonPath("$.[*].itemsGenerated").value(hasItem(DEFAULT_ITEMS_GENERATED.booleanValue())));
+
+        // Check, that the count call also returns 1
+        restLotMockMvc.perform(get("/api/lots/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("1"));
+    }
+
+    /**
+     * Executes the search, and checks that the default entity is not returned
+     */
+    private void defaultLotShouldNotBeFound(String filter) throws Exception {
+        restLotMockMvc.perform(get("/api/lots?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+
+        // Check, that the count call also returns 0
+        restLotMockMvc.perform(get("/api/lots/count?sort=id,desc&" + filter))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(content().string("0"));
+    }
+
 
     @Test
     @Transactional

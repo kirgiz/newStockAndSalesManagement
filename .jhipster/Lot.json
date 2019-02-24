@@ -79,7 +79,7 @@
     "searchEngine": false,
     "service": "serviceClass",
     "entityTableName": "lot",
-    "jpaMetamodelFiltering": false,
+    "jpaMetamodelFiltering": true,
     "pagination": "pagination",
     "angularJSSuffix": "StockAndSalesUtility"
 }

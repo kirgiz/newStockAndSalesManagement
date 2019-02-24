@@ -6,6 +6,8 @@ import com.kirgiz.stocksndsalesmanagement.web.rest.errors.BadRequestAlertExcepti
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.HeaderUtil;
 import com.kirgiz.stocksndsalesmanagement.web.rest.util.PaginationUtil;
 import com.kirgiz.stocksndsalesmanagement.service.dto.LotDTO;
+import com.kirgiz.stocksndsalesmanagement.service.dto.LotCriteria;
+import com.kirgiz.stocksndsalesmanagement.service.LotQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +38,11 @@ public class LotResource {
 
     private final LotService lotService;
 
-    public LotResource(LotService lotService) {
+    private final LotQueryService lotQueryService;
+
+    public LotResource(LotService lotService, LotQueryService lotQueryService) {
         this.lotService = lotService;
+        this.lotQueryService = lotQueryService;
     }
 
     /**
@@ -86,15 +91,29 @@ public class LotResource {
      * GET  /lots : get all the lots.
      *
      * @param pageable the pagination information
+     * @param criteria the criterias which the requested entities should match
      * @return the ResponseEntity with status 200 (OK) and the list of lots in body
      */
     @GetMapping("/lots")
     @Timed
-    public ResponseEntity<List<LotDTO>> getAllLots(Pageable pageable) {
-        log.debug("REST request to get a page of Lots");
-        Page<LotDTO> page = lotService.findAll(pageable);
+    public ResponseEntity<List<LotDTO>> getAllLots(LotCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Lots by criteria: {}", criteria);
+        Page<LotDTO> page = lotQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/lots");
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+    * GET  /lots/count : count all the lots.
+    *
+    * @param criteria the criterias which the requested entities should match
+    * @return the ResponseEntity with status 200 (OK) and the count in body
+    */
+    @GetMapping("/lots/count")
+    @Timed
+    public ResponseEntity<Long> countLots(LotCriteria criteria) {
+        log.debug("REST request to count Lots by criteria: {}", criteria);
+        return ResponseEntity.ok().body(lotQueryService.countByCriteria(criteria));
     }
 
     /**

@@ -432,26 +432,8 @@ export class DashboardStockAndSalesUtilityComponent implements OnInit, OnDestroy
             .sort((item1, item2) => {
                 return parseInt(item2.rateDate.format('YYYYMMDD'), 10) - parseInt(item1.rateDate.format('YYYYMMDD'), 10);
             });
-        console.log('FXXXXXXXXXXXXXXXXXXXXX');
-        console.log(fx);
-        console.log(date);
-        console.log(fx[0]);
-        console.log(currency);
         return fx[0];
-        /* return fxrates.reduce((p, v) => {
-            return parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(v.rateDate.format('YYYYMMDD'), 10) &&
-                parseInt(p.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
-                parseInt(v.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10) &&
-                p.rateForCurrencyId === currency && v.rateForCurrencyId
-                ? p
-                : v;
-        });*/
     }
-
-    /*   ngAfterViewInit(): void {
-        this.computePNL();
-this.filterResults();
-    }*/
 
     /*
  * Return a random number within the defined range,

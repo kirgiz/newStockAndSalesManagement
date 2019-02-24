@@ -30,13 +30,20 @@ import { NgForm } from '@angular/forms';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import * as moment from 'moment';
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
-import { first } from 'rxjs/operators';
+import { first, take } from 'rxjs/operators';
+import { LotStockAndSalesUtility } from 'app/shared/model/lot-stock-and-sales-utility.model';
+import { LotStockAndSalesUtilityService } from '../lot-stock-and-sales-utility/lot-stock-and-sales-utility.service';
+import { ForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-stock-and-sales-utility.model';
+import { Moment } from 'moment';
+import { ForexratesStockAndSalesUtilityService } from '../forexrates-stock-and-sales-utility/forexrates-stock-and-sales-utility.service';
+import { ICompanyStockAndSalesUtility } from 'app/shared/model/company-stock-and-sales-utility.model';
+import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
     templateUrl: './materialhistory-stock-and-sales-utility-dialog.component.html'
 })
-export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnInit, OnDestroy {
     @ViewChild('transferClassif')
     editForm: any;
     thirdsfrom: ThirdStockAndSalesUtility[];
@@ -63,7 +70,6 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     creationDateDp: any;
     materialTypeId: number;
     transferType: TransferclassificationStockAndSalesUtility;
-    //  selectedValue = 'AM';
     quantity: any;
     predicate: string;
     reverse: any;
@@ -71,7 +77,11 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     page: number;
     previousPage: number;
     materialClassificationsToDisplay: MaterialclassificationStockAndSalesUtility[];
-    quantityAvailable: boolean;
+    quantityAvailable: boolean = false;
+    fxrates: ForexratesStockAndSalesUtility[];
+    company: ICompanyStockAndSalesUtility[];
+    avgcost: number = 0;
+    outgoingTransfer: boolean = false;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -85,7 +95,10 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         private router: Router,
         private userService: UserService,
         private autThirds: UserAuthorizedThirdService,
-        private principal: Principal
+        private principal: Principal,
+        private lotService: LotStockAndSalesUtilityService,
+        private forexratesService: ForexratesStockAndSalesUtilityService,
+        private companyService: CompanyStockAndSalesUtilityService
     ) {
         this.itemsPerPage = 100000000;
         this.page = 1; // data.pagingParams.page;
@@ -104,6 +117,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         this.transferClassificationSubscription = this.transferclassificationService.query().subscribe(
             (res: HttpResponse<TransferclassificationStockAndSalesUtility[]>) => {
                 this.transferclassifications = res.body;
+                this.onTransferTypeChange();
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
@@ -161,8 +175,16 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
         this.materialhistory.transferClassifId = this.transferType.id;
 
-        console.log(this.materialhistory.warehousefromId);
-        // this.filterClassification();
+        const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
+            this.fxrates = res1.body;
+        });
+
+        this.companyService
+            .query()
+            .pipe(take(1))
+            .subscribe((company: HttpResponse<ICompanyStockAndSalesUtility[]>) => {
+                this.company = company.body;
+            });
     }
 
     filterClassification() {
@@ -199,10 +221,62 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
                     this.quantityAvailable = false;
                 }
             });
+        this.PriceAdvice();
     }
 
-    ngAfterViewInit() {
-        //  this.materialhistory.warehousefromId = 1201;
+    PriceAdvice() {
+        console.log('HAAA');
+        if (this.materialhistory.materialclassificationId && this.outgoingTransfer) {
+            this.materialService
+                .query({
+                    'currentLocation.equals': this.materialhistory.warehousefromId,
+                    'materialTypeCatId.equals': this.materialhistory.materialclassificationId
+                })
+                .subscribe((res: HttpResponse<MaterialStockAndSalesUtility[]>) => {
+                    const tmp: MaterialStockAndSalesUtility[] = res.body;
+                    const tmpLot: LotStockAndSalesUtility[] = [];
+                    const crit: number[] = [];
+                    for (const mat of tmp) {
+                        crit.push(mat.lotIdentifierId);
+                    }
+                    this.lotService.query({ 'id.in': crit }).subscribe((res1: HttpResponse<LotStockAndSalesUtility[]>) => {
+                        const lot: LotStockAndSalesUtility[] = res1.body;
+                        console.log(lot);
+                        console.log(this.company[0].baseCurrencyId);
+                        this.avgcost = 0;
+                        for (const lit of lot) {
+                            const closest_fx_rate = this.closestFxrate(this.fxrates, moment(), lit.buycurrencylotId).straighRate;
+                            this.avgcost = this.avgcost + lit.unitBuyPrice * closest_fx_rate;
+                        }
+                        this.avgcost = this.avgcost / lot.length;
+                    });
+                });
+        }
+    }
+
+    onTransferTypeChange() {
+        if (this.transferclassifications && this.materialhistory.transferClassifId) {
+            this.outgoingTransfer = this.transferclassifications.find((rec: TransferclassificationStockAndSalesUtility) => {
+                return rec.id === this.materialhistory.transferClassifId;
+            }).isOutgoingTransfer;
+            this.PriceAdvice();
+        } else {
+            this.outgoingTransfer = false;
+        }
+    }
+
+    private closestFxrate(fxrates: ForexratesStockAndSalesUtility[], date: Moment, currency: number) {
+        const fx = fxrates
+            .filter(item => {
+                return (
+                    item.rateForCurrencyId === currency &&
+                    parseInt(item.rateDate.format('YYYYMMDD'), 10) <= parseInt(date.format('YYYYMMDD'), 10)
+                );
+            })
+            .sort((item1, item2) => {
+                return parseInt(item2.rateDate.format('YYYYMMDD'), 10) - parseInt(item1.rateDate.format('YYYYMMDD'), 10);
+            });
+        return fx[0];
     }
 
     clear() {

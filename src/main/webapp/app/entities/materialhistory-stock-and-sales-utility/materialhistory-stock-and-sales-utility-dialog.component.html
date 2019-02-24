@@ -16,7 +16,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.transferClassif" for="field_transferClassif">Transfer Classif</label>
-                <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="materialhistory.transferClassifId"
+                <select class="form-control" id="field_transferClassif" name="transferClassif" [(ngModel)]="materialhistory.transferClassifId" (ngModelChange)="onTransferTypeChange()"
                     required #transferClassif="ngModel">
                     <option *ngIf="!editForm.value.transferClassif" [ngValue]="null" selected></option>
                     <option [ngValue]="transferclassificationOption.id" *ngFor="let transferclassificationOption of transferclassifications; trackBy: trackTransferclassificationById">{{transferclassificationOption.name}}</option>
@@ -32,7 +32,7 @@
 
             <div class="form-group col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialclassification.materialCategory" for="field_materialClassif">Type d article</label>
-                <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialhistory.materialclassificationId"  
+                <select class="form-control" id="field_materialClassif" name="field_materialClassif" [(ngModel)]="materialhistory.materialclassificationId"  (ngModelChange)="PriceAdvice()"
                     required>
                     <option *ngIf="!editForm.value.materialClassif" [ngValue]="null" selected></option>
                     <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialClassificationsToDisplay; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
@@ -61,12 +61,17 @@
             <div class="form-group  col-md-6">
                 <h5 class="list-group-item-heading" jhiTranslate="stockAndSalesManagementApp.materialhistory.price" for="field_price">Price</h5>
                 <input type="number" class="form-control" name="price" id="field_price" [(ngModel)]="materialhistory.price" [required]="(transferType.isIncomingTransfer ||
-                transferType.isOutgoingTransfer)" />
+                transferType.isOutgoingTransfer)" (ngModelChange)="PriceAdvice()"/>
             </div>
             <div [hidden]="!(editForm.controls.field_price?.dirty && editForm.controls.field_price?.invalid) && (transferType.isIncomingTransfer ||
             transferType.isOutgoingTransfer)">
                 <small class="form-text text-danger" [hidden]="!editForm.controls.field_price?.errors?.required" jhiTranslate="entity.validation.required">
                     This field is required.
+                </small>
+            </div>
+            <div [hidden]="!outgoingTransfer || !quantityAvailable">
+                <small class="form-text text-warning" [hidden]="!outgoingTransfer || !quantityAvailable">
+                   Prix minimum (0 gain) conseillé: {{avgcost}}
                 </small>
             </div>
         </div>
@@ -150,7 +155,8 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group  col-md-12">
+                <div class="form-row">
             <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.comments" for="field_comments">Comments</label>
             <input type="text" class="form-control" name="comments" id="field_comments" [(ngModel)]="materialhistory.comments" maxlength="500"
             />
@@ -162,6 +168,7 @@
             </div>
         </div>
     </div>
+</div>
     <br>
 
     <div class="modal-footer">
@@ -169,7 +176,7 @@
             <span class="fa fa-ban"></span>&nbsp;
             <span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-outline-primary">
+        <button type="submit" [disabled]="!quantityAvailable || editForm.form.invalid || isSaving" class="btn btn-outline-primary">
             <span class="fa fa-save"></span>&nbsp;
             <span jhiTranslate="entity.action.save">Save</span>
         </button>

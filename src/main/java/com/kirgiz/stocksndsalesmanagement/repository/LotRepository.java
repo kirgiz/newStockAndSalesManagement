@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface LotRepository extends JpaRepository<Lot, Long> {
+public interface LotRepository extends JpaRepository<Lot, Long>, JpaSpecificationExecutor<Lot> {
 
 }
