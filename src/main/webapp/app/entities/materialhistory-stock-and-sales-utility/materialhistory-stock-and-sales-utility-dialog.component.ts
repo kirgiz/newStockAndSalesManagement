@@ -210,6 +210,9 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     checkQuantity() {
         this.materialService
             .query({
+                page: this.page - 1,
+                size: 100000000 /*this.itemsPerPage,*/,
+                sort: this.sort(),
                 'currentLocation.equals': this.materialhistory.warehousefromId,
                 'materialTypeCatId.equals': this.materialhistory.materialclassificationId
             })
