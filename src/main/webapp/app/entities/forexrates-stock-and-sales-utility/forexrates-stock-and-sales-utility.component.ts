@@ -3,9 +3,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
-import { IForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-stock-and-sales-utility.model';
+import { IForexratesStockAndSalesUtility, ForexratesStockAndSalesUtility } from 'app/shared/model/forexrates-stock-and-sales-utility.model';
 import { Principal } from 'app/core';
 import { ForexratesStockAndSalesUtilityService } from './forexrates-stock-and-sales-utility.service';
+import { CurrencyStockAndSalesUtility, ICurrencyStockAndSalesUtility } from 'app/shared/model/currency-stock-and-sales-utility.model';
+import { CurrencyStockAndSalesUtilityService } from '../currency-stock-and-sales-utility';
 
 @Component({
     selector: 'jhi-forexrates-stock-and-sales-utility',
@@ -15,18 +17,29 @@ export class ForexratesStockAndSalesUtilityComponent implements OnInit, OnDestro
     forexrates: IForexratesStockAndSalesUtility[];
     currentAccount: any;
     eventSubscriber: Subscription;
+    forexratesToDisplay: IForexratesStockAndSalesUtility[];
+    currencies: ICurrencyStockAndSalesUtility[];
+    currency: ICurrencyStockAndSalesUtility;
 
     constructor(
         private forexratesService: ForexratesStockAndSalesUtilityService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
-        private principal: Principal
+        private principal: Principal,
+        private currencyService: CurrencyStockAndSalesUtilityService
     ) {}
 
     loadAll() {
         this.forexratesService.query().subscribe(
             (res: HttpResponse<IForexratesStockAndSalesUtility[]>) => {
                 this.forexrates = res.body;
+                this.filterResults();
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
+        this.currencyService.query().subscribe(
+            (res: HttpResponse<ICurrencyStockAndSalesUtility[]>) => {
+                this.currencies = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
@@ -48,11 +61,27 @@ export class ForexratesStockAndSalesUtilityComponent implements OnInit, OnDestro
         return item.id;
     }
 
+    trackCurrenciesById(index: number, item: ICurrencyStockAndSalesUtility) {
+        return item.id;
+    }
+
     registerChangeInForexrates() {
         this.eventSubscriber = this.eventManager.subscribe('forexratesListModification', response => this.loadAll());
     }
 
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    filterResults() {
+        if (!this.currency) {
+            this.forexratesToDisplay = this.forexrates.slice();
+        } else {
+            console.log(this.currency);
+            console.log(this.forexrates);
+            this.forexratesToDisplay = this.forexrates.filter((rec: IForexratesStockAndSalesUtility) => {
+                return rec.rateForCurrencyId === this.currency;
+            });
+        }
     }
 }
