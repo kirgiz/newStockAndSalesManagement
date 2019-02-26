@@ -8,6 +8,7 @@ import { Principal } from 'app/core';
 import { ForexratesStockAndSalesUtilityService } from './forexrates-stock-and-sales-utility.service';
 import { CurrencyStockAndSalesUtility, ICurrencyStockAndSalesUtility } from 'app/shared/model/currency-stock-and-sales-utility.model';
 import { CurrencyStockAndSalesUtilityService } from '../currency-stock-and-sales-utility';
+import { Moment } from 'moment';
 
 @Component({
     selector: 'jhi-forexrates-stock-and-sales-utility',
@@ -20,6 +21,8 @@ export class ForexratesStockAndSalesUtilityComponent implements OnInit, OnDestro
     forexratesToDisplay: IForexratesStockAndSalesUtility[];
     currencies: ICurrencyStockAndSalesUtility[];
     currency: ICurrencyStockAndSalesUtility;
+    dateFrom: Moment;
+    dateTo: Moment;
 
     constructor(
         private forexratesService: ForexratesStockAndSalesUtilityService,
@@ -80,7 +83,18 @@ export class ForexratesStockAndSalesUtilityComponent implements OnInit, OnDestro
             console.log(this.currency);
             console.log(this.forexrates);
             this.forexratesToDisplay = this.forexrates.filter((rec: IForexratesStockAndSalesUtility) => {
-                return rec.rateForCurrencyId === this.currency;
+                let l_return: boolean;
+                l_return = rec.rateForCurrencyId === this.currency;
+                if (this.dateFrom) {
+                    l_return = this.dateFrom.valueOf() <= rec.rateDate.valueOf();
+                }
+                if (this.dateTo) {
+                    l_return = this.dateTo.valueOf() >= rec.rateDate.valueOf();
+                }
+                if (this.dateTo && this.dateFrom) {
+                    l_return = this.dateTo.valueOf() >= rec.rateDate.valueOf() && this.dateFrom.valueOf() <= rec.rateDate.valueOf();
+                }
+                return l_return;
             });
         }
     }

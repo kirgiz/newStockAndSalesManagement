@@ -16,6 +16,8 @@
     <br/>
         <div class="row">
             <div class="col-md-2">
+               <label for="field_Currencies"></label>     <span
+                    jhiTranslate="stockAndSalesManagementApp.currency.isoCode">Monnaie</span>
                 <select
                     class="form-control"
                     id="field_Currencies"
@@ -28,6 +30,40 @@
                         ccy.isoCode
                         }}</option>
                 </select>
+            </div>
+
+            <!--</label>  jhiTranslate="stockAndSalesManagementApp.materialhistory.transferDate"-->
+            <div class="col-md-2">
+                <label
+                    class="form-control-label"
+                    for="field_dateFrom">A Partir de</label>
+                <input
+                    id="field_dateFrom"
+                    name="dateFrom"
+                    placeholder="yyyy-mm-dd"
+                    class="form-control"
+                    ngbDatepicker
+                    (click)="datePickerFrom.toggle()"
+                    [(ngModel)]="dateFrom"
+                    (ngModelChange)="filterResults()"
+                    #datePickerFrom="ngbDatepicker"
+                    />
+            </div>
+            <div class="col-md-2">
+                <label
+                    class="form-control-label"
+                    for="field_dateTo">Jusqu'à</label>
+                <input
+                    id="field_dateTo"
+                    name="dateTo"
+                    placeholder="yyyy-mm-dd"
+                    class="form-control"
+                    ngbDatepicker
+                    (click)="datePickerTo.toggle()"
+                    [(ngModel)]="dateTo"
+                    (ngModelChange)="filterResults()"
+                    #datePickerTo="ngbDatepicker"
+                    />
             </div>
         </div>
         <br />
@@ -54,7 +90,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let forexrates of forexratesToDisplay ;trackBy:
+                        <tr *ngFor="let forexrates of forexratesToDisplay
+                            ;trackBy:
                             trackId">
                             <td><a
                                     [routerLink]="['/forexrates-stock-and-sales-utility',
@@ -65,7 +102,8 @@
                                 <div *ngIf="forexrates.rateForCurrencyId">
                                     <a
                                         [routerLink]="['../currency-stock-and-sales-utility',
-                                        forexrates.rateForCurrencyId , 'view' ]">{{forexrates.rateForCurrencyIsoCode}}</a>
+                                        forexrates.rateForCurrencyId , 'view'
+                                        ]">{{forexrates.rateForCurrencyIsoCode}}</a>
                                 </div>
                             </td>
                             <td class="text-right">
