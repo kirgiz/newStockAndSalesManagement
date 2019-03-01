@@ -1,86 +1,187 @@
 <div>
     <h2 id="page-heading">
         <span jhiTranslate="stockAndSalesManagementApp.lot.home.title">Lots</span>
-        <button id="jh-create-entity" class="btn btn btn-outline-dark float-right jh-create-entity create-lot-stock-and-sales-utility" [routerLink]="['/lot-stock-and-sales-utility/new']">
+        <button id="jh-create-entity" class="btn btn btn-outline-dark
+            float-right jh-create-entity create-lot-stock-and-sales-utility"
+            [routerLink]="['/lot-stock-and-sales-utility/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="stockAndSalesManagementApp.lot.home.createLabel">
-            Create new Lot
+            <span
+                jhiTranslate="stockAndSalesManagementApp.lot.home.createLabel">
+                Create new Lot
             </span>
         </button>
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
-    <div class="table-responsive" *ngIf="lots">
-        <table class="table table-dark table-striped  table-sm table-hover">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="code"><span jhiTranslate="stockAndSalesManagementApp.lot.code">Code</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="description"><span jhiTranslate="stockAndSalesManagementApp.lot.description">Description</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="creationDate"><span jhiTranslate="stockAndSalesManagementApp.lot.creationDate">Creation Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="numberOfItems"><span jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems">Number Of Items</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="comments"><span jhiTranslate="stockAndSalesManagementApp.lot.comments">Comments</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="unitBuyPrice"><span jhiTranslate="stockAndSalesManagementApp.lot.unitBuyPrice">Unit Buy Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="itemsGenerated"><span jhiTranslate="stockAndSalesManagementApp.lot.itemsGenerated">Items Generated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="buycurrencylotIsoCode"><span jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="materialclassificationName"><span jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let lot of lots ;trackBy: trackId">
-                <td><a [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'view' ]">{{lot.id}}</a></td>
-                <td>{{lot.code}}</td>
-                <td>{{lot.description}}</td>
-                <td>{{lot.creationDate | date:'mediumDate'}}</td>
-                <td>{{lot.numberOfItems}}</td>
-                <td>{{lot.comments}}</td>
-                <td>{{lot.unitBuyPrice}}</td>
-                <td>{{lot.itemsGenerated}}</td>
-                <td>
-                    <div *ngIf="lot.buycurrencylotId">
-                        <a [routerLink]="['../currency-stock-and-sales-utility', lot.buycurrencylotId , 'view' ]" >{{lot.buycurrencylotIsoCode}}</a>
-                    </div>
-                </td>
-                <td>
-                    <div *ngIf="lot.materialclassificationId">
-                        <a [routerLink]="['../materialclassification-stock-and-sales-utility', lot.materialclassificationId , 'view' ]" >{{lot.materialclassificationName}}</a>
-                    </div>
-                </td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'view' ]"
-                                class="btn btn-outline-secondary btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/lot-stock-and-sales-utility', lot.id, 'edit']"
-                                class="btn btn-outline-secondary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'lot-stock-and-sales-utility/'+ lot.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-outline-secondary btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                             <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="lots && lots.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        <div class="row">
+            <div class="col-md-2">
+                <label for="field_Currencies"> <span
+                        jhiTranslate="stockAndSalesManagementApp.currency.isoCode">Monnaie</span>
+                </label>
+                <select
+                    class="form-control"
+                    id="field_matclassification"
+                    name="matclassification"
+                    [(ngModel)]="materialClassification"
+                    (ngModelChange)="filterResults()">
+                    <option [ngValue]="null" selected></option>
+                    <option [ngValue]="matClass.id" *ngFor="let matClass of materialClassifications;
+                        trackBy: trackmaterialClassificationsById">{{
+                            matClass.name
+                        }}</option>
+                </select>
+            </div>
+
+            <!--</label>  jhiTranslate="stockAndSalesManagementApp.materialhistory.transferDate"-->
+            <div class="col-md-2">
+                <label
+                    class="form-control-label"
+                    for="field_dateFrom">A Partir de</label>
+                <input
+                    id="field_dateFrom"
+                    name="dateFrom"
+                    placeholder="yyyy-mm-dd"
+                    class="form-control"
+                    ngbDatepicker
+                    (click)="datePickerFrom.toggle()"
+                    [(ngModel)]="dateFrom"
+                    (ngModelChange)="filterResults()"
+                    #datePickerFrom="ngbDatepicker"
+                    />
+            </div>
+            <div class="col-md-2">
+                <label
+                    class="form-control-label"
+                    for="field_dateTo">Jusqu'à</label>
+                <input
+                    id="field_dateTo"
+                    name="dateTo"
+                    placeholder="yyyy-mm-dd"
+                    class="form-control"
+                    ngbDatepicker
+                    (click)="datePickerTo.toggle()"
+                    [(ngModel)]="dateTo"
+                    (ngModelChange)="filterResults()"
+                    #datePickerTo="ngbDatepicker"
+                    />
+            </div>
         </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        <br />
+
+        <hr />
+
+        <div class="row">
+            <div class="table-responsive" *ngIf="lots">
+                <table class="table table-dark table-striped table-sm
+                    table-hover">
+                    <thead>
+                        <tr jhiSort [(predicate)]="predicate"
+                            [(ascending)]="reverse"
+                            [callback]="transition.bind(this)">
+                            <th jhiSortBy="id"><span
+                                    jhiTranslate="global.field.id">ID</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="code"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.code">Code</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="description"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.description">Description</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="creationDate"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.creationDate">Creation
+                                    Date</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="numberOfItems"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.numberOfItems">Number
+                                    Of Items</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="comments"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.comments">Comments</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="unitBuyPrice"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.unitBuyPrice">Unit
+                                    Buy Price</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="itemsGenerated"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.itemsGenerated">Items
+                                    Generated</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="buycurrencylotIsoCode"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.buycurrencylot">Buycurrencylot</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th jhiSortBy="materialclassificationName"><span
+                                    jhiTranslate="stockAndSalesManagementApp.lot.materialclassification">Materialclassification</span>
+                                <fa-icon [icon]="'sort'"></fa-icon></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lot of lotsTodisplay ;trackBy: trackId">
+                            <td><a
+                                    [routerLink]="['/lot-stock-and-sales-utility',
+                                    lot.id, 'view' ]">{{lot.id}}</a></td>
+                            <td>{{lot.code}}</td>
+                            <td>{{lot.description}}</td>
+                            <td>{{lot.creationDate | date:'mediumDate'}}</td>
+                            <td>{{lot.numberOfItems}}</td>
+                            <td>{{lot.comments}}</td>
+                            <td>{{lot.unitBuyPrice}}</td>
+                            <td>{{lot.itemsGenerated}}</td>
+                            <td>
+                                <div *ngIf="lot.buycurrencylotId">
+                                    <a
+                                        [routerLink]="['../currency-stock-and-sales-utility',
+                                        lot.buycurrencylotId , 'view' ]">{{lot.buycurrencylotIsoCode}}</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="lot.materialclassificationId">
+                                    <a
+                                        [routerLink]="['../materialclassification-stock-and-sales-utility',
+                                        lot.materialclassificationId , 'view' ]">{{lot.materialclassificationName}}</a>
+                                </div>
+                            </td>
+                            <td class="text-right">
+                                <div class="btn-group flex-btn-group-container">
+                                    <button type="submit"
+                                        [routerLink]="['/lot-stock-and-sales-utility',
+                                        lot.id, 'view' ]"
+                                        class="btn btn-outline-secondary
+                                        btn-sm">
+                                        <fa-icon [icon]="'eye'"></fa-icon>
+                                        <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span> -->
+                                    </button>
+                                    <button type="submit"
+                                        [routerLink]="['/lot-stock-and-sales-utility',
+                                        lot.id, 'edit']"
+                                        class="btn btn-outline-secondary
+                                        btn-sm">
+                                        <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                                        <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span> -->
+                                    </button>
+                                    <button type="submit"
+                                        [routerLink]="['/', { outlets: { popup:
+                                        'lot-stock-and-sales-utility/'+ lot.id +
+                                        '/delete'} }]"
+                                        replaceUrl="true"
+                                        queryParamsHandling="merge"
+                                        class="btn btn-outline-secondary
+                                        btn-sm">
+                                        <fa-icon [icon]="'times'"></fa-icon>
+                                        <!-- <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span> -->
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="lots && lots.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5"
+                    [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page"
+                    [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true"
+                    [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
     </div>
-</div>

@@ -9,6 +9,9 @@ import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { LotStockAndSalesUtilityService } from './lot-stock-and-sales-utility.service';
+import { MaterialclassificationStockAndSalesUtilityService } from '../materialclassification-stock-and-sales-utility';
+import { IMaterialclassificationStockAndSalesUtility } from 'app/shared/model/materialclassification-stock-and-sales-utility.model';
+import { Moment } from 'moment';
 
 @Component({
     selector: 'jhi-lot-stock-and-sales-utility',
@@ -29,6 +32,11 @@ export class LotStockAndSalesUtilityComponent implements OnInit, OnDestroy {
     predicate: any;
     previousPage: any;
     reverse: any;
+    materialClassifications: IMaterialclassificationStockAndSalesUtility[];
+    materialClassification: IMaterialclassificationStockAndSalesUtility;
+    dateFrom: Moment;
+    dateTo: Moment;
+    lotsTodisplay: ILotStockAndSalesUtility[];
 
     constructor(
         private lotService: LotStockAndSalesUtilityService,
@@ -37,7 +45,8 @@ export class LotStockAndSalesUtilityComponent implements OnInit, OnDestroy {
         private principal: Principal,
         private activatedRoute: ActivatedRoute,
         private router: Router,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private materialClassificationService: MaterialclassificationStockAndSalesUtilityService
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
         this.routeData = this.activatedRoute.data.subscribe(data => {
@@ -56,9 +65,18 @@ export class LotStockAndSalesUtilityComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<ILotStockAndSalesUtility[]>) => this.paginateLots(res.body, res.headers),
+                (res: HttpResponse<ILotStockAndSalesUtility[]>) => {
+                    this.paginateLots(res.body, res.headers);
+                    this.filterResults();
+                },
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
+        this.materialClassificationService.query().subscribe(
+            (res: HttpResponse<IMaterialclassificationStockAndSalesUtility[]>) => {
+                this.materialClassifications = res.body;
+            },
+            (res: HttpErrorResponse) => this.onError(res.message)
+        );
     }
 
     loadPage(page: number) {
@@ -119,6 +137,10 @@ export class LotStockAndSalesUtilityComponent implements OnInit, OnDestroy {
         return result;
     }
 
+    trackmaterialClassificationsById(index: number, item: IMaterialclassificationStockAndSalesUtility) {
+        return item.id;
+    }
+
     private paginateLots(data: ILotStockAndSalesUtility[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
@@ -128,5 +150,27 @@ export class LotStockAndSalesUtilityComponent implements OnInit, OnDestroy {
 
     private onError(errorMessage: string) {
         this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    filterResults() {
+        console.log(this.materialClassification);
+        if (!this.materialClassification && !this.dateFrom && !this.dateTo) {
+            this.lotsTodisplay = this.lots;
+        } else {
+            this.lotsTodisplay = this.lots.filter((rec: ILotStockAndSalesUtility) => {
+                let l_return: boolean;
+                l_return = rec.materialclassificationId === this.materialClassification;
+                if (this.dateFrom) {
+                    l_return = this.dateFrom.valueOf() <= rec.creationDate.valueOf();
+                }
+                if (this.dateTo) {
+                    l_return = this.dateTo.valueOf() >= rec.creationDate.valueOf();
+                }
+                if (this.dateTo && this.dateFrom) {
+                    l_return = this.dateTo.valueOf() >= rec.creationDate.valueOf() && this.dateFrom.valueOf() <= rec.creationDate.valueOf();
+                }
+                return l_return;
+            });
+        }
     }
 }

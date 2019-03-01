@@ -77,7 +77,7 @@ export class ForexratesStockAndSalesUtilityComponent implements OnInit, OnDestro
     }
 
     filterResults() {
-        if (!this.currency) {
+        if (!this.currency && !this.dateFrom && !this.dateTo) {
             this.forexratesToDisplay = this.forexrates.slice();
         } else {
             console.log(this.currency);
