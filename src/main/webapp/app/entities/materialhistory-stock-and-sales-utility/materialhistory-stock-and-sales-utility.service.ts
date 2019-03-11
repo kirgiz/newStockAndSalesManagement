@@ -18,6 +18,7 @@ import { ThirdStockAndSalesUtility } from '../../shared/model/third-stock-and-sa
 import { SERVER_API_URL } from 'app/app.constants';
 // import { createRequestOption } from 'app/shared';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
+import { BehaviorSubject } from 'rxjs';
 
 type EntityResponseType = HttpResponse<IMaterialhistoryStockAndSalesUtility>;
 type EntityArrayResponseType = HttpResponse<IMaterialhistoryStockAndSalesUtility[]>;
@@ -28,6 +29,8 @@ export class MaterialhistoryStockAndSalesUtilityService {
     private subsmat: Subscription;
     transTypeEvent: TransferclassificationStockAndSalesUtility;
     defaultThird: ThirdStockAndSalesUtility;
+    private messageSource = new BehaviorSubject('default message');
+    currentMessage = this.messageSource.asObservable();
 
     @Output()
     selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
@@ -48,6 +51,10 @@ export class MaterialhistoryStockAndSalesUtilityService {
             });
         });
         return this.http.post<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
+    }
+
+    changeMessage(message: string) {
+        this.messageSource.next(message);
     }
 
     update(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
