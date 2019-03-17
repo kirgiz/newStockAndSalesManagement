@@ -5,20 +5,19 @@ import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { map } from 'rxjs/operators';
 
-import { JhiDateUtils, JhiDataUtils } from 'ng-jhipster';
+import { JhiDateUtils } from 'ng-jhipster';
 
 import { MaterialhistoryStockAndSalesUtility } from './materialhistory-stock-and-sales-utility.model';
 import { createRequestOption } from '../../shared';
 import { MaterialStockAndSalesUtility, IMaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
-import { Subject } from 'rxjs';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility/material-stock-and-sales-utility.service';
 import { Subscription } from 'rxjs';
 import { TransferclassificationStockAndSalesUtility } from '../../shared/model/transferclassification-stock-and-sales-utility.model';
 import { ThirdStockAndSalesUtility } from '../../shared/model/third-stock-and-sales-utility.model';
 import { SERVER_API_URL } from 'app/app.constants';
-// import { createRequestOption } from 'app/shared';
 import { IMaterialhistoryStockAndSalesUtility } from 'app/shared/model/materialhistory-stock-and-sales-utility.model';
 import { BehaviorSubject } from 'rxjs';
+import { ParamTransfer } from './param-transfer.model';
 
 type EntityResponseType = HttpResponse<IMaterialhistoryStockAndSalesUtility>;
 type EntityArrayResponseType = HttpResponse<IMaterialhistoryStockAndSalesUtility[]>;
@@ -26,24 +25,26 @@ type EntityArrayResponseType = HttpResponse<IMaterialhistoryStockAndSalesUtility
 @Injectable({ providedIn: 'root' })
 export class MaterialhistoryStockAndSalesUtilityService {
     defaultThirdDestination: ThirdStockAndSalesUtility;
-    private subsmat: Subscription;
     transTypeEvent: TransferclassificationStockAndSalesUtility;
     defaultThird: ThirdStockAndSalesUtility;
     private messageSource = new BehaviorSubject('default message');
     currentMessage = this.messageSource.asObservable();
+    private messageparamTransf: BehaviorSubject<ParamTransfer> = new BehaviorSubject(new ParamTransfer(null, null, null));
+    currentparamTransf = this.messageparamTransf.asObservable();
 
     @Output()
     selectedMaterial: EventEmitter<MaterialStockAndSalesUtility[]> = new EventEmitter();
 
     private resourceUrl = SERVER_API_URL + 'api/materialhistories';
+    subsmat: Subscription;
 
     constructor(private http: HttpClient, private dateUtils: JhiDateUtils, private materialService: MaterialStockAndSalesUtilityService) {}
 
     create(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(materialhistory);
-        console.log('haaaaaaaaaaa');
+        console.log('MAISNONHEUUUUUUUUUUUUUUUUUUUUUUUUUU');
         console.log(copy);
-        materialhistory.itemTransfereds.forEach(element => {
+        copy.itemTransfereds.forEach(element => {
             this.materialService.find(element.id).subscribe((resmaterial: HttpResponse<IMaterialStockAndSalesUtility>) => {
                 const material: IMaterialStockAndSalesUtility = resmaterial.body;
                 material.currentLocation = materialhistory.warehousetoId;
@@ -53,45 +54,23 @@ export class MaterialhistoryStockAndSalesUtilityService {
         return this.http.post<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
     }
 
-    changeMessage(message: string) {
-        this.messageSource.next(message);
+    setParamTransf(params: ParamTransfer) {
+        this.messageparamTransf.next(params);
     }
 
     update(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
-        // const copy = this.convert(materialhistory);
-        console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-        // console.log(copy);
         materialhistory.itemTransfereds.forEach(element => {
             this.materialService.find(element.id).subscribe((resmaterial: HttpResponse<IMaterialStockAndSalesUtility>) => {
                 const material: IMaterialStockAndSalesUtility = resmaterial.body;
                 material.currentLocation = materialhistory.warehousetoId;
-                this.materialService.update(material).subscribe((res: HttpResponse<IMaterialStockAndSalesUtility>) => {});
+                this.materialService.update(material).subscribe(() => {});
             });
         });
-        // return this.http.put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' });
-        //    .map((res: EntityResponseType) => this.convertResponse(res));
         const copy = this.convertDateFromClient(materialhistory);
         return this.http
             .put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
-    //  public resourceUrl = SERVER_API_URL + 'api/materialhistories';
-
-    // constructor(private http: HttpClient) {}
-
-    /*   create(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convertDateFromClient(materialhistory);
-        return this.http
-            .post<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-    }
-
-    update(materialhistory: IMaterialhistoryStockAndSalesUtility): Observable<EntityResponseType> {
-        const copy = this.convertDateFromClient(materialhistory);
-        return this.http
-            .put<IMaterialhistoryStockAndSalesUtility>(this.resourceUrl, copy, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-    }*/
 
     find(id: number): Observable<EntityResponseType> {
         return this.http
@@ -149,17 +128,6 @@ export class MaterialhistoryStockAndSalesUtilityService {
             });
         }
         return res;
-    }
-
-    private convert(materialhistory: MaterialhistoryStockAndSalesUtility): MaterialhistoryStockAndSalesUtility {
-        const copy: MaterialhistoryStockAndSalesUtility = Object.assign({}, materialhistory);
-        copy.creationDate = this.dateUtils.convertLocalDateToServer(materialhistory.creationDate);
-        return copy;
-    }
-
-    private convertResponse(res: EntityResponseType): EntityResponseType {
-        const body: MaterialhistoryStockAndSalesUtility = this.convertItemFromServer(res.body);
-        return res.clone({ body });
     }
 
     /**

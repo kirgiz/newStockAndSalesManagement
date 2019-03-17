@@ -38,6 +38,7 @@ import { Moment } from 'moment';
 import { ForexratesStockAndSalesUtilityService } from '../forexrates-stock-and-sales-utility/forexrates-stock-and-sales-utility.service';
 import { ICompanyStockAndSalesUtility } from 'app/shared/model/company-stock-and-sales-utility.model';
 import { CompanyStockAndSalesUtilityService } from '../company-stock-and-sales-utility';
+import { ParamTransfer } from './param-transfer.model';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility-dialog',
@@ -82,6 +83,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
     company: ICompanyStockAndSalesUtility[];
     avgcost: number = 0;
     outgoingTransfer: boolean = false;
+    message: string;
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -174,6 +176,17 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
         this.materialhistory.warehousefromId = this.materialhistoryService.getDefaultThird().id;
         this.materialhistory.warehousetoId = this.materialhistoryService.getDefaultDestination().id;
         this.materialhistory.transferClassifId = this.transferType.id;
+
+        this.materialhistoryService.currentparamTransf.subscribe(messageParamTransf => {
+            let paramTransf: ParamTransfer;
+            paramTransf = messageParamTransf;
+            if (paramTransf.warehouseFrom) {
+                this.materialhistory.warehousefromId = paramTransf.warehouseFrom;
+            }
+            if (paramTransf.warehouseTo) {
+                this.materialhistory.warehousetoId = paramTransf.warehouseTo;
+            }
+        });
 
         const fxRatesSubscription = this.forexratesService.query().subscribe((res1: HttpResponse<ForexratesStockAndSalesUtility[]>) => {
             this.fxrates = res1.body;
@@ -331,7 +344,7 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
                         this.subscribeToSaveResponse(this.materialhistoryService.update(this.materialhistory));
                     } else {
                         // this.materialhistory.warehousefromId = this.materialhistory.warehousetoId;
-                        console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+                        console.log('ttttttttttttttttttttttttttttttttttttttttttttttttttttt');
                         this.subscribeToSaveResponse(this.materialhistoryService.create(this.materialhistory));
                     }
                 },
@@ -341,15 +354,6 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
 
         console.log(this.materialhistory.itemTransfereds);
         this.isSaving = true;
-        /* const theDate = new Date(Date.now());
-        const year1 = new Date(Date.now()).getFullYear();
-        const month1 = new Date(Date.now()).getMonth() + 1;
-        const day1 = new Date(Date.now()).getDate();
-        const dd: { year: any; month: any; day: any } = {
-            year: year1,
-            month: month1,
-            day: day1
-        };*/
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<IMaterialhistoryStockAndSalesUtility>>) {
@@ -358,16 +362,6 @@ export class MaterialhistoryStockAndSalesUtilityDialogComponent implements OnIni
             (res: HttpErrorResponse) => this.onSaveError()
         );
     }
-
-    /* private subscribeToSaveResponse(
-    result: Observable<HttpResponse<IMaterialhistoryStockAndSalesUtility>>
-  ) {
-    result.subscribe(
-      (res: HttpResponse<IMaterialhistoryStockAndSalesUtility>) =>
-        this.onSaveSuccess(res.body),
-      (res: HttpErrorResponse) => this.onSaveError()
-    );
-  }*/
 
     private onSaveSuccess(result: MaterialhistoryStockAndSalesUtility) {
         this.eventManager.broadcast({

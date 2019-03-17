@@ -24,6 +24,7 @@ import { MaterialclassificationStockAndSalesUtilityService } from '../materialcl
 import { MaterialclassificationStockAndSalesUtility } from '../../shared/model/materialclassification-stock-and-sales-utility.model';
 import { MaterialStockAndSalesUtility } from '../../shared/model/material-stock-and-sales-utility.model';
 import { MaterialStockAndSalesUtilityService } from '../material-stock-and-sales-utility';
+import { ParamTransfer } from './param-transfer.model';
 
 @Component({
     selector: 'jhi-materialhistory-stock-and-sales-utility',
@@ -65,6 +66,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
     date: { year: number; month: number; dusrSubscription: Subscription; day: number };
     transferSource: number;
     transferDest: number;
+    transferParams: ParamTransfer;
 
     materialhistoriesToDisplay: {
         id?: number;
@@ -81,6 +83,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         materialclassificationDescription?: string;
     }[];
     materialType: number;
+    message: string;
 
     constructor(
         private materialhistoryService: MaterialhistoryStockAndSalesUtilityService,
@@ -110,7 +113,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.historySubscription = this.materialhistoryService
             .query({
                 page: this.page - 1,
-                size: 100000000 /*this.itemsPerPage,*/,
+                size: 100000000,
                 sort: this.sort()
             })
             .subscribe(
@@ -210,7 +213,6 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.principal.hasAuthority('ROLE_ADMIN').then(hasAuth => {
             this.hasAdminAuth = hasAuth;
         });
-        //   this.registerChangeInMaterialhistories();
     }
 
     loadPage(page: number) {
@@ -231,17 +233,16 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
     }
 
     reset() {
-        /*   this.page = 0;
-        this.materialhistories = [];*/
         this.loadAll();
     }
 
     filterResults() {
+        this.transferParams = new ParamTransfer(this.transferSource, this.transferDest, this.materialType);
+        this.materialhistoryService.setParamTransf(this.transferParams);
         const mat: IMaterialhistoryStockAndSalesUtility[] = this.materialhistories.filter(item => {
             console.log(this.date);
-            // item.creationDate.
             const dd: Date = new Date(
-                parseInt(item.creationDate.format('YYYY'), 10), // getFullYear(),
+                parseInt(item.creationDate.format('YYYY'), 10),
                 parseInt(item.creationDate.format('M MM '), 10),
                 parseInt(item.creationDate.format('D DD'), 10)
             );
@@ -284,16 +285,8 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
                 res2[value.materialTypeCatId].numberOfItems += 1;
                 return res2;
             }, {});
-
-            /* console.log(tmpData);
-            console.log(result);*/
             this.inventories = result;
         });
-    }
-
-    onDateSelect(event: any) {
-        console.log('sxvgdfsgdfsgdfg');
-        console.log(this.date);
     }
 
     clear() {
@@ -308,6 +301,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.loadAll();
     }
     ngOnInit() {
+        this.materialhistoryService.currentMessage.subscribe(message => (this.message = message));
         this.loadAll();
         this.principal.identity().then(account => {
             this.currentAccount = account;
@@ -344,10 +338,7 @@ export class MaterialhistoryStockAndSalesUtilityComponent implements OnInit, OnD
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         this.queryCount = this.totalItems;
-        // this.page = pagingParams.page;
         this.materialhistories = data;
-        console.log(this.materialhistories);
-
         this.materialhistoriesToDisplay = this.materialhistories.slice();
     }
     private onError(error) {
