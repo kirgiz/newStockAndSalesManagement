@@ -70,13 +70,28 @@
                 </small>
             </div>
             <div [hidden]="!outgoingTransfer || !quantityAvailable">
-                <small class="form-text text-warning" [hidden]="!outgoingTransfer || !quantityAvailable">
+                <small class="form-text text-danger" [hidden]="!outgoingTransfer || !quantityAvailable">
                    Prix minimum (0 gain) conseillé: {{avgcost}}
                 </small>
             </div>
         </div>
 
         <div class="form-row">
+
+                <div class="form-group  col-md-6">
+                        <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_warehousefrom">Warehousefrom</label>
+                        <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId" (ngModelChange)="filterClassification()"
+                            required #warehousefrom="ngModel">
+                            <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
+                            <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
+                        </select>
+                    </div>
+                    <div [hidden]="!(editForm.controls.warehousefrom?.dirty && editForm.controls.warehousefrom.invalid)">
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.warehousefrom?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+
             <div class="form-group  col-md-6">
                 <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehouseto" for="field_warehouseto">Warehouseto</label>
                 <select class="form-control" id="field_warehouseto" name="warehouseto" [(ngModel)]="materialhistory.warehousetoId" required>
@@ -90,19 +105,6 @@
                 </small>
             </div>
 
-            <div class="form-group  col-md-6">
-                <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.warehousefrom" for="field_warehousefrom">Warehousefrom</label>
-                <select class="form-control" id="field_warehousefrom" name="warehousefrom" [(ngModel)]="materialhistory.warehousefromId" (ngModelChange)="filterClassification()"
-                    required #warehousefrom="ngModel">
-                    <option *ngIf="!editForm.value.warehousefrom" [ngValue]="null" selected></option>
-                    <option [ngValue]="thirdOption.id" *ngFor="let thirdOption of thirdsfrom; trackBy: trackThirdById">{{thirdOption.name}}</option>
-                </select>
-            </div>
-            <div [hidden]="!(editForm.controls.warehousefrom?.dirty && editForm.controls.warehousefrom.invalid)">
-                <small class="form-text text-danger" [hidden]="!editForm.controls.warehousefrom?.errors?.required" jhiTranslate="entity.validation.required">
-                    This field is required.
-                </small>
-            </div>
         </div>
         <div class="form-row">
                 <div class="form-group  col-md-6">

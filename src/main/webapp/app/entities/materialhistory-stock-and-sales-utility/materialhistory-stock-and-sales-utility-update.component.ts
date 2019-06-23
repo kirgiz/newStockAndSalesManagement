@@ -47,6 +47,8 @@ export class MaterialhistoryStockAndSalesUtilityUpdateComponent implements OnIni
         this.isSaving = false;
         this.activatedRoute.data.subscribe(({ materialhistory }) => {
             this.materialhistory = materialhistory;
+            console.log('this.materialhistory');
+            console.log(this.materialhistory);
         });
         this.materialService.query().subscribe(
             (res: HttpResponse<IMaterialStockAndSalesUtility[]>) => {
@@ -69,6 +71,8 @@ export class MaterialhistoryStockAndSalesUtilityUpdateComponent implements OnIni
         this.materialclassificationService.query().subscribe(
             (res: HttpResponse<IMaterialclassificationStockAndSalesUtility[]>) => {
                 this.materialclassifications = res.body;
+                console.log('this.materialclassifications');
+                console.log(this.materialclassifications);
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );

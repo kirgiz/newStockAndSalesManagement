@@ -102,7 +102,7 @@
                     <label class="form-control-label" jhiTranslate="stockAndSalesManagementApp.materialhistory.materialclassification" for="field_materialclassification">Materialclassification</label>
                     <select class="form-control" id="field_materialclassification" name="materialclassification" [(ngModel)]="materialhistory.materialclassificationId"  required>
                         <option *ngIf="!editForm.value.materialclassification" [ngValue]="null" selected></option>
-                        <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialclassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.description}}</option>
+                        <option [ngValue]="materialclassificationOption.id" *ngFor="let materialclassificationOption of materialclassifications; trackBy: trackMaterialclassificationById">{{materialclassificationOption.name}}</option>
                     </select>
                 </div>
                 <div [hidden]="!(editForm.controls.materialclassification?.dirty && editForm.controls.materialclassification?.invalid)">
